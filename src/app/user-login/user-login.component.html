@@ -5,17 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Music Login</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
+  <style>
+    .error {
+      color: red; /* Style error messages */
+    }
+  </style>
 </head>
 <body>
   <div class="container">
     <h1>Welcome to Music Login</h1>
     <form (ngSubmit)="submit()" #loginForm="ngForm">
-      <input type="text" [(ngModel)]="mobileNumber" name="mobileNumber" placeholder="Enter Mobile Number">
+      <input type="text" [(ngModel)]="mobileNumber" name="mobileNumber" placeholder="Enter Mobile Number" required pattern="[0-9]{10}" title="Please enter a 10-digit number">
       <br>
-      <input type="password" [(ngModel)]="otp" name="otp" placeholder="Enter OTP">
+      <input type="password" [(ngModel)]="otp" name="otp" placeholder="Enter OTP" required>
       <br>
-      <input type="submit" value="Login">
+      <input type="submit" value="Login" [disabled]="!loginForm.valid">
+      <div *ngIf="loginForm.submitted && !loginForm.valid" class="error">Please enter valid details.</div>
     </form>
     <div class="social-icons">
       <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -25,5 +30,4 @@
     </div>
   </div>
 </body>
-
 </html>
