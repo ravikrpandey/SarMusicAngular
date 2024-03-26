@@ -1,0 +1,21 @@
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #333;
+  color: white;
+  padding: 10px;
+}
+
+.player-controls button {
+  background-color: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  margin: 0 5px;
+}
+
+.volume-control input {
+  width: 100px;
+}

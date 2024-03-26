@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music Login</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to Music Login</h1>
+    <form (ngSubmit)="submit()" #loginForm="ngForm">
+      <input type="text" [(ngModel)]="mobileNumber" name="mobileNumber" placeholder="Enter Mobile Number">
+      <br>
+      <input type="password" [(ngModel)]="otp" name="otp" placeholder="Enter OTP">
+      <br>
+      <input type="submit" value="Login">
+    </form>
+    <div class="social-icons">
+      <a href="#"><i class="fab fa-facebook-f"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-linkedin-in"></i></a>
+    </div>
+  </div>
+</body>
+
+</html>
