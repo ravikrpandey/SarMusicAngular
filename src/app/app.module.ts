@@ -1,10 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { UserLoginComponent } from './user-login/user-login.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { SharedModule } from './shared/shared.module';
 import { FormsModule } from '@angular/forms';
@@ -19,10 +16,7 @@ import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    UserLoginComponent,
-    DashboardComponent,
-
+    AppComponent
   ],
   imports: [
     BrowserModule,

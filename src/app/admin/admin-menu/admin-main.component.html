@@ -1,0 +1,57 @@
+<header>
+    <div class="header-fixed">
+        <div class="logo" style="cursor: pointer;">
+            <img src="" routerLink="Dashboard"> Admin Pannel test
+        </div>
+
+        <div class="float__right">
+            <div class="user_profile">
+                <ul>
+                    <li (click)="showDropdown($event)">
+                        <a><img src="https://media.licdn.com/dms/image/C5603AQFEHQcpalKFBg/profile-displayphoto-shrink_200_200/0/1644255153601?e=2147483647&v=beta&t=7U0oTfCZjF7Fi8LCbJ7P9M8QYVSQcdBQEHTCQWBAGN8" alt=""></a>
+                        <div class="dropdown-profile" *ngIf="showList">
+                            <a (click)="profile()"><img src="../assets/editProfile.svg" alt="Profile">Profile</a>
+                            <a (click)="logOut()"><img src="../assets/logout.svg" alt="Log Out">Log Out</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- <mat-progress-bar mode="indeterminate" *ngIf="progres"></mat-progress-bar> -->
+
+    </div>
+</header>
+
+
+<nav class="left_sidebar">
+    <div class="nav_bar">
+        <ul>
+            <ng-container *ngFor="let nav of navData;let i = index">
+                <li>
+                    <span><a (click)="navToggel(i,nav)" routerLink="{{nav.route===null?currentRoute:nav.route}}"
+                            routerLinkActive="{{nav.route===null?'':'activeRoute'}}">{{nav.moduleName}}
+                            <p *ngIf="!nav.route" [ngClass]="navIndexvalue == i ? 'rotate':'back'" id="clip"></p>
+                        </a></span>
+                    <ul [ngStyle]="{'display':navIndexvalue == i ? 'block':'none'}">
+                        <li *ngFor="let subNav of nav.subModules ; let j = index">
+                            <a *ngIf="subNav.access==true" [routerLink]="subNav.route"
+                                routerLinkActive="activeRoute">{{subNav.moduleName}}</a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ng-container>
+        </ul>
+    </div>
+</nav>
+
+<main class="right-content-wrapper">
+    <section class="content-padding-right">
+        <div class="layout-page-content">
+<router-outlet></router-outlet>
+
+        </div>
+    </section>
+</main>

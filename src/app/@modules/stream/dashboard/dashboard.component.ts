@@ -35,8 +35,30 @@ export class DashboardComponent implements AfterViewInit {
 
   loginForm() {
     this.router.navigate(['/login']);
+    
   }
 
+  signOutForm() {
+    // Remove the mobile number from localStorage
+    localStorage.removeItem('mobileNumber');
+    window.location.href = '/login';
+
+    const mobileNumber = localStorage.getItem('mobileNumber') as string | null;
+    if (!mobileNumber) {
+      window.location.href = '/login';
+    }
+  }
+
+  adminMenueToggle() {
+    this.router.navigate(['/admin']); 
+  }
+  
+
+
+
+
+  
+  
 
   // Define variables for the audio player and buttons
   audioPlayer!: HTMLAudioElement;
@@ -46,11 +68,10 @@ export class DashboardComponent implements AfterViewInit {
 
 
   ngOnInit() {
-    // Call the updateSeekBar method when component initializes
-    // this.updateSeekBar();
-
-      // Call the updateSeekBar method when component initializes
-      // this.updateSeekBar(event: any);
+      // const mobileNumber = localStorage.getItem('mobileNumber') as string | null;
+      if (!localStorage.getItem('mobileNumber')) {
+        window.location.href = '/login';
+      }
   }
 
   // Update seekbar and time display

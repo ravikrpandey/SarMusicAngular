@@ -1,0 +1,158 @@
+.box_dashboard {
+    float: left;
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+    margin-bottom: 25px;
+  }
+  
+  .box_dashboard h2 {
+    float: left;
+    width: 100%;
+    font-weight: 400;
+    color: #fff;
+    font-size: 14px;
+    margin: 0px;
+    padding: 2px 0px 2px 15px;
+    text-align: left;
+    border-radius: 0px 0px 9px 9px;
+  }
+  
+  .box_dashboard .middle_data {
+    float: left;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    font-size: 20px;
+    padding: 30px 0px;
+    font-weight: bold;
+  }
+  
+  .das_box {
+    float: left;
+    width: 100%;
+  }
+  
+  .das_box a {
+    float: left;
+    width: 100%;
+    padding: 6px 0px;
+    text-align: center;
+    transition: background 0.3s;
+    border-radius: 9px 9px 0px 0px;
+    color: #fff;
+    background: #05913d;
+    text-decoration: none;
+    border-top: 1px solid #ffffff47;
+  }
+  
+  .das_box button {
+    float: left;
+    width: 100%;
+    padding: 6px 0px;
+    text-align: center;
+    transition: background 0.3s;
+    border-radius: 9px 9px 0px 0px;
+    color: #fff;
+    background: #05913d;
+    text-decoration: none;
+    border: none;
+    border-top: 1px solid #ffffff47;
+  
+  }
+  
+  .box_background {
+    background-color: #43926D;
+  }
+  
+  .box_background h2 {
+    background: #105e2f;
+  }
+  
+  
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-content {
+    visibility: hidden;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    z-index: 1;
+    right: -4px;
+    top: 57px;
+  }
+  
+  .dropdown:hover .dropdown-content {
+    visibility: visible;
+    top: 22px;
+    transition: 0.3s;
+  }
+  
+  .dropdown-content ul {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+  }
+  
+  .dropdown-content ul li {
+    display: inline-block;
+    width: 100%;
+    float: left;
+  }
+  
+  .dropdown-content ul li a {
+    text-decoration: none;
+    color: #000;
+    padding: 5px 8px;
+    display: flex;
+  }
+  
+  .dropdown-content ul li a:hover {
+    background-color: #05913d;
+    color: #fff;
+  }
+  
+  .filter_date label {
+    margin-right: 20px;
+  }
+  .filter_date{
+    margin: 0 auto;
+  }
+  .filter_date button{
+    border: none;
+    color: #fff;
+    background: #105e2f;
+    border-radius: 4px;
+    padding: 2px 16px;
+  }
+  
+  
+  .filterData{
+    margin-left: auto;
+    padding: 0 24px 0 0;
+    color: #05913d;
+  
+  }
+  .filterData p{
+    font-size: 16px;
+    margin: 0;
+  }
+  .today{
+    background-color: #05913d;
+  }
+  
+  .today a{
+    color: #fff !important;
+  
+  }
+  .resetButon{
+    border: none;
+    background: none;
+    margin-left: 10px;
+  }
+  

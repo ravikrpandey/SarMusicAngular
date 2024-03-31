@@ -1,0 +1,265 @@
+<style>
+  .box_dashboard {
+      position: relative;
+  }
+
+  .up-icons {
+      position: absolute;
+
+      right: 5px;
+      top: 7px;
+  }
+
+  .up-icons a {
+
+      width: 22px;
+      height: 22px;
+      background-color: #fff;
+      border-radius: 20px;
+      display: inline-block;
+      text-align: center;
+      line-height: 22px;
+      margin-left: 3px;
+  }
+
+  .up-icons img {
+      width: 15px;
+  }
+</style>
+<div class="head-title">
+  <h1>Welcome Dashboard</h1>
+
+  <div class="filter_date" *ngIf="showCustomDateFilters">
+          <label  class="form-label-group">Start date: <input class="form-control" type=date id=start required [(ngModel)]="startDateCustom"></label>
+          <label  class="form-label-group">End date: <input class="form-control" type=date id=end required [(ngModel)]="endDateCustom"></label>
+          <button type="button" class="btn btn-primary" (click)="searchByDateCustom()">Search</button>
+  </div>
+
+  <div class="filterData">
+      <!-- <p>{{filData | titlecase}}</p> -->
+
+      <!-- <p>{{filData == 'week' ? 'This Week' : filData | titlecase}}</p> -->
+      <p>{{filData == 'week' ? 'This Week' : (filData == 'month' ? 'This Month' : filData | titlecase)}}</p>
+  </div>
+
+  <div class="flter_dropdown">
+      <div class="dropdown">
+          <span><i class="fa fa-filter"></i> Filter</span>
+          <div class="dropdown-content">
+              <ul>
+                  <li [ngClass]="{'today':filData==='today'}"><a href="javascript:void(0)" (click)="searchByDate('today')">Today</a></li>
+
+                  <li [ngClass]="{'today':filData==='week'}"><a href="javascript:void(0)" (click)="searchByDate('week')">This Week</a></li>
+                  <li [ngClass]="{'today':filData==='month'}"><a href="javascript:void(0)" (click)="searchByDate('month')">This Month</a></li>
+                  <li [ngClass]="{'today':filData==='Custom'}"><a href="javascript:void(0)" (click)="customData('Custom')">Custom</a></li>
+              </ul>
+          </div>
+      </div>
+  </div>
+  <button class="resetButon" (click)="searchByDate('today')"><span><i class="fa fa-refresh"></i> Reset</span></button>
+</div>
+
+<div class="main">
+  <div class="row">
+      <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-3 col-12">
+          <div class="box_dashboard box_background">
+
+              <h2>Unique Users</h2>
+              <div  class="up-icons">
+                  <a *ngIf="(TotalSale?.ActiveUsers - TotalSale?.OldActiveUsers) > 0"><img src="/assets/icons/up-arrow1.svg"></a>
+                  <!-- <a *ngIf="(TotalSale?.ActiveUsers - TotalSale?.OldActiveUsers) < 0"><img style="opacity: 0.3;" src="/assets/icons/up-arrow1.svg"></a> -->
+                  <a *ngIf="(TotalSale?.ActiveUsers - TotalSale?.OldActiveUsers) < 0"><img src="/assets/icons/down-arrow1.svg"></a>
+                  <!-- <a *ngIf="(TotalSale?.ActiveUsers - TotalSale?.OldActiveUsers) > 0"><img style="opacity: 0.3;" src="/assets/icons/down-arrow1.svg"></a> -->
+              </div>
+
+              <div class="middle_data">{{TotalSale?.ActiveUsers}}</div>
+              <!-- {{element.source == 1 ? 'upwork' : (element.source == 2 ? 'refer from friend' : '')}} -->
+              <div class="das_box">
+                  <button (click)="activeUserDetailClick()" class="vd-btn">View Detail</button>
+              </div>
+          </div>
+      </div>
+
+      <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-3 col-12">
+          <div class="box_dashboard box_background">
+              <h2>Total Courses Sales</h2>
+              <div  class="up-icons">
+                <a *ngIf="(TotalSale?.TotalCourseSales - TotalSale?.OldTotalCourseSales) > 0"><img src="/assets/icons/up-arrow1.svg"></a>
+                <a *ngIf="(TotalSale?.TotalCourseSales - TotalSale?.OldTotalCourseSales) < 0"><img style="opacity: 0.3;" src="/assets/icons/up-arrow1.svg"></a>
+                <a *ngIf="(TotalSale?.TotalCourseSales - TotalSale?.OldTotalCourseSales) < 0"><img src="/assets/icons/down-arrow1.svg"></a>
+                <a *ngIf="(TotalSale?.TotalCourseSales - TotalSale?.OldTotalCourseSales) > 0"><img style="opacity: 0.3;" src="/assets/icons/down-arrow1.svg"></a>
+            </div>
+              <div class="middle_data">{{TotalSale?.TotalCourseSales ? TotalSale?.TotalCourseSales : 0}}</div>
+              <div class="das_box">
+                  <a class="vd-btn" (click)="orderFilterClick('totalCourses')">View Detail</a>
+              </div>
+          </div>
+      </div>
+
+      <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-3 col-12">
+          <div  class="box_dashboard box_background">
+              <h2>Total Product Sales</h2>
+              <div  class="up-icons">
+                  <a *ngIf="(TotalSale?.TotalProductSales - TotalSale?.OldTotalProductSales) > 0"><img src="/assets/icons/up-arrow1.svg"></a>
+                  <!-- <a *ngIf="(TotalSale?.TotalProductSales - TotalSale?.OldTotalProductSales) < 0"><img style="opacity: 0.3;" src="/assets/icons/up-arrow1.svg"></a> -->
+                  <a *ngIf="(TotalSale?.TotalProductSales - TotalSale?.OldTotalProductSales) < 0"><img src="/assets/icons/down-arrow1.svg"></a>
+                  <!-- <a *ngIf="(TotalSale?.TotalProductSales - TotalSale?.OldTotalProductSales) > 0"><img style="opacity: 0.3;" src="/assets/icons/down-arrow1.svg"></a> -->
+              </div>
+              <div class="middle_data">{{TotalSale?.TotalProductSales ? TotalSale?.TotalProductSales : 0}}</div>
+              <div class="das_box">
+                  <a (click)="orderFilterClick('totalProducts')" class="vd-btn">View Detail</a>
+              </div>
+          </div>
+      </div>
+
+      <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-3 col-12">
+          <div class="box_dashboard box_background">
+              <h2>Total Consultation Sales</h2>
+              <div  class="up-icons">
+                  <a *ngIf="(TotalSale?.TotalConsultantSales - TotalSale?.OldTotalConsultationSales) > 0"><img src="/assets/icons/up-arrow1.svg"></a>
+                  <!-- <a *ngIf="(TotalSale?.TotalConsultantSales - TotalSale?.OldTotalConsultationSales) < 0"><img style="opacity: 0.3;" src="/assets/icons/up-arrow1.svg"></a> -->
+                  <a *ngIf="(TotalSale?.TotalConsultantSales - TotalSale?.OldTotalConsultationSales) < 0"><img src="/assets/icons/down-arrow1.svg"></a>
+                  <!-- <a *ngIf="(TotalSale?.TotalConsultantSales - TotalSale?.OldTotalConsultationSales) > 0"><img style="opacity: 0.3;" src="/assets/icons/down-arrow1.svg"></a> -->
+              </div>
+              <div class="middle_data">{{TotalSale?.TotalConsultantSales ? TotalSale?.TotalConsultantSales : 0}}</div>
+              <div class="das_box">
+                  <a (click)="orderFilterClick('totalConsultations')" class="vd-btn">View Detail</a>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="row">
+      <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-3 col-12">
+          <div class="box_dashboard box_background">
+              <h2>Total Reports Sales</h2>
+              <div  class="up-icons">
+                  <a *ngIf="(TotalSale?.TotalReportSales - TotalSale?.OldTotalReportSales) > 0"><img src="/assets/icons/up-arrow1.svg"></a>
+                  <!-- <a *ngIf="(TotalSale?.TotalReportSales - TotalSale?.OldTotalReportSales) < 0"><img style="opacity: 0.3;" src="/assets/icons/up-arrow1.svg"></a> -->
+                  <a *ngIf="(TotalSale?.TotalReportSales - TotalSale?.OldTotalReportSales) < 0"><img src="/assets/icons/down-arrow1.svg"></a>
+                  <!-- <a *ngIf="(TotalSale?.TotalReportSales - TotalSale?.OldTotalReportSales) > 0"><img style="opacity: 0.3;" src="/assets/icons/down-arrow1.svg"></a> -->
+              </div>
+              <div class="middle_data">{{TotalSale?.TotalReportSales ? TotalSale?.TotalReportSales : 0}}</div>
+              <div class="das_box">
+                  <a (click)="orderFilterClick('totalReports')" class="vd-btn">View Detail</a>
+              </div>
+          </div>
+      </div>
+
+      <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-3 col-12">
+          <div class="box_dashboard box_background">
+              <h2>Total Event Sale</h2>
+              <div  class="up-icons">
+                  <a *ngIf="(TotalSale?.TotalEventSales - TotalSale?.OldTotalEventSales) > 0"><img src="/assets/icons/up-arrow1.svg"></a>
+                  <!-- <a *ngIf="(TotalSale?.TotalEventSales - TotalSale?.OldTotalEventSales) < 0"><img style="opacity: 0.3;" src="/assets/icons/up-arrow1.svg"></a> -->
+                  <a *ngIf="(TotalSale?.TotalEventSales - TotalSale?.OldTotalEventSales) < 0"><img src="/assets/icons/down-arrow1.svg"></a>
+                  <!-- <a *ngIf="(TotalSale?.TotalEventSales - TotalSale?.OldTotalEventSales) > 0"><img style="opacity: 0.3;" src="/assets/icons/down-arrow1.svg"></a> -->
+              </div>
+              <div class="middle_data">{{TotalSale?.TotalEventSales ?  TotalSale?.TotalEventSales : 0}}</div>
+              <div class="das_box">
+                  <a (click)="orderFilterClick('totalEvents')" class="vd-btn">View Detail</a>
+              </div>
+          </div>
+      </div>
+
+      <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-3 col-12">
+          <div class="box_dashboard box_background">
+              <h2>Total Report Downloaded</h2>
+              <div  class="up-icons">
+                  <a *ngIf="(TotalSale?.TotalReportDownloads - TotalSale?.OldTotalReportDownloads) > 0"><img src="/assets/icons/up-arrow1.svg"></a>
+                  <!-- <a *ngIf="(TotalSale?.TotalReportDownloads - TotalSale?.OldTotalReportDownloads) < 0"><img style="opacity: 0.3;" src="/assets/icons/up-arrow1.svg"></a> -->
+                  <a *ngIf="(TotalSale?.TotalReportDownloads - TotalSale?.OldTotalReportDownloads) < 0"><img src="/assets/icons/down-arrow1.svg"></a>
+                  <!-- <a *ngIf="(TotalSale?.TotalReportDownloads - TotalSale?.OldTotalReportDownloads) > 0"><img style="opacity: 0.3;" src="/assets/icons/down-arrow1.svg"></a> -->
+              </div>
+              <div class="middle_data">{{TotalSale?.TotalReportDownloads}}</div>
+              <div class="das_box">
+                  <a (click)="openReportList()" class="vd-btn">View Detail</a>
+              </div>
+          </div>
+      </div>
+
+      <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-3 col-12">
+          <div class="box_dashboard box_background">
+              <h2>Total Revenue</h2>
+              <div  class="up-icons">
+                  <a *ngIf="(TotalSale?.TotalRevenueGenerated - TotalSale?.OldTotalRevenueGenerated) > 0"><img src="/assets/icons/up-arrow1.svg"></a>
+                  <!-- <a *ngIf="(TotalSale?.TotalRevenueGenerated - TotalSale?.OldTotalRevenueGenerated) < 0"><img style="opacity: 0.3;" src="/assets/icons/up-arrow1.svg"></a> -->
+                  <a *ngIf="(TotalSale?.TotalRevenueGenerated - TotalSale?.OldTotalRevenueGenerated) < 0"><img src="/assets/icons/down-arrow1.svg"></a>
+                  <!-- <a *ngIf="(TotalSale?.TotalRevenueGenerated - TotalSale?.OldTotalRevenueGenerated) > 0"><img style="opacity: 0.3;" src="/assets/icons/down-arrow1.svg"></a> -->
+              </div>
+              <div class="middle_data">{{TotalSale?.TotalRevenueGenerated ? TotalSale?.TotalRevenueGenerated : 0}}</div>
+              <div class="das_box">
+                  <a (click)="orderFilterClick('totalRevenue')" class="vd-btn">View Detail</a>
+              </div>
+          </div>
+      </div>
+
+  </div>
+
+  <div class="row">
+
+    <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-3 col-12">
+      <div  class="box_dashboard box_background">
+        <h2>Total Repeat Customer</h2>
+        <div class="middle_data" *ngIf="TotalSale && TotalSale.TotalRepeatCustomers">{{TotalSale.TotalRepeatCustomers}}</div>
+        <div class="middle_data" *ngIf="!TotalSale || !TotalSale.TotalRepeatCustomers">{{TotalSale.TotalRepeatCustomers}}0</div>
+        <div class="das_box">
+          <a (click)="repeateCustemerData()" class="vd-btn">View Detail</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-3 col-12">
+      <div class="box_dashboard box_background">
+        <h2>Total Retention Rate</h2>
+        <div class="middle_data" *ngIf="TotalSale && TotalSale.TotalRetantionRateOfMonth">{{ TotalSale.TotalRetantionRateOfMonth }}</div>
+        <div class="middle_data" *ngIf="!TotalSale || !TotalSale.TotalRetantionRateOfMonth">0</div>
+        <div class="das_box">
+          <a (click)="retentionRateData()" class="vd-btn">View Detail</a>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-3 col-12">
+      <div class="box_dashboard box_background">
+        <h2>Total No Of Active Users</h2>
+        <div class="up-icons">
+          <a *ngIf="(TotalSale?.TotalAverageSession - TotalSale?.OldTotalRepeatCustomers) > 0"><img
+              src="/assets/icons/up-arrow1.svg"></a>
+          <!-- <a *ngIf="(TotalSale?.TotalAverageSession - TotalSale?.OldTotalRepeatCustomers) < 0"><img style="opacity: 0.3;"
+              src="/assets/icons/up-arrow1.svg"></a> -->
+          <a *ngIf="(TotalSale?.TotalAverageSession - TotalSale?.OldTotalRepeatCustomers) < 0"><img
+              src="/assets/icons/down-arrow1.svg"></a>
+          <!-- <a *ngIf="(TotalSale?.TotalAverageSession - TotalSale?.OldTotalRepeatCustomers) > 0"><img style="opacity: 0.3;"
+              src="/assets/icons/down-arrow1.svg"></a> -->
+        </div>
+        <div class="middle_data">{{TotalSale?.TotalAverageSession ? TotalSale?.TotalAverageSession : 0}}</div>
+        <div class="das_box">
+          <a (click)="averageSessionDetailClick()" class="vd-btn">View Detail</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-3 col-12">
+      <div class="box_dashboard box_background">
+        <h2>Transaction user count</h2>
+        <div *ngIf="!showCustomDateFilters" class="up-icons">
+          <a *ngIf="(TotalSale?.TotalAverageSession - TotalSale?.OldTotalRepeatCustomers) > 0"><img
+              src="/assets/icons/up-arrow1.svg"></a>
+          <a *ngIf="(TotalSale?.TotalAverageSession - TotalSale?.OldTotalRepeatCustomers) < 0"><img style="opacity: 0.3;"
+              src="/assets/icons/up-arrow1.svg"></a>
+          <a *ngIf="(TotalSale?.TotalAverageSession - TotalSale?.OldTotalRepeatCustomers) < 0"><img
+              src="/assets/icons/down-arrow1.svg"></a>
+          <a *ngIf="(TotalSale?.TotalAverageSession - TotalSale?.OldTotalRepeatCustomers) > 0"><img style="opacity: 0.3;"
+              src="/assets/icons/down-arrow1.svg"></a>
+        </div>
+        <div class="middle_data">{{TotalSale?.TotalAverageSession ? TotalSale?.TotalAverageSession : 0}}</div>
+        <div class="das_box">
+          <a (click)="averageSessionDetailClick()" class="vd-btn">View Detail</a>
+        </div>
+      </div>
+    </div> -->
+
+  </div>
+</div>
