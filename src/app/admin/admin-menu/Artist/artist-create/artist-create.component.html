@@ -72,7 +72,7 @@
                   <!-- <a *ngIf="(TotalSale?.ActiveUsers - TotalSale?.OldActiveUsers) > 0"><img style="opacity: 0.3;" src="/assets/icons/down-arrow1.svg"></a> -->
               </div>
 
-              <div class="middle_data">{{TotalSale?.ActiveUsers}}</div>
+              <div class="middle_data">{{TotalSale?.ActiveUsers ? TotalSale?.ActiveUsers : 0}}</div>
               <!-- {{element.source == 1 ? 'upwork' : (element.source == 2 ? 'refer from friend' : '')}} -->
               <div class="das_box">
                   <button (click)="activeUserDetailClick()" class="vd-btn">View Detail</button>
@@ -82,7 +82,7 @@
 
       <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-3 col-12">
           <div class="box_dashboard box_background">
-              <h2>Total Courses Sales</h2>
+              <h2>Total Artists</h2>
               <div  class="up-icons">
                 <a *ngIf="(TotalSale?.TotalCourseSales - TotalSale?.OldTotalCourseSales) > 0"><img src="/assets/icons/up-arrow1.svg"></a>
                 <a *ngIf="(TotalSale?.TotalCourseSales - TotalSale?.OldTotalCourseSales) < 0"><img style="opacity: 0.3;" src="/assets/icons/up-arrow1.svg"></a>
@@ -98,7 +98,7 @@
 
       <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-3 col-12">
           <div  class="box_dashboard box_background">
-              <h2>Total Product Sales</h2>
+              <h2>Total Albums</h2>
               <div  class="up-icons">
                   <a *ngIf="(TotalSale?.TotalProductSales - TotalSale?.OldTotalProductSales) > 0"><img src="/assets/icons/up-arrow1.svg"></a>
                   <!-- <a *ngIf="(TotalSale?.TotalProductSales - TotalSale?.OldTotalProductSales) < 0"><img style="opacity: 0.3;" src="/assets/icons/up-arrow1.svg"></a> -->
@@ -114,7 +114,7 @@
 
       <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-3 col-12">
           <div class="box_dashboard box_background">
-              <h2>Total Consultation Sales</h2>
+              <h2>Total Songs</h2>
               <div  class="up-icons">
                   <a *ngIf="(TotalSale?.TotalConsultantSales - TotalSale?.OldTotalConsultationSales) > 0"><img src="/assets/icons/up-arrow1.svg"></a>
                   <!-- <a *ngIf="(TotalSale?.TotalConsultantSales - TotalSale?.OldTotalConsultationSales) < 0"><img style="opacity: 0.3;" src="/assets/icons/up-arrow1.svg"></a> -->
@@ -132,7 +132,7 @@
   <div class="row">
       <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-3 col-12">
           <div class="box_dashboard box_background">
-              <h2>Total Reports Sales</h2>
+              <h2>Total Playlists</h2>
               <div  class="up-icons">
                   <a *ngIf="(TotalSale?.TotalReportSales - TotalSale?.OldTotalReportSales) > 0"><img src="/assets/icons/up-arrow1.svg"></a>
                   <!-- <a *ngIf="(TotalSale?.TotalReportSales - TotalSale?.OldTotalReportSales) < 0"><img style="opacity: 0.3;" src="/assets/icons/up-arrow1.svg"></a> -->
@@ -148,7 +148,7 @@
 
       <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-3 col-12">
           <div class="box_dashboard box_background">
-              <h2>Total Event Sale</h2>
+              <h2>Total Playlists Songs</h2>
               <div  class="up-icons">
                   <a *ngIf="(TotalSale?.TotalEventSales - TotalSale?.OldTotalEventSales) > 0"><img src="/assets/icons/up-arrow1.svg"></a>
                   <!-- <a *ngIf="(TotalSale?.TotalEventSales - TotalSale?.OldTotalEventSales) < 0"><img style="opacity: 0.3;" src="/assets/icons/up-arrow1.svg"></a> -->
@@ -164,14 +164,14 @@
 
       <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-3 col-12">
           <div class="box_dashboard box_background">
-              <h2>Total Report Downloaded</h2>
+              <h2>Total Active Users</h2>
               <div  class="up-icons">
                   <a *ngIf="(TotalSale?.TotalReportDownloads - TotalSale?.OldTotalReportDownloads) > 0"><img src="/assets/icons/up-arrow1.svg"></a>
                   <!-- <a *ngIf="(TotalSale?.TotalReportDownloads - TotalSale?.OldTotalReportDownloads) < 0"><img style="opacity: 0.3;" src="/assets/icons/up-arrow1.svg"></a> -->
                   <a *ngIf="(TotalSale?.TotalReportDownloads - TotalSale?.OldTotalReportDownloads) < 0"><img src="/assets/icons/down-arrow1.svg"></a>
                   <!-- <a *ngIf="(TotalSale?.TotalReportDownloads - TotalSale?.OldTotalReportDownloads) > 0"><img style="opacity: 0.3;" src="/assets/icons/down-arrow1.svg"></a> -->
               </div>
-              <div class="middle_data">{{TotalSale?.TotalReportDownloads}}</div>
+              <div class="middle_data">{{TotalSale?.TotalReportDownloads ? TotalSale?.TotalReportDownloads: 0}}</div>
               <div class="das_box">
                   <a (click)="openReportList()" class="vd-btn">View Detail</a>
               </div>
@@ -199,15 +199,15 @@
   <div class="row">
 
     <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-3 col-12">
-      <div  class="box_dashboard box_background">
-        <h2>Total Repeat Customer</h2>
-        <div class="middle_data" *ngIf="TotalSale && TotalSale.TotalRepeatCustomers">{{TotalSale.TotalRepeatCustomers}}</div>
-        <div class="middle_data" *ngIf="!TotalSale || !TotalSale.TotalRepeatCustomers">{{TotalSale.TotalRepeatCustomers}}0</div>
-        <div class="das_box">
-          <a (click)="repeateCustemerData()" class="vd-btn">View Detail</a>
+        <div class="box_dashboard box_background">
+          <h2>Total Retention Rate</h2>
+          <div class="middle_data" *ngIf="TotalSale && TotalSale.TotalRetantionRateOfMonth">{{ TotalSale.TotalRetantionRateOfMonth }}</div>
+          <div class="middle_data" *ngIf="!TotalSale || !TotalSale.TotalRetantionRateOfMonth">0</div>
+          <div class="das_box">
+            <a (click)="retentionRateData()" class="vd-btn">View Detail</a>
+          </div>
         </div>
       </div>
-    </div>
 
     <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-3 col-12">
       <div class="box_dashboard box_background">
@@ -241,7 +241,7 @@
       </div>
     </div>
 
-    <!-- <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-3 col-12">
+    <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-3 col-12">
       <div class="box_dashboard box_background">
         <h2>Transaction user count</h2>
         <div *ngIf="!showCustomDateFilters" class="up-icons">
@@ -259,7 +259,7 @@
           <a (click)="averageSessionDetailClick()" class="vd-btn">View Detail</a>
         </div>
       </div>
-    </div> -->
+    </div>
 
   </div>
 </div>

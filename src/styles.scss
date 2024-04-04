@@ -1,4 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
+
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
 .header-fixed {
     width: 100%;
     height: 50px;
@@ -191,4 +194,79 @@ ul ul {
     margin-top: 50px;
     height: 100%;
     transition: .3s;
+}
+
+.head-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.main {
+    padding: 20px;
+    background: #ffffff 0% 0% no-repeat padding-box;
+    box-shadow: 0 0 25px #b0bac93d;
+    border: 1px solid #2e5bff14;
+    border-radius: 15px;
+}
+
+.user_profile>ul>li>a img {
+    height: 28px;
+    width: 28px;
+    border-radius: 50%;
+}
+
+img, svg {
+    vertical-align: middle;
+}
+
+.user_profile>ul>li .dropdown-profile {
+    opacity: 1;
+    visibility: visible;
+    margin-top: 0;
+    transition: .3s;
+}
+
+.dropdown-profile {
+    position: absolute;
+    visibility: hidden;
+    opacity: 0;
+    transition: .3s;
+    margin-top: 14px;
+    min-width: 140px;
+    right: -5px;
+    top: 40px;
+    background: #ffffff;
+    z-index: 1;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 3px 4px 1px #0003;
+    cursor: pointer;
+}
+
+*, :after, :before {
+    box-sizing: border-box;
+}
+
+.dropdown-profile>a>img {
+    height: 18px;
+    margin-right: 10px;
+}
+
+.dropdown-profile>a>img {
+    height: 18px;
+    margin-right: 10px;
+}
+
+img, svg {
+    vertical-align: middle;
+}
+
+.dropdown-profile>a:last-child {
+    border-bottom: solid 0px #1d3e5a;
+}
+
+a:not([href]):not([class]), a:not([href]):not([class]):hover {
+    color: inherit;
+    text-decoration: none;
 }

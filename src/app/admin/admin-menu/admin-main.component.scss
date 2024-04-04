@@ -34,6 +34,35 @@
     background-color: #f1f1f2 !important;
   }
 
+  .logo {
+    cursor: pointer;
+    background-color: #1db954;
+    padding: 8px;
+    margin-left: 30px; /* Adjust margin here */
+    margin-top: 15px;
+    color: white;
+    font-weight: bold;
+    display: inline-block;
+    border-radius: 5px;
+    text-transform: uppercase;
+}
+
+
+
+
+
+
+.logo:hover {
+    background-color: #169e4d;
+}
+
+.head-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
   
 
   
