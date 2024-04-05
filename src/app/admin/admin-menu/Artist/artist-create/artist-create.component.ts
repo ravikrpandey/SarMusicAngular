@@ -4,6 +4,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 
 import { NavigationExtras, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { LoginService } from 'src/app/services/login.service';
 
 @Component({
   selector: 'app-artist-create',
@@ -11,126 +12,41 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./artist-create.component.scss']
 })
 export class ArtistCreateComponent {
+  artistName: string = '';
+  dob: string = '';
+  gender: string = '';
+  artistProfileUrl: string = '';
+  bio: string = '';
 
-    myForm: any;
+  constructor(
+    private router: Router,
+    private loginService: LoginService,
+    private toastr: ToastrService
+  ) {}
 
-    activeUser: any;
-    TotalSale: any;
-    startDate: any;
-    endDate: any;
-    startDateCustom: any = null;
-    endDateCustom: any = null;
-    filData: any = 'today';
-    showCustomDateFilters: boolean = false;
-    constructor( private router: Router, private toastr: ToastrService) { }
-  
-    // ngOnInit() {
-    //   this.myForm = new FormGroup({
-    //     name: new FormControl('Sammy'),
-    //     email: new FormControl(''),
-    //     message: new FormControl('')
-    //   });
-    // }
-  
-    // onSubmit(myForm: any) {
-    //  let val=this.myForm.value;
-    //  console.log(val);
-     
-    // }
+ngOnInit(){}
 
-
-    
-  ngOnInit(): void {
-    // Get the current date
-    const today = new Date();
-
-    // Get tomorrow's date by adding one day to the current date
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
-
-    // Format the current date and tomorrow's date as 'YYYY-MM-DD' (assuming you want this format)
-    const formattedStartDate = today.toISOString().split('T')[0];
-    const formattedEndDate = tomorrow.toISOString().split('T')[0];
-
-    // Create the queryParams object with default values
-    const queryParams = {
-      startDate: formattedStartDate,
-      endDate: formattedEndDate,
-      type: this.filData
-    };
-   
+submit() {
+  const artistData: any = {
+    artistName: this.artistName,
+    dob: this.dob,
+    gender: this.gender,
+    artistProfileUrl: this.artistProfileUrl,
+    bio: this.bio
   }
-
-  activeUserDetailClick() {
-    this.router.navigate(['/home/customer'], { queryParams: { callFrom: 'activeUsers', startDate: this.startDate, endDate: this.endDate } });
-  }
-
-  averageSessionDetailClick() {
-    this.router.navigate(['/home/customer'], { queryParams: { callFrom: 'averageSessionData', startDate: this.startDate, endDate: this.endDate } });
-  }
-
-  retentionRateData() {
-    const navigationExtras: NavigationExtras = {
-      queryParams: { callFrom: 'retentionRateData', startDte: this.startDate, endDate: this.endDate },
-      skipLocationChange: true,
-    };
-    this.router.navigate(['/home/retentionRate'],  navigationExtras);
-  }
-
-  repeateCustemerData() {
-    this.router.navigate(['/home/customer'], { queryParams: { callFrom: 'repeatCustomerData', startDate: this.startDate, endDate: this.endDate }});
-  }
-
-  searchByDateCustom() {
-
-  }
-
-  orderFilterClick(type: string) {
-    switch (type) {
-      case 'totalCourses':
-        this.router.navigate(['/home/order'], { queryParams: { type: 'totalCourses', dateFilterType: this.filData, callFrom: 'dashboard', filterType: JSON.stringify(['COURSE']), startDate: this.startDate, endDate: this.endDate } });
-        break;
-      case 'totalProducts':
-        this.router.navigate(['/home/order'], { queryParams: { type: 'totalProducts', dateFilterType: this.filData, callFrom: 'dashboard', filterType: JSON.stringify(['PRODUCT']), startDate: this.startDate, endDate: this.endDate } });
-        break;
-      case 'totalConsultations':
-        this.router.navigate(['/home/order'], { queryParams: { type: 'totalConsultations', dateFilterType: this.filData, callFrom: 'dashboard', filterType: JSON.stringify(['VASTU CONSULTATION', 'NUMEROLOGY CONSULTATION']), startDate: this.startDate, endDate: this.endDate } });
-        break;
-      case 'totalReports':
-        this.router.navigate(["home/reports"], { queryParams: { type: 'totalReports', dateFilterType: this.filData, callFrom: 'dashboard', filterType: JSON.stringify(['REPORT']), startDate: this.startDate, endDate: this.endDate } });
-        break;
-      case 'totalEvents':
-        this.router.navigate(['/home/order'], { queryParams: { type: 'totalEvents', dateFilterType: this.filData, callFrom: 'dashboard', filterType: JSON.stringify(['EVENT']), startDate: this.startDate, endDate: this.endDate } });
-        break;
-      case 'totalRevenue':
-        this.router.navigate(['/home/order'], { queryParams: { type: 'totalRevenue', dateFilterType: this.filData, callFrom: 'dashboard', filterType: JSON.stringify(['COURSE', 'REPORT', 'PRODUCT', 'PACKAGE', 'VASTU CONSULTATION', 'NUMEROLOGY CONSULTATION', 'EVENT']), startDate: this.startDate, endDate: this.endDate } });
-        break;
-      case 'totalRepeatCustomer':
-        this.router.navigate(['/home/customer'], { queryParams: { callFrom: 'totalRepeatCustomer', startDate: this.startDate, endDate: this.endDate } });
-        break;
-      default:
-        break;
-
+  console.log(artistData, "artistData-----")
+  this.loginService.createArtist(artistData).subscribe((res: any) => {
+    if(res.status === 403 || res.status == 500) {
+      this.toastr.error(res.body.message, 'Error');
+      alert("Error");
+    } else {
+      this.toastr.success('Artist Created successfully!', 'Success');
+      alert("Artist Created successfully!");
     }
-  }
+  })
 
-  openReportList() {
-    this.router.navigate(['/home/new-dashboard/downloadReportList'], { queryParams: { dateFilterType: this.filData, callFrom: 'dashboard', startDate: this.startDate, endDate: this.endDate } });
-  }
+}
 
-  formatDate() {
-
-  }
-
-  searchByDate(filter = '') {
-   
-    }
-
-
-  customData(cus: any) {
-    this.showCustomDateFilters = true;
-    this.filData = cus;
-  }
 
 
 
