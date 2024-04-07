@@ -2,13 +2,14 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { ArtistCreateComponent } from '../Artist/artist-create/artist-create.component';
-import { ArtistListComponent } from '../artist-list/artist-list.component';
+import { ArtistListComponent } from './artist-list/artist-list.component';
+import { ArtistEditComponent } from './artist-edit/artist-edit.component';
 
 const routes: Routes = [
-  { path: '', component: ArtistCreateComponent },
+  { path: '', component: ArtistListComponent },
+  { path: 'list', component:  ArtistListComponent},
   { path: 'create', component: ArtistCreateComponent },
-  { path: 'get-list', component:  ArtistListComponent},
-  // { path: 'genre-edit', component:  GenreEditComponent},
+  { path: 'edit/:id', component:  ArtistEditComponent},
 
 ];
 

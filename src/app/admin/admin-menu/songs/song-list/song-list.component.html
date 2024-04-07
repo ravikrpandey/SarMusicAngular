@@ -1,0 +1,25 @@
+<div class="card">
+    <div class="card-header">
+      <span>ALL SONGS</span>
+    </div>
+    <div class="card-body">
+      <div class="album-container">
+        <div class="album" *ngFor="let song of songs">
+          <!-- Attach click event to the image -->
+          <img [src]="song.albumCardUrl" alt="{{ song.albumName }}" (click)="playSong(song)">
+          <div class="album-info">
+            <h3>{{ song.duration }}</h3>
+            <p>{{ song.artistName }}</p>
+            <p>{{ song.genre }}</p>
+          </div>
+          <div class="icons">
+            <span class="edit-icon" (click)="editalbum(song.songId)">✎</span> 
+            <span class="delete-icon" (click)="deletealbum(song.songId)">🗑</span>
+            <audio [id]="'audioPlayer_' + song.songId" [src]="song.songUrl" controls></audio>
+            <span class="play-icon" (click)="togglePlay(song.songUrl)"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

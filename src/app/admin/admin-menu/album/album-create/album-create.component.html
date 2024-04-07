@@ -1,0 +1,60 @@
+<div class="card">
+    <div class="card-header">
+        ADD ALBUM
+    </div>
+    <div class="card-body">
+        <form>
+            <div class="form-group">
+                <label for="name">Album Name</label>
+                <input type="text" id="name" [(ngModel)]="albumName" name="albumName" class="form-control" placeholder="Enter album name">
+            </div>
+            <div class="form-group">
+                <label for="releaseDate">Release Date</label>
+                <input type="date" id="releaseDate" [(ngModel)]="releaseDate" name="releaseDate" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="genre">Genre</label>
+                <select id="genre" [(ngModel)]="genre" name="genre" class="form-control">
+                  <option value="" disabled selected>Select Genre</option>
+                  <option value="pop">Pop</option>
+                  <option value="rock">Rock</option>
+                  <option value="hip-hop">Hip-hop/Rap</option>
+                  <option value="r&b">R&B/Soul</option>
+                  <option value="country">Country</option>
+                  <option value="jazz">Jazz</option>
+                  <option value="blues">Blues</option>
+                  <option value="electronic">Electronic/Dance</option>
+                  <option value="reggae">Reggae</option>
+                  <option value="classical">Classical</option>
+                  <option value="metal">Metal</option>
+                  <option value="punk">Punk</option>
+                  <option value="folk">Folk</option>
+                  <option value="indie">Indie</option>
+                  <option value="funk">Funk</option>
+                  <option value="gospel">Gospel</option>
+                  <option value="alternative">Alternative</option>
+                  <option value="world">World</option>
+                  <option value="experimental">Experimental</option>
+                  <option value="ambient">Ambient</option>
+                  <option value="Bhojpuri">Bhojpuri</option>
+                </select>
+              </div>
+              
+            <div class="form-group">
+                <label for="albumCardUrl">Album Card URL</label>
+                <input type="text" id="albumCardUrl" [(ngModel)]="albumCardUrl" name="albumCardUrl" class="form-control"
+                    placeholder="Enter album card URL">
+            </div>
+            <div class="form-group">
+                <label for="artistId">Select Artist</label>
+                <select id="artistId" [(ngModel)]="selectedArtist" name="artistId" class="form-control" placeholder="Enter artist name">
+                  <option *ngFor="let artist of artists" [ngValue]="artist">{{ artist.artistName }}</option>
+                </select>
+              </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" (click)="submit()">Save</button>
+                <button type="button" class="btn btn-secondary">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+<div class="card">
+    <div class="card-header">
+      <span>ALL ALBUMS</span>
+    </div>
+    <div class="card-body">
+      <div class="album-container">
+        <div class="album" *ngFor="let album of albums">
+          <img [src]="album.albumCardUrl" alt="{{ album.albumName }}">
+          <div class="album-info">
+            <h3>{{ album.albumName }}</h3>
+            <p>Gender: {{ album.gender }}</p>
+          </div>
+          <div class="icons">
+            <span class="edit-icon" (click)="editalbum(album.albumId)">✎</span> 
+            <span class="delete-icon" (click)="deletealbum(album.artistId)">🗑</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

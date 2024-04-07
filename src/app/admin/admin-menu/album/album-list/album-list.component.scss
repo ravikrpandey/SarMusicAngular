@@ -1,0 +1,80 @@
+.card {
+    border: 1px solid #d4d4d4;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    width: 1280px; /* Adjust width as needed */
+  }
+  
+  .card-header {
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #d4d4d4;
+    border-radius: 8px 8px 0 0;
+    padding: 15px 20px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .album-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .album {
+    margin: 10px;
+    width: 200px; /* Adjust width as needed */
+    height: 300px; /* Adjust height as needed */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  
+  .album img {
+    width: 100%;
+    height: 60%;
+    object-fit: cover; /* Ensure the image covers the entire container */
+  }
+  
+  .album-info {
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    color: white; /* Text color */
+    text-align: center; /* Center the text */
+  }
+  
+  .album-info h3 {
+    margin: 0;
+    font-size: 18px;
+    margin-bottom: 5px; /* Add spacing between elements */
+  }
+  
+  .album-info p {
+    margin: 0;
+    font-size: 14px;
+  }
+  
+  
+  
+  
+  
+  
+  
+  // .album {
+  //   position: relative; /* Position icons relative to the album container */
+  // }
+  
+  // .icons {
+  //   position: absolute; /* Position icons absolutely */
+  //   top: 10px; /* Adjust top position as needed */
+  // }
+  
+  .left-icon {
+    left: 10px; /* Adjust left position as needed */
+  }
+  
+  .right-icon {
+    right: 40px; /* Adjust right position as needed */
+  }
+  
+  

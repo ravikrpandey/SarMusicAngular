@@ -1,0 +1,43 @@
+<div class="card">
+    <div class="card-header">
+        EDIT ARTIST
+    </div>
+    <div class="card-body">
+        <form>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" [(ngModel)]="artistName" name="artistName" class="form-control" placeholder="Enter name">
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth</label>
+                <input type="date" id="dob" [(ngModel)]="dob" name="dob" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <select id="gender" [(ngModel)]="gender" name="gender" class="form-control">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <!-- <div class="form-group">
+                <label for="profileImage">Profile Image</label>
+                <input type="file" id="profileImage" name="profileImage" class="form-control-file">
+            </div> -->
+            <div class="form-group">
+                <label for="websiteUrl">Artist Profile URL</label>
+                <input type="text" id="websiteUrl" [(ngModel)]="artistProfileUrl" name="artistProfileUrl" class="form-control"
+                    placeholder="Enter website URL">
+            </div>
+            <div class="form-group">
+                <label for="brief">Bio</label>
+                <textarea id="brief" [(ngModel)]="bio" name="bio" class="form-control"
+                    placeholder="Enter any size of text description here"></textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" (click)="submit()">Update</button>
+                <button type="button" class="btn btn-secondary">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

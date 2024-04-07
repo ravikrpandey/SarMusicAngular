@@ -511,27 +511,51 @@ body {
   display: none; /* Hide scrollbar in Chrome/Safari/Opera */
 }
 
-.card {
-  flex: 0 0 auto;
-  width: 300px;
-  margin-right: 20px; /* Add some space between cards */
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  /* Specify the path to your background image within the url() function */
-  background-image: url('https://images.hungama.com/c/1/212/82e/23815246/23815246_700x394.jpg');
-  /* Adjust background image properties as needed */
-  background-size: cover; /* Cover the entire card */
-  background-position: center; /* Center the background image */
-}
+// .card {
+//   flex: 0 0 auto;
+//   width: 300px;
+//   margin-right: 20px; /* Add some space between cards */
+//   border: 1px solid #ccc;
+//   border-radius: 8px;
+//   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+//   /* Specify the path to your background image within the url() function */
+//   background-image: url('https://images.hungama.com/c/1/212/82e/23815246/23815246_700x394.jpg');
+//   /* Adjust background image properties as needed */
+//   background-size: cover; /* Cover the entire card */
+//   background-position: center; /* Center the background image */
+// }
 
+.card {
+    flex: 0 0 auto;
+  width: 200px;
+  margin-right: 20px;
+    border: 1px solid #d4d4d4;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    // width: 1280px;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-image: url('https://images.hungama.com/c/1/212/82e/23815246/23815246_700x394.jpg');
+    background-size: cover; /* Cover the entire card */
+    background-position: center;
+    /* Adjust width as needed */
+  }
+
+.left-icon {
+    left: 10px; /* Adjust left position as needed */
+  }
+  
+  .right-icon {
+    right: 40px; /* Adjust right position as needed */
+  }
 
 .card:last-child {
   margin-right: 0; /* Remove margin from the last card */
 }
 
 .card-header {
-  background-color: #1DB954;
+  background-color: #eef4f0;
   color: white;
   padding: 10px;
   border-top-left-radius: 8px;
@@ -539,9 +563,9 @@ body {
 }
 
 .card-body {
-  padding: 20px;
+  padding: 10px;
   // width: 20px;
-  height: 80px;
+  height: 120px;
 }
 
 .song-list {
@@ -553,13 +577,33 @@ body {
   margin-bottom: 10px;
 }
 
-.card-footer {
-  background-color: rgba(118, 171, 174, 0.7); /* Adjust the alpha value (0.7) to set the transparency */
-  padding: 10px;
-  text-align: center;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
-}
+/* Add this class for green play button */
+.greenPlay {
+    color: green;
+  }
+  
+  /* Add this class to change color on hover */
+  .greenPlay:hover {
+    color: darkgreen;
+  }
+
+  /* Hide the icon with the hidden class */
+.hidden {
+    display: none;
+  }
+  
+  
+
+  .card-footer {
+    background-color: rgba(70, 74, 70, 0.7); /* Adjust the alpha value (0.7) to set the transparency */
+    padding: 10px;
+    text-align: center;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    color: white; /* Set text color to white */
+    font-weight: bold; /* Make the text bold */
+  }
+  
 
 
 .slide-button {
@@ -621,3 +665,17 @@ body {
 .artistName {
   color: #999;
 }
+
+
+/* Define the animation */
+@keyframes wave {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+    100% { transform: translateY(0); }
+  }
+  
+  /* Apply the animation to the wave icon */
+  .fa-wave-square {
+    animation: wave 1s infinite;
+  }
+  

@@ -4,8 +4,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- <link rel="stylesheet" href="css/style.css"> -->
-  <!-- <link rel="stylesheet" href="css/utility.css"> -->
   <title>Spotify - Web Player: Music for everyone</title>
 </head>
 
@@ -30,100 +28,24 @@
             Your Library
           </h2>
         </div>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
 
         <div class="songList">
-          <div class="songCard">
-            <i class="fas fa-play-circle"></i>
-            <div class="songInfo">
-                <span class="songName">Song 1</span>
-                <span class="artistName">Artist 1</span>
+          <div class="songCard" *ngFor="let song of songs">
+            <i class="fas fa-play-circle" *ngIf="!song.isPlaying" (click)="playSongongById(song)"></i>
+            <div class="songInfo" (click)="playSongongById(song)">
+              <span class="songId">{{song.songId}}.&nbsp;</span>
+              <span class="songName">{{song.songTitle}} &nbsp;</span>
+              <span class="artistName">{{song.artistName}}</span>
+              <i class="fas fa-wave-square" *ngIf="song.songId"></i> <!-- Wave play icon for playing song -->
             </div>
+          </div>
         </div>
-          <div class="songCard">
-            <i class="fas fa-play-circle"></i>
-            <div class="songInfo">
-                <span class="songName">Song 1</span>
-                <span class="artistName">Artist 1</span>
-            </div>
-        </div>
-          <div class="songCard">
-            <i class="fas fa-play-circle"></i>
-            <div class="songInfo">
-                <span class="songName">Song 1</span>
-                <span class="artistName">Artist 1</span>
-            </div>
-        </div>
-          <div class="songCard">
-            <i class="fas fa-play-circle"></i>
-            <div class="songInfo">
-                <span class="songName">Song 1</span>
-                <span class="artistName">Artist 1</span>
-            </div>
-        </div>
-          <div class="songCard">
-            <i class="fas fa-play-circle"></i>
-            <div class="songInfo">
-                <span class="songName">Song 1</span>
-                <span class="artistName">Artist 1</span>
-            </div>
-        </div>
-          <div class="songCard">
-            <i class="fas fa-play-circle"></i>
-            <div class="songInfo">
-                <span class="songName">Song 1</span>
-                <span class="artistName">Artist 1</span>
-            </div>
-        </div>
-          <div class="songCard">
-            <i class="fas fa-play-circle"></i>
-            <div class="songInfo">
-                <span class="songName">Song 1</span>
-                <span class="artistName">Artist 1</span>
-            </div>
-        </div>
-          <div class="songCard">
-            <i class="fas fa-play-circle"></i>
-            <div class="songInfo">
-                <span class="songName">Song 1</span>
-                <span class="artistName">Artist 1</span>
-            </div>
-        </div>
-          <div class="songCard">
-            <i class="fas fa-play-circle"></i>
-            <div class="songInfo">
-                <span class="songName">Song 1</span>
-                <span class="artistName">Artist 1</span>
-            </div>
-        </div>
-          <div class="songCard">
-            <i class="fas fa-play-circle"></i>
-            <div class="songInfo">
-                <span class="songName">Song 1</span>
-                <span class="artistName">Artist 1</span>
-            </div>
-        </div>
-          <div class="songCard">
-            <i class="fas fa-play-circle"></i>
-            <div class="songInfo">
-                <span class="songName">Song 1</span>
-                <span class="artistName">Artist 1</span>
-            </div>
-        </div>
-          <div class="songCard">
-            <i class="fas fa-play-circle"></i>
-            <div class="songInfo">
-                <span class="songName">Song 1</span>
-                <span class="artistName">Artist 1</span>
-            </div>
-        </div>
-          <div class="songCard">
-            <i class="fas fa-play-circle"></i>
-            <div class="songInfo">
-                <span class="songName">Song 1</span>
-                <span class="artistName">Artist 1</span>
-            </div>
-        </div>
-      </div>
+        
+        
+        
+        
 
         <!-- <div class="footer">
           <div><a href="https://www.spotify.com/jp/legal/"><span>Legal</span></a></div>
@@ -164,159 +86,16 @@
       <!-- song playlist starts -->
       <div class="spotifyPlaylists">
         <h1>Pick Your Mood</h1>
-        <!-- <div class="cardContainer">  </div> -->
         <div class="popular-songs">
-          <div class="card">
-            <!-- <div class="card-header">
-              <h2>Popular Songs</h2>
-            </div> -->
-            <div class="card-body">
-             <!--  <ul class="song-list">
-                <li class="song"></li>
-                <li class="song"></li>
-                <li class="song">Song 3 - Artist 3</li>
-              </ul>-->
+          <div class="card" *ngFor="let album of albums" [style.background-image]="'url(' + album.albumCardUrl + ')'">
+            <div class="card-body" (click)="songsByAlbumId(album.albumId)">
             </div>
             <div class="card-footer">
-              <p>KIARA</p>
-            </div>
-          </div>
-          <div class="card">
-            <!-- <div class="card-header">
-              <h2>Popular Songs</h2>
-            </div> -->
-            <div class="card-body">
-              <!-- <ul class="song-list">
-                <li class="song">Song 1 - Artist 1</li>
-                <li class="song">Song 2 - Artist 2</li>
-                <li class="song">Song 3 - Artist 3</li>
-              </ul> -->
-            </div>
-            <div class="card-footer">
-              <p>KIARA</p>
-            </div>
-          </div>
-          <div class="card">
-            <!-- <div class="card-header">
-              <h2>Popular Songs</h2>
-            </div> -->
-            <div class="card-body">
-              <!-- <ul class="song-list">
-                <li class="song">Song 1 - Artist 1</li>
-                <li class="song">Song 2 - Artist 2</li>
-                <li class="song">Song 3 - Artist 3</li>
-              </ul> -->
-            </div>
-            <div class="card-footer">
-              <p>KIARA</p>
-            </div>
-          </div>
-          <div class="card">
-            <!-- <div class="card-header">
-              <h2>Popular Songs</h2>
-            </div> -->
-            <div class="card-body">
-              <!-- <ul class="song-list">
-                <li class="song">Song 1 - Artist 1</li>
-                <li class="song">Song 2 - Artist 2</li>
-                <li class="song">Song 3 - Artist 3</li>
-              </ul> -->
-            </div>
-            <div class="card-footer">
-              <p>KIARA</p>
-            </div>
-          </div>
-          <div class="card">
-            <!-- <div class="card-header">
-              <h2>Popular Songs</h2>
-            </div> -->
-            <div class="card-body">
-              <!-- <ul class="song-list">
-                <li class="song">Song 1 - Artist 1</li>
-                <li class="song">Song 2 - Artist 2</li>
-                <li class="song">Song 3 - Artist 3</li>
-              </ul> -->
-            </div>
-            <div class="card-footer">
-              <p>KIARA</p>
-            </div>
-          </div>
-          <div class="card">
-            <!-- <div class="card-header">
-              <h2>Popular Songs</h2>
-            </div> -->
-            <div class="card-body">
-              <!-- <ul class="song-list">
-                <li class="song">Song 1 - Artist 1</li>
-                <li class="song">Song 2 - Artist 2</li>
-                <li class="song">Song 3 - Artist 3</li>
-              </ul> -->
-            </div>
-            <div class="card-footer">
-              <p>KIARA</p>
-            </div>
-          </div>
-          <div class="card">
-            <!-- <div class="card-header">
-              <h2>Popular Songs</h2>
-            </div> -->
-            <div class="card-body">
-              <!-- <ul class="song-list">
-                <li class="song">Song 1 - Artist 1</li>
-                <li class="song">Song 2 - Artist 2</li>
-                <li class="song">Song 3 - Artist 3</li>
-              </ul> -->
-            </div>
-            <div class="card-footer">
-              <p>KIARA</p>
-            </div>
-          </div>
-          <div class="card">
-            <!-- <div class="card-header">
-              <h2>Popular Songs</h2>
-            </div> -->
-            <div class="card-body">
-              <!-- <ul class="song-list">
-                <li class="song">Song 1 - Artist 1</li>
-                <li class="song">Song 2 - Artist 2</li>
-                <li class="song">Song 3 - Artist 3</li>
-              </ul> -->
-            </div>
-            <div class="card-footer">
-              <p>KIARA</p>
-            </div>
-          </div>
-          <div class="card">
-            <!-- <div class="card-header">
-              <h2>Popular Songs</h2>
-            </div> -->
-            <div class="card-body">
-              <!-- <ul class="song-list">
-                <li class="song">Song 1 - Artist 1</li>
-                <li class="song">Song 2 - Artist 2</li>
-                <li class="song">Song 3 - Artist 3</li>
-              </ul> -->
-            </div>
-            <div class="card-footer">
-              <p>KIARA</p>
-            </div>
-          </div>
-          <div class="card">
-            <!-- <div class="card-header">
-              <h2>Popular Songs</h2>
-            </div> -->
-            <div class="card-body">
-              <!-- <ul class="song-list">
-                <li class="song">Song 1 - Artist 1</li>
-                <li class="song">Song 2 - Artist 2</li>
-                <li class="song">Song 3 - Artist 3</li>
-              </ul> -->
-            </div>
-            <div class="card-footer">
-              <p>KIARA</p>
+              <p>{{album.albumName}}</p>
             </div>
           </div>
         </div>
+
         <div class="playbar">
           <div class="seekbar">
             <div class="circle" [style.left.%]="circlePosition"></div>
@@ -329,7 +108,8 @@
               <img width="35" id="next" src="assets/nextsong.svg" alt="">
             </div>
             <div class="timevol">
-              <div class="songtime">{{ currentTime }} / {{ totalTime }}</div>
+              <div class="songtime"><p>{{ currentTime }} / {{ totalTime }}</p>
+              </div>
               <div class="volume">
                 <img width="25" src="assets/volume.svg" alt="">
                 <div class="range">
@@ -337,11 +117,11 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div>                                      
+        </div>
         </div>
         <audio #audioPlayer [src]="currentMusic" (timeupdate)="updateSeekBar($event)"></audio>
-
-      </div>
+        
 
       <div class="spotifyPlaylists">
         <h1>Most Played</h1>
@@ -499,21 +279,28 @@
           </div>
         </div>
 
-         <!-- audio play back controls go here, hidden by default -->
-         <div class="playbar">
+        <!-- audio play back controls go here, hidden by default -->
+        <div class="playbar">
           <audio id="audioPlayer" [src]="currentMusic"></audio>
           <div class="seekbar">
             <div class="circle"></div>
           </div>
           <div class="abovebar">
-            <div class="songinfo"></div>
+            <div class="songinfo">
+              <p>{{currentMusicName}} {{currentArtistName}}</p>
+              <!-- <p></p> -->
+            </div>
             <div class="songbuttons">
               <img width="35" id="previous" src="assets/prevsong.svg" alt="" (click)="previousSong()">
               <img width="35" id="play" [src]="playPauseSrc" alt="" (click)="togglePlay()">
               <img width="35" id="next" src="assets/nextsong.svg" alt="" (click)="nextSong()">
             </div>
             <div class="timevol">
-              <div class="songtime"></div>
+              <div class="songtime">
+                <!-- <p>{{songDuration}}</p> -->
+                <p>{{ currentTime }} / {{ songDuration }}</p>
+
+              </div>
               <div class="volume">
                 <img width="25" [src]="volumeIcon" alt="" (click)="toggleVolume()">
                 <div class="range">

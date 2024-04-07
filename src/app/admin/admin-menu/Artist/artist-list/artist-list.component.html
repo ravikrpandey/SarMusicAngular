@@ -1,0 +1,20 @@
+<div class="card">
+  <div class="card-header">
+    <span>ALL ARTISTS</span>
+  </div>
+  <div class="card-body">
+    <div class="album-container">
+      <div class="album" *ngFor="let artist of artists">
+        <img [src]="artist.artistProfileUrl" alt="{{ artist.artistName }}">
+        <div class="album-info">
+          <h3>{{ artist.artistName }}</h3>
+          <p>Gender: {{ artist.gender }}</p>
+        </div>
+        <div class="icons">
+          <span class="edit-icon" (click)="editArtist(artist.artistId)">✎</span> <!-- Edit icon -->
+          <span class="delete-icon" (click)="deleteArtist(artist.artistId)">🗑</span> <!-- Delete icon -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

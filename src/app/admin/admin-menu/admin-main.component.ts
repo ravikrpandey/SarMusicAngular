@@ -97,7 +97,7 @@ export class AdminMainComponent implements OnInit, AfterContentChecked, DoCheck 
         "subModules": [
           {
             "moduleName": "All Artists",
-            "route": "/artist",
+            "route": "artist/list",
             "read": true,
             "write": true,
             "delete": true,
@@ -105,7 +105,7 @@ export class AdminMainComponent implements OnInit, AfterContentChecked, DoCheck 
           },
           {
             "moduleName": "Add Artists",
-            "route": "artist",
+            "route": "artist/create",
             "read": true,
             "write": true,
             "delete": true,
@@ -113,7 +113,7 @@ export class AdminMainComponent implements OnInit, AfterContentChecked, DoCheck 
           },
           {
             "moduleName": "Edit Artists",
-            "route": "roles-and-access/dealer",
+            "route": "artist/edit/:id",
             "read": true,
             "write": true,
             "delete": true,
@@ -133,7 +133,7 @@ export class AdminMainComponent implements OnInit, AfterContentChecked, DoCheck 
         "subModules": [
           {
             "moduleName": "All Albums",
-            "route": "roles-and-access/user",
+            "route": "album/list",
             "read": true,
             "write": true,
             "delete": true,
@@ -141,7 +141,7 @@ export class AdminMainComponent implements OnInit, AfterContentChecked, DoCheck 
           },
           {
             "moduleName": "Add Album",
-            "route": "roles-and-access/assign-roles",
+            "route": "album/create",
             "read": true,
             "write": true,
             "delete": true,
@@ -169,7 +169,7 @@ export class AdminMainComponent implements OnInit, AfterContentChecked, DoCheck 
         "subModules": [
           {
             "moduleName": "All Songs",
-            "route": "roles-and-access/user",
+            "route": "song/list",
             "read": true,
             "write": true,
             "delete": true,
@@ -177,7 +177,7 @@ export class AdminMainComponent implements OnInit, AfterContentChecked, DoCheck 
           },
           {
             "moduleName": "Add Songs",
-            "route": "roles-and-access/assign-roles",
+            "route": "song/create",
             "read": true,
             "write": true,
             "delete": true,
@@ -185,7 +185,7 @@ export class AdminMainComponent implements OnInit, AfterContentChecked, DoCheck 
           },
           {
             "moduleName": "Edit Songs",
-            "route": "roles-and-access/dealer",
+            "route": "song/edit/:id",
             "read": true,
             "write": true,
             "delete": true,
