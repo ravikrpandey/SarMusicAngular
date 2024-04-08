@@ -80,7 +80,7 @@ export class AdminMainComponent implements OnInit, AfterContentChecked, DoCheck 
     this.navData = [
       {
         "moduleName": "Dashboard",
-        "route": "./new-dashboard",
+        "route": "list-dashboard",
         "read": true,
         "write": true,
         "delete": true,

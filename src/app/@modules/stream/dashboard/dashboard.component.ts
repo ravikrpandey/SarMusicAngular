@@ -54,8 +54,9 @@ export class DashboardComponent implements AfterViewInit {
   albums: any[] = [];
   songs: any[] = [];
 
+
     // Assuming you have a property to track the currently playing song
-currentSong: any;
+  currentSong: any;
 
   ngOnInit() {
     // const mobileNumber = localStorage.getItem('mobileNumber') as string | null;
@@ -84,51 +85,6 @@ currentSong: any;
     })
   }
 
-
-
-// Inside your component class
-
-updateSeekBar($event: any) {
-  const audioPlayer = this.audioPlayerRef.nativeElement;
-  const currentTime = audioPlayer.currentTime;
-  // const duration = audioPlayer.duration;
-  let duration = audioPlayer.duration;
-  duration = this.songDuration;
-
-  // Calculate circle position
-  this.circlePosition = (currentTime / duration) * 100;
-
-  // Format time display
-  this.currentTime = this.formatTime(currentTime);
-  this.totalTime = this.formatTime(duration);
-
-  // Get exact playing time
-  console.log("Current time:", currentTime);
-}
-
-
-
-  // Format time as mm:ss
-  formatTime(time: number): string {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-  }
-
-
-
-
-
-  adjustVolume(event: Event) {
-    const volumeLevel = (event.target as HTMLInputElement).value;
-    console.log('Volume level:', volumeLevel);
-    if (this.audioPlayer) {
-      const normalizedVolume = parseFloat(volumeLevel) / 100;
-      this.audioPlayer.volume = normalizedVolume;
-    }
-  }
-
-
   ngAfterViewInit() {
     const volumeRange = this.el.nativeElement.querySelector('#volumeRange');
     const updateVolume = () => {
@@ -155,11 +111,75 @@ updateSeekBar($event: any) {
     if (this.previousButton) {
       this.previousButton.addEventListener('click', this.previousSong.bind(this));
     }
+
+        // Initialize audio player
+        this.audioPlayer = this.audioPlayerRef.nativeElement;
+
+        // Add event listener for updating seek bar
+        this.audioPlayer.addEventListener('timeupdate', () => {
+          this.updateSeekBar();
+        });
   }
+
+
+
+// Inside your component class
+
+  // Update seek bar and current time
+  updateSeekBar() {
+    if (this.audioPlayer) {
+      const currentTime = this.audioPlayer.currentTime;
+      let duration = this.audioPlayer.duration;
+      if (isNaN(duration)) {
+        duration = 0;
+      }
+      const progress = (currentTime / duration) * 100;
+  
+      this.currentTime = this.formatTime(currentTime);
+      this.totalTime = this.formatTime(duration);
+      this.circlePosition = progress;
+    }
+  }
+  
+
+
+  // Format time as mm:ss
+  formatTime(time: number): string {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  }
+
+  adjustSong(event: MouseEvent) {
+    if (this.audioPlayer && event.target instanceof HTMLElement) {
+      const seekBarWidth = event.target.clientWidth;
+      const clickX = event.clientX - event.target.getBoundingClientRect().left;
+      const percentage = (clickX / seekBarWidth) * 100;
+      const newTime = (percentage / 100) * this.audioPlayer.duration;
+      this.audioPlayer.currentTime = newTime;
+      this.circlePosition = percentage;
+      this.currentTime = this.formatTime(newTime);
+    }
+  }
+  
+  
+
+
+
+
+
+  adjustVolume(event: Event) {
+    const volumeLevel = (event.target as HTMLInputElement).value;
+    console.log('Volume level:', volumeLevel);
+    if (this.audioPlayer) {
+      const normalizedVolume = parseFloat(volumeLevel) / 100;
+      this.audioPlayer.volume = normalizedVolume;
+    }
+  }
+
 
   // Function to toggle play/pause
   togglePlay() {
-
     if (this.audioPlayer) {
       if (this.audioPlayer.paused) {
         this.audioPlayer.play();

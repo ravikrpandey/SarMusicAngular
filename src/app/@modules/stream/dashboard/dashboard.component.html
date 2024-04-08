@@ -97,7 +97,9 @@
         </div>
 
         <div class="playbar">
-          <div class="seekbar">
+          <audio #audioPlayer id="audioPlayer" [src]="currentMusic"></audio>
+          <div class="seekbar" (click)="adjustSong($event)">
+            <div class="progress-bar" [style.width.%]="circlePosition"></div>
             <div class="circle" [style.left.%]="circlePosition"></div>
           </div>
           <div class="abovebar">
@@ -120,7 +122,7 @@
           </div>                                      
         </div>
         </div>
-        <audio #audioPlayer [src]="currentMusic" (timeupdate)="updateSeekBar($event)"></audio>
+        <audio #audioPlayer [src]="currentMusic" (timeupdate)="updateSeekBar()"></audio>
         
 
       <div class="spotifyPlaylists">
@@ -281,14 +283,14 @@
 
         <!-- audio play back controls go here, hidden by default -->
         <div class="playbar">
-          <audio id="audioPlayer" [src]="currentMusic"></audio>
-          <div class="seekbar">
-            <div class="circle"></div>
+          <audio #audioPlayer id="audioPlayer" [src]="currentMusic"></audio>
+          <div class="seekbar" (click)="adjustSong($event)">
+            <div class="progress-bar" [style.width.%]="circlePosition"></div>
+            <div class="circle" [style.left.%]="circlePosition"></div>
           </div>
           <div class="abovebar">
             <div class="songinfo">
               <p>{{currentMusicName}} {{currentArtistName}}</p>
-              <!-- <p></p> -->
             </div>
             <div class="songbuttons">
               <img width="35" id="previous" src="assets/prevsong.svg" alt="" (click)="previousSong()">
@@ -297,9 +299,7 @@
             </div>
             <div class="timevol">
               <div class="songtime">
-                <!-- <p>{{songDuration}}</p> -->
-                <p>{{ currentTime }} / {{ songDuration }}</p>
-
+                <p>{{ currentTime }} / {{ totalTime }}</p>
               </div>
               <div class="volume">
                 <img width="25" [src]="volumeIcon" alt="" (click)="toggleVolume()">
@@ -310,8 +310,7 @@
             </div>
           </div>
         </div>
-
-
+        <audio #audioPlayer [src]="currentMusic" (timeupdate)="updateSeekBar()"></audio>
 
       </div>
     </div>
