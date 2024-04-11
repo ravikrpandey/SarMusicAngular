@@ -8,6 +8,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 
 
 
@@ -26,9 +28,10 @@ import { ToastrModule } from 'ngx-toastr';
     SharedModule,
     FormsModule,
     HttpClientModule,
-    ToastrModule.forRoot({
-      positionClass: 'toast-top-right'
-    })
+    MatSnackBarModule,
+    ToastrModule.forRoot(),
+
+
   ],
   providers: [],
   bootstrap: [AppComponent]

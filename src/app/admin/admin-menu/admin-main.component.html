@@ -1,29 +1,38 @@
 <header>
-    <div class="header-fixed">
-        <div class="logo" style="cursor: pointer;">
-            <img src="" routerLink="Dashboard"> &nbsp;DEVELOPERS PANNEL&nbsp;
-        </div>
+  <div class="header-fixed">
+      <div class="logo" style="cursor: pointer;">
+          <img src="" routerLink="Dashboard"> &nbsp;DEVELOPERS PANEL&nbsp;
+      </div>
 
-        <div class="float__right">
-            <div class="user_profile">
-                <ul>
-                    <li (click)="showDropdown($event)">
-                        <a><img src="https://media.licdn.com/dms/image/C5603AQFEHQcpalKFBg/profile-displayphoto-shrink_200_200/0/1644255153601?e=2147483647&v=beta&t=7U0oTfCZjF7Fi8LCbJ7P9M8QYVSQcdBQEHTCQWBAGN8" alt=""></a>
-                        <div class="dropdown-profile" *ngIf="showList">
-                            <a (click)="profile()"><img src="https://clicknumero.com/assets/editProfile.svg" alt="Profile">Profile</a> 
-                        <p> <a (click)="logOut()"><img src="https://clicknumero.com/assets/logout.svg
-                                " alt="Log Out">  &nbsp;Log Out</a> </p>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+      <!-- Search bar -->
+      <!-- <div class="search-bar">
+          <input type="text" placeholder="Search">
+          <button type="submit">Search</button>
+      </div> -->
 
-        </div>
 
-        <!-- <mat-progress-bar mode="indeterminate" *ngIf="progres"></mat-progress-bar> -->
 
-    </div>
+      <div class="float__right">
+          <div class="user_profile">
+              <ul>
+                <li>
+                  <div class="notification-icon">
+                      <!-- <a><img src="notification-bell-icon.png" alt="Notifications"></a> -->
+                      <span class="notification-icon">🔔</span>
+                  </div></li>
+                  <li (click)="showDropdown($event)">
+                      <a><img src="https://media.licdn.com/dms/image/C5603AQFEHQcpalKFBg/profile-displayphoto-shrink_200_200/0/1644255153601?e=2147483647&v=beta&t=7U0oTfCZjF7Fi8LCbJ7P9M8QYVSQcdBQEHTCQWBAGN8" alt=""></a>
+                      <div class="dropdown-profile" *ngIf="showList">
+                          <a (click)="profile()"><img src="https://clicknumero.com/assets/editProfile.svg" alt="Profile">Profile</a>
+                          <p><a (click)="logOut()"><img src="https://clicknumero.com/assets/logout.svg" alt="Log Out">&nbsp;Log Out</a></p>
+                      </div>
+                  </li>
+              </ul>
+          </div>
+      </div>
+  </div>
 </header>
+
 
 
 <nav class="left_sidebar">
