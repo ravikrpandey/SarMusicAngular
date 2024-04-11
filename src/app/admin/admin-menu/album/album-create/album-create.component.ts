@@ -38,8 +38,9 @@ export class AlbumCreateComponent implements OnInit { // Implement OnInit interf
       artistName: this.selectedArtist.artistName
     }
     this.loginService.createAlbum(albumData).subscribe((res: any) => {
-      if (res.data.code === 200) {
-        alert(res.message)
+      if (res.data) {
+        console.log(res.data,"res.data===")
+        alert('Album Uploaded Successfully')
       }
 
     })

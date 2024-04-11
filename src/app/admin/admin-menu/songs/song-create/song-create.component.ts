@@ -92,6 +92,8 @@ export class SongCreateComponent {
 
     this.loginService.createSong(songData).subscribe((res: any) => {
       if (res.data) {
+        console.log(res.data,"res.data===")
+        alert('Song Uploaded Successfully')
         this.toastr.success('Song Created Successfully'); // Display success toaster message
       }
     });

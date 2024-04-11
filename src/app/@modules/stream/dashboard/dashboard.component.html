@@ -35,7 +35,7 @@
           <div class="songCard" *ngFor="let song of songs">
             <i class="fas fa-play-circle" *ngIf="!song.isPlaying" (click)="playSongongById(song)"></i>
             <div class="songInfo" (click)="playSongongById(song)">
-              <span class="songId">{{song.songId}}.&nbsp;</span>
+              <span class="songId">{{song.songId}}&nbsp;</span>
               <span class="songName">{{song.songTitle}} &nbsp;</span>
               <span class="artistName">{{song.artistName}}</span>
               <i class="fas fa-wave-square" *ngIf="song.songId"></i> <!-- Wave play icon for playing song -->

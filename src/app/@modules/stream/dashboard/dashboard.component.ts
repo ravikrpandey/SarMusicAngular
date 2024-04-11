@@ -86,40 +86,32 @@ export class DashboardComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    const volumeRange = this.el.nativeElement.querySelector('#volumeRange');
-    const updateVolume = () => {
-      const volumeLevel = parseInt(volumeRange.value);
-      console.log('Volume level:', volumeLevel);
-    };
-    updateVolume();
-    volumeRange.addEventListener('input', updateVolume);
-
-    // Initialize variables with the corresponding elements
-    this.audioPlayer = document.getElementById('audioPlayer') as HTMLAudioElement;
-    this.playButton = document.getElementById('play') as HTMLImageElement;
-    this.nextButton = document.getElementById('next') as HTMLImageElement;
-    this.previousButton = document.getElementById('previous') as HTMLImageElement;
-
-
-    // Add event listeners only if the elements exist
-    if (this.playButton) {
-      this.playButton.addEventListener('click', this.togglePlay.bind(this));
-    }
-    if (this.nextButton) {
-      this.nextButton.addEventListener('click', this.nextSong.bind(this));
-    }
-    if (this.previousButton) {
-      this.previousButton.addEventListener('click', this.previousSong.bind(this));
-    }
-
-        // Initialize audio player
-        this.audioPlayer = this.audioPlayerRef.nativeElement;
-
-        // Add event listener for updating seek bar
-        this.audioPlayer.addEventListener('timeupdate', () => {
-          this.updateSeekBar();
-        });
+    // Initialize audio player
+    this.audioPlayer = this.audioPlayerRef.nativeElement;
+  
+    // Add event listener for updating seek bar
+    this.audioPlayer.addEventListener('timeupdate', () => {
+      this.updateSeekBar();
+    });
+  
+    // Add event listeners for play, pause, and error events
+    this.audioPlayer.addEventListener('play', () => {
+      this.playPauseSrc = this.pauseButtonSrc;
+      this.cdr.detectChanges();
+    });
+  
+    this.audioPlayer.addEventListener('pause', () => {
+      this.playPauseSrc = this.playbuttonSrc;
+      this.cdr.detectChanges();
+    });
+  
+    this.audioPlayer.addEventListener('error', (event) => {
+      console.error('Error occurred while playing the audio:', event);
+      // Handle error gracefully
+    });
   }
+  
+  
 
 
 
@@ -178,36 +170,57 @@ export class DashboardComponent implements AfterViewInit {
   }
 
 
-  // Function to toggle play/pause
   togglePlay() {
-    if (this.audioPlayer) {
-      if (this.audioPlayer.paused) {
-        this.audioPlayer.play();
-        console.log(this.playButton.src, "this.playButton.src");
-        this.playPauseSrc = this.pauseButtonSrc;
+    if (this.audioPlayer && this.audioPlayer.src) {
+      // Check if the audio source is set
+      if (this.audioPlayer.readyState >= 2) {
+        // Check if the audio is loaded
+        if (this.audioPlayer.paused) {
+          this.audioPlayer.play();
+        } else {
+          this.audioPlayer.pause();
+        }
       } else {
-        this.audioPlayer.pause();
-        console.log(this.playPauseSrc, "this.playButton.src");
-        this.playPauseSrc = this.playbuttonSrc;
+        console.warn('Audio is still loading.');
       }
+    } else {
+      console.warn('Audio source is not set.');
     }
   }
+  
+  
+  
 
   playSongongById(song: any) {
-    console.log("playSongongById====", song)
-
-    this.currentMusic = song.songUrl
-    this.currentMusicName = song.songTitle
-    this.currentArtistName = song.artistName
-    this.songDuration = song.duration
-
-
-
-    this.togglePlay()
-    this.cdr.detectChanges();
-
-
+    console.log("playSongongById====", song);
+  
+    this.currentMusic = song.songUrl;
+    this.currentMusicName = song.songTitle;
+    this.currentArtistName = song.artistName;
+    this.songDuration = song.duration;
+  
+    // Set the new source and wait for it to be ready to play
+    this.audioPlayer.src = this.currentMusic;
+    this.audioPlayer.load(); // Load the new source
+  
+    // Add event listener for when the new source is ready to play
+    this.audioPlayer.addEventListener('canplaythrough', () => {
+      // Play the song when it's ready
+      this.audioPlayer.play();
+      // Update the play/pause button icon
+      this.playPauseSrc = this.pauseButtonSrc;
+      this.cdr.detectChanges();
+    });
+  
+    // Handle errors
+    this.audioPlayer.addEventListener('error', (event) => {
+      console.error('Error occurred while loading the audio:', event);
+      // Handle error gracefully
+    });
   }
+  
+  
+  
 
   toggleVolume() {
     if (this.audioPlayer) {
@@ -224,15 +237,30 @@ export class DashboardComponent implements AfterViewInit {
 
 
 
-  // Function to play the next song
-  nextSong() {
-    // Add your logic to play the next song
+// Function to play the next song
+nextSong() {
+  if (this.songs.length === 0) return; // No songs available
+  const currentIndex = this.songs.findIndex(song => song.songUrl === this.currentMusic);
+  let nextIndex = currentIndex + 1;
+  if (nextIndex >= this.songs.length) {
+    nextIndex = 0; // Loop back to the first song if reaching the end
   }
+  const nextSong = this.songs[nextIndex];
+  this.playSongongById(nextSong);
+}
 
-  // Function to play the previous song
-  previousSong() {
-    // Add your logic to play the previous song
+// Function to play the previous song
+previousSong() {
+  if (this.songs.length === 0) return; // No songs available
+  const currentIndex = this.songs.findIndex(song => song.songUrl === this.currentMusic);
+  let prevIndex = currentIndex - 1;
+  if (prevIndex < 0) {
+    prevIndex = this.songs.length - 1; // Loop back to the last song if reaching the beginning
   }
+  const prevSong = this.songs[prevIndex];
+  this.playSongongById(prevSong);
+}
+
 
   loginForm() {
     this.router.navigate(['/login']);
