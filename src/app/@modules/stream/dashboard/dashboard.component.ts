@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Renderer2, ElementRef, ViewChild } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 
@@ -12,13 +13,18 @@ import { LoginService } from 'src/app/services/login.service';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements AfterViewInit {
+likedSongs: any;
+
+
+
 
   constructor(
     private router: Router,
     private http: HttpClient,
     private el: ElementRef,
     private loginService: LoginService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private snackBar: MatSnackBar
   ) { }
   @ViewChild('audioPlayer') audioPlayerRef!: ElementRef<HTMLAudioElement>;
   // Other variables
@@ -31,6 +37,7 @@ export class DashboardComponent implements AfterViewInit {
   currentMusicName: any;
   currentArtistName: string = '';
   songDuration: any;
+  showLikedSongs: boolean = false;
 
 
   
@@ -66,6 +73,16 @@ export class DashboardComponent implements AfterViewInit {
     this.getAll();
   }
 
+  openSnackBar(message: string, action: string, type: string) {
+    this.snackBar.open(message, action, {
+      duration: 5000,
+      panelClass: type == 'error' ? ['snackbar-error'] : ['snackbar-success'],
+      verticalPosition: 'top',
+      horizontalPosition:'right',
+
+    });
+  }
+
   getAll() {
     this.loginService.getAllAlbum().subscribe((res: any) => {
       this.albums = res.data;
@@ -73,6 +90,10 @@ export class DashboardComponent implements AfterViewInit {
       this.cdr.detectChanges();
       if (this.albums.length > 0) {
         this.songsByAlbumId(this.albums[0].albumId);
+        // Load the first song after fetching all songs
+        if (this.songs.length > 0) {
+          this.playSongById(this.songs[0]); // Assuming you want to play the first song
+        }
       }
     })
   };
@@ -109,7 +130,14 @@ export class DashboardComponent implements AfterViewInit {
       console.error('Error occurred while playing the audio:', event);
       // Handle error gracefully
     });
+  
+    // Add event listener for when current song ends
+    this.audioPlayer.addEventListener('ended', () => {
+      // Play the next song
+      this.nextSong();
+    });
   }
+  
   
   
 
@@ -182,17 +210,19 @@ export class DashboardComponent implements AfterViewInit {
         }
       } else {
         console.warn('Audio is still loading.');
+        this.openSnackBar('Audio is still loading.', 'close', 'error');
       }
     } else {
       console.warn('Audio source is not set.');
+      this.openSnackBar('Audio source is not set.', 'close', 'error');
     }
   }
   
   
   
 
-  playSongongById(song: any) {
-    console.log("playSongongById====", song);
+  playSongById(song: any) {
+    console.log("playSongById====", song);
   
     this.currentMusic = song.songUrl;
     this.currentMusicName = song.songTitle;
@@ -246,7 +276,7 @@ nextSong() {
     nextIndex = 0; // Loop back to the first song if reaching the end
   }
   const nextSong = this.songs[nextIndex];
-  this.playSongongById(nextSong);
+  this.playSongById(nextSong);
 }
 
 // Function to play the previous song
@@ -258,7 +288,7 @@ previousSong() {
     prevIndex = this.songs.length - 1; // Loop back to the last song if reaching the beginning
   }
   const prevSong = this.songs[prevIndex];
-  this.playSongongById(prevSong);
+  this.playSongById(prevSong);
 }
 
 
@@ -281,6 +311,35 @@ previousSong() {
   adminMenueToggle() {
     this.router.navigate(['/admin']);
   }
+
+
+  // =============Likng song=============
+
+  addToLikedSongs(songid: any) {
+console.log("song gets liked")
+  }
+
+  removeFromLikedSongs(song: any) {
+    console.log("song gets unliked")
+
+  }
+
+  toggleLove(song: any) {
+    song.liked = !song.liked; // Toggle the liked state
+    if (song.liked) {
+      // Add the song to the "liked" section or perform any other action
+      this.addToLikedSongs(song);
+    } else {
+      // Remove the song from the "liked" section or perform any other action
+      this.removeFromLikedSongs(song);
+    }
+  }
+
+
+  toggleLibrary() {
+    this.showLikedSongs = !this.showLikedSongs;
+  }
+  
 
 
 

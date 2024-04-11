@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, NgForm } from '@angular/forms';
-// import { log } from 'console';
-
 import { NavigationExtras, Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 import { LoginService } from 'src/app/services/login.service';
 
 import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
@@ -25,7 +22,6 @@ export class ArtistCreateComponent {
   constructor(
     private router: Router,
     private loginService: LoginService,
-    private toastr: ToastrService,
     private snackBar: MatSnackBar
   ) {}
 

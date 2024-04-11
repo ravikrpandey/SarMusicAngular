@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 // import { LoginService } from '../services/login.service';
 import { ToastrService } from 'ngx-toastr';
@@ -11,36 +12,40 @@ import { LoginService } from 'src/app/services/login.service';
   styleUrls: ['./user-login.component.scss']
 })
 export class UserLoginComponent {
-  mobileNumber: string = '';
-  otp: string = '';
-
   constructor(
     private router: Router,
     private loginService: LoginService,
-    private toastr: ToastrService
+    private snackBar: MatSnackBar
   ) {}
+
+  mobileNumber: string = '';
+  otp: string = '';
+
+  openSnackBar(message: string, action: string, type: string) {
+    this.snackBar.open(message, action, {
+      duration: 5000,
+      panelClass: type === 'error' ? ['snackbar-error'] : ['snackbar-success'],
+      verticalPosition: 'top',
+      horizontalPosition: 'right',
+    });
+  }
 
   submit() {
     const userData: any = {
       mobileNumber: this.mobileNumber,
       otp: this.otp
     }
-    
-    console.log("userData", userData);
     this.loginService.createUser(userData).subscribe((res: any) => {
       if (res.code == 403) {
-        this.toastr.error(res.body.message, 'Error');
+        this.openSnackBar(res.message, 'close', res.status);
         alert("Error");
       } else {
       localStorage.setItem('mobileNumber', this.mobileNumber);
         this.router.navigate(['/main/stream']);
-        this.toastr.success('User approved successfully!', 'Success');
-        alert("User approved successfully!");
+        this.openSnackBar(res.message, 'close', res.status);
       }
-      console.log('User Data : ', res.code);
     });
-
-    console.log('Mobile Number:', this.mobileNumber);
-    console.log('OTP:', this.otp);
   }
 }
+
+
