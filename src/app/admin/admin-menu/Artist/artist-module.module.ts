@@ -5,6 +5,7 @@ import { ArtistRoutingModule } from './artist-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ArtistListComponent } from './artist-list/artist-list.component';
 import { ArtistEditComponent } from './artist-edit/artist-edit.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 
@@ -14,7 +15,8 @@ import { ArtistEditComponent } from './artist-edit/artist-edit.component';
     CommonModule,
     ArtistRoutingModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    MatSnackBarModule,
   ]
 })
 export class ArtistModuleModule { }
