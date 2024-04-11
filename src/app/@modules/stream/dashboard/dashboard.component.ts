@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, AfterViewInit, ChangeDetectorRef, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Renderer2, ElementRef, ViewChild } from '@angular/core';
@@ -24,7 +24,8 @@ likedSongs: any;
     private el: ElementRef,
     private loginService: LoginService,
     private cdr: ChangeDetectorRef,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private renderer: Renderer2
   ) { }
   @ViewChild('audioPlayer') audioPlayerRef!: ElementRef<HTMLAudioElement>;
   // Other variables
@@ -46,6 +47,10 @@ likedSongs: any;
   playButton!: HTMLImageElement;
   nextButton!: HTMLImageElement;
   previousButton!: HTMLImageElement;
+
+    // Define variables
+    lastScrollTop = 0;
+    spotifyPlaylists: HTMLElement | null = null;
 
 
   playPauseSrc = 'assets/play.svg';
@@ -136,6 +141,9 @@ likedSongs: any;
       // Play the next song
       this.nextSong();
     });
+
+    // Get the element reference
+    this.spotifyPlaylists = document.querySelector('.spotifyPlaylists');
   }
   
   
@@ -339,10 +347,29 @@ console.log("song gets liked")
   toggleLibrary() {
     this.showLikedSongs = !this.showLikedSongs;
   }
+
+
   
 
+  
 
+  // // Listen for scroll events
+  // @HostListener('window:scroll', [])
+  // onWindowScroll() {
+  //   if (!this.spotifyPlaylists) return;
 
+  //   const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
 
+  //   if (currentScroll > this.lastScrollTop) {
+  //     // Scrolling down
+  //     this.renderer.setStyle(this.spotifyPlaylists, 'transform', 'translateY(0)');
+  //   } else {
+  //     // Scrolling up
+  //     this.renderer.setStyle(this.spotifyPlaylists, 'transform', 'translateY(-100%)');
+  //   }
 
+  //   this.lastScrollTop = currentScroll;
+  // }
 }
+  
+

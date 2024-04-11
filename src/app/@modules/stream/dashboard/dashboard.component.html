@@ -24,11 +24,17 @@
       <div class="library bg-grey rounded m-1 p-1">
         <div class="heading">
           <img class="invert" src="assets/playlist.svg" alt="">
-          <h2>
-            Your Library
-          </h2>
+          <h2>Your Library</h2>
         </div>
+        <div class="liked-songs">
+          
+          <h2> &nbsp;&nbsp;&nbsp;<i class="fas fa-heart"></i> &nbsp;&nbsp;&nbsp;Liked Songs </h2>
+        </div>
+        
+        
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-uxq/xBbFAO8SXvXVeD6cu7wnb7TdSZ+r3vZdtL3zB9a72g5Qr0x3z2StxOAqJT0Q" crossorigin="anonymous">
+
 
 
         <div class="songList">
@@ -38,28 +44,27 @@
               <span class="songId">{{song.songId}}&nbsp;</span>
               <span class="songName">{{song.songTitle}} &nbsp;</span>
               <span class="artistName">{{song.artistName}} &nbsp;&nbsp;</span>
-              <i class="fas fa-heart loveIcon" 
-                 [ngClass]="{'blank-heart': !song.liked, 'bubbling-heart': song.liked}" 
-                 (click)="toggleLove(song)"></i> <!-- Love icon button -->
+              <i class="fas fa-heart loveIcon" [ngClass]="{'blank-heart': !song.liked, 'bubbling-heart': song.liked}"
+                (click)="toggleLove(song)"></i> <!-- Love icon button -->
             </div>
           </div>
         </div>
-        
-        
-        
-        
-        
-        
 
-        <!-- <div class="footer">
+
+
+
+
+
+<!-- 
+        <div class="footer">
           <div><a href="https://www.spotify.com/jp/legal/"><span>Legal</span></a></div>
           <div><a href="https://www.spotify.com/jp/privacy/"><span>Privacy Center</span></a></div>
-          <div><a href="https://www.spotify.com/jp/legal/privacy-policy/"><span>Privacy Policy</span></a>
-          </div>
+          <div><a href="https://www.spotify.com/jp/legal/privacy-policy/"><span>Privacy Policy</span></a></div>
           <div><a href="https://www.spotify.com/jp/legal/cookies-policy/"><span>Cookies</span></a></div>
           <div><a href="https://www.spotify.com/jp/legal/privacy-policy/#s3"><span>About Ads</span></a></div>
-          <div><a href="https://www.spotify.com/jp/accessibility/"><span>Accessibility</span></a></div>
+          
         </div> -->
+        
       </div>
 
 
@@ -114,7 +119,8 @@
               <img width="35" id="next" src="assets/nextsong.svg" alt="">
             </div>
             <div class="timevol">
-              <div class="songtime"><p>{{ currentTime }} / {{ totalTime }}</p>
+              <div class="songtime">
+                <p>{{ currentTime }} / {{ totalTime }}</p>
               </div>
               <div class="volume">
                 <img width="25" src="assets/volume.svg" alt="">
@@ -123,11 +129,11 @@
                 </div>
               </div>
             </div>
-          </div>                                      
+          </div>
         </div>
-        </div>
-        <audio #audioPlayer [src]="currentMusic" (timeupdate)="updateSeekBar()"></audio>
-        
+      </div>
+      <audio #audioPlayer [src]="currentMusic" (timeupdate)="updateSeekBar()"></audio>
+
 
       <div class="spotifyPlaylists">
         <h1>Most Played</h1>
