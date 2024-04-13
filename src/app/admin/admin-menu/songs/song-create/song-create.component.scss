@@ -150,3 +150,13 @@
   button[type="button"]:hover {
     background-color: #5a6268;
   }
+
+  .icons {
+    display: flex; /* Use flexbox to align icons horizontally */
+}
+
+.edit-icon, .delete-icon {
+  font-size: 20px;
+    cursor: pointer;
+    margin-right: 160px; /* Add margin between the icons */
+}

@@ -308,11 +308,11 @@ previousSong() {
   signOutForm() {
     // Remove the mobile number from localStorage
     localStorage.removeItem('mobileNumber');
-    window.location.href = '/login';
+    window.location.href = '/auth';
 
     const mobileNumber = localStorage.getItem('mobileNumber') as string | null;
     if (!mobileNumber) {
-      window.location.href = '/login';
+      window.location.href = '/auth';
     }
   }
 
@@ -323,12 +323,39 @@ previousSong() {
 
   // =============Likng song=============
 
-  addToLikedSongs(songid: any) {
-console.log("song gets liked")
+  addToLikedSongs(songid: Number, liked: string) {
+    let mobileNumber = localStorage.getItem('mobileNumber');
+    const likedSongDetails: any = {
+      songId: songid,
+      playlistName: 'Liked Song',
+      playlistId: 1,
+      liked: liked, 
+      mobileNumber: mobileNumber
+    }
+    this.loginService.addToLikedSongs(likedSongDetails).subscribe((res: any) => {
+      if (res) {
+      this.openSnackBar(res.message, 'close', 'Success');
+      }
+
+    })
+
   }
 
-  removeFromLikedSongs(song: any) {
-    console.log("song gets unliked")
+  removeFromLikedSongs(songid: Number, liked: string) {
+    let mobileNumber = localStorage.getItem('mobileNumber');
+    const likedSongDetails: any = {
+      songId: songid,
+      playlistName: 'Liked Song',
+      playlistId: 1,
+      liked: liked,
+      mobileNumber: mobileNumber
+    }
+    this.loginService.addToLikedSongs(likedSongDetails).subscribe((res: any) => {
+      if (res) {
+      this.openSnackBar(res.message, 'close', 'Success');
+      }
+
+    })
 
   }
 
@@ -336,10 +363,10 @@ console.log("song gets liked")
     song.liked = !song.liked; // Toggle the liked state
     if (song.liked) {
       // Add the song to the "liked" section or perform any other action
-      this.addToLikedSongs(song);
+      this.addToLikedSongs(song.songId, song.liked);
     } else {
       // Remove the song from the "liked" section or perform any other action
-      this.removeFromLikedSongs(song);
+      this.removeFromLikedSongs(song.songId, song.liked);
     }
   }
 

@@ -11,11 +11,16 @@ const routes = {
   createArtist: () => `${SERVER_API_URL}/api/createArtist`,
   getAllArtist: () => `${SERVER_API_URL}/api/getAllArtists`,
   getArtistById: (artistId: string) => `${SERVER_API_URL}/api/getArtistById/${artistId}`,
+
   createAlbum: () => `${SERVER_API_URL}/api/createAlbum`,
   getAllAlbum: () => `${SERVER_API_URL}/api/geAllAlbum`,
+  getAlbumById: (albumId: string) => `${SERVER_API_URL}/api/getAlbumById/${albumId}`,
   createSong: () => `${SERVER_API_URL}/api/createSong`,
   getAllSongs: () => `${SERVER_API_URL}/api/getAllSong`,
   songsByAlbumId: (albumId: string) => `${SERVER_API_URL}/api/getSongsByAlbumId/${albumId}`,
+
+  // add song list == playlist creation
+  addToLikedSongs: () => `${SERVER_API_URL}/api/createsongPlayList`
 
 }
 
@@ -84,6 +89,16 @@ export class LoginService {
       catchError(this.handleError)
     )
   };
+
+
+  addToLikedSongs(likedSongDetails: any): Observable<any> {
+    return this.http.post<any>(routes.addToLikedSongs(), likedSongDetails)
+  };
+
+  getAlbumById(albumId: any) {
+    return this.http.get<any>(routes.getAlbumById(albumId))
+  };
+
 
   private handleError(error: any): Observable<never> {
     console.error('An error occurred:', error);

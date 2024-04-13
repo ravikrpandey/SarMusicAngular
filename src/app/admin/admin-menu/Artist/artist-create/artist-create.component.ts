@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, NgForm } from '@angular/forms';
 import { NavigationExtras, Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login.service';
-
 import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
-
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -16,13 +15,14 @@ export class ArtistCreateComponent {
   artistName: string = '';
   dob: string = '';
   gender: string = '';
-  artistProfileUrl: string = '';
+  artistProfileUrl: any
   bio: string = '';
   artistForm!: NgForm;
   constructor(
     private router: Router,
     private loginService: LoginService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private location: Location
   ) {}
 
   ngOnInit() {}
@@ -60,13 +60,9 @@ export class ArtistCreateComponent {
 
   }
 
-//   submit() {
-//     this.snackBar.open('Operation successful!', 'Close', {
-//       duration: 2000,
-//       panelClass: ['snackbar-success'],
-//     });
-//   }
-// }
+  cancel() {
+    this.location.back();
+  }
 
 
 }

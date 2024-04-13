@@ -111,14 +111,6 @@ export class AdminMainComponent implements OnInit, AfterContentChecked, DoCheck 
             "delete": true,
             "access": true
           },
-          {
-            "moduleName": "Edit Artists",
-            "route": "artist/edit/:id",
-            "read": true,
-            "write": true,
-            "delete": true,
-            "access": true
-          },
 
         ]
       },
@@ -142,14 +134,6 @@ export class AdminMainComponent implements OnInit, AfterContentChecked, DoCheck 
           {
             "moduleName": "Add Album",
             "route": "album/create",
-            "read": true,
-            "write": true,
-            "delete": true,
-            "access": true
-          },
-          {
-            "moduleName": "Edit Album",
-            "route": "roles-and-access/dealer",
             "read": true,
             "write": true,
             "delete": true,
@@ -183,15 +167,6 @@ export class AdminMainComponent implements OnInit, AfterContentChecked, DoCheck 
             "delete": true,
             "access": true
           },
-          {
-            "moduleName": "Edit Songs",
-            "route": "song/edit/:id",
-            "read": true,
-            "write": true,
-            "delete": true,
-            "access": true
-          },
-
         ]
       },
 
@@ -219,15 +194,6 @@ export class AdminMainComponent implements OnInit, AfterContentChecked, DoCheck 
             "delete": true,
             "access": true
           },
-          {
-            "moduleName": "Edit PlayLists",
-            "route": "roles-and-access/dealer",
-            "read": true,
-            "write": true,
-            "delete": true,
-            "access": true
-          },
-
         ]
       },
       {

@@ -1,6 +1,8 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { LoginService } from 'src/app/services/login.service';
+import { Location } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-song-create',
@@ -25,7 +27,9 @@ export class SongCreateComponent {
   constructor(
     private toastr: ToastrService,
     private loginService: LoginService,
-    private cdr: ChangeDetectorRef 
+    private cdr: ChangeDetectorRef ,
+    private location: Location,
+    private snackBar: MatSnackBar,
   ) {
 
   }
@@ -33,11 +37,9 @@ export class SongCreateComponent {
   ngOnInit() {
     this.getAllArtists();
     if (this.selectedArtist) {
-      console.log('Selected artist:', this.selectedArtist);
     };
     this.getAllAlbum();
     if (this.selectedAlbum) {
-      console.log('Selected artist:', this.selectedAlbum);
     };
   }
 
@@ -91,12 +93,26 @@ export class SongCreateComponent {
     };
 
     this.loginService.createSong(songData).subscribe((res: any) => {
-      if (res.data) {
-        console.log(res.data,"res.data===")
-        alert('Song Uploaded Successfully')
-        this.toastr.success('Song Created Successfully'); // Display success toaster message
+      if (res) {
+        this.openSnackBar(res.message, 'close', 'Success');
+      } else {
+        this.openSnackBar(res.message, 'close', 'error');
       }
     });
+  }
+
+  openSnackBar(message: string, action: string, type: string) {
+    this.snackBar.open(message, action, {
+      duration: 5000,
+      panelClass: type == 'error' ? ['snackbar-error'] : ['snackbar-success'],
+      verticalPosition: 'top',
+      horizontalPosition:'right',
+
+    });
+  }
+
+  cancel() {
+    this.location.back();
   }
 
 };

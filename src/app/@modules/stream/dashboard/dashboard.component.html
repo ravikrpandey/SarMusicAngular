@@ -41,7 +41,7 @@
           <div class="songCard" *ngFor="let song of songs">
             <i class="fas fa-play-circle" *ngIf="!song.isPlaying" (click)="playSongById(song)"></i>
             <div class="songInfo" (click)="playSongById(song)">
-              <span class="songId">{{song.songId}}&nbsp;</span>
+              <!-- <span class="songId">{{song.songId}}&nbsp;</span> -->
               <span class="songName">{{song.songTitle}} &nbsp;</span>
               <span class="artistName">{{song.artistName}} &nbsp;&nbsp;</span>
               <i class="fas fa-heart loveIcon" [ngClass]="{'blank-heart': !song.liked, 'bubbling-heart': song.liked}"

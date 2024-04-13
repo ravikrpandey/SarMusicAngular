@@ -69,12 +69,34 @@
   //   top: 10px; /* Adjust top position as needed */
   // }
   
-  .left-icon {
-    left: 10px; /* Adjust left position as needed */
-  }
+  // .left-icon {
+  //   left: 10px; /* Adjust left position as needed */
+  //   transition: left 0.3s ease; /* Add transition for smooth animation */
+  // }
   
-  .right-icon {
-    right: 40px; /* Adjust right position as needed */
-  }
+  // .right-icon {
+  //   right: 40px; /* Adjust right position as needed */
+  //   transition: right 0.3s ease; /* Add transition for smooth animation */
+  // }
   
+  // /* Define hover effects */
+  // .left-icon:hover {
+  //   left: 5px; /* Adjust left position on hover */
+  // }
   
+  // .right-icon:hover {
+  //   right: 45px; 
+  // }
+
+  
+  .icons {
+    display: flex; /* Use flexbox to align icons horizontally */
+}
+
+.edit-icon, .delete-icon {
+  font-size: 20px;
+    cursor: pointer;
+    margin-right: 160px; /* Add margin between the icons */
+}
+
+

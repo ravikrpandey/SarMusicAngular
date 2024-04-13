@@ -28,14 +28,14 @@ export class AlbumListComponent {
   getAll() {
     this.loginService.getAllAlbum().subscribe((res: any) => {
       this.albums = res.data;
-      console.log(res.data, "albumData==========")
       this.cdr.detectChanges();
 
     })
   }
 
-editalbum(arg0: any) {
-throw new Error('Method not implemented.');
+editalbum(albumId: any) {
+// this.router.navigate(['admin/album/edit'], {queryParams:{albumId:albumId}})
+this.router.navigate(['admin/album/edit', albumId])
 }
 deletealbum(arg0: any) {
 throw new Error('Method not implemented.');

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoginService } from 'src/app/services/login.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-album-create',
@@ -18,7 +20,9 @@ export class AlbumCreateComponent implements OnInit { // Implement OnInit interf
   selectedArtist: any;
 
   constructor(
-    private loginService: LoginService
+    private loginService: LoginService,
+    private snackBar: MatSnackBar,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -38,9 +42,10 @@ export class AlbumCreateComponent implements OnInit { // Implement OnInit interf
       artistName: this.selectedArtist.artistName
     }
     this.loginService.createAlbum(albumData).subscribe((res: any) => {
-      if (res.data) {
-        console.log(res.data,"res.data===")
-        alert('Album Uploaded Successfully')
+      if (res) {
+        this.openSnackBar(res.message, 'close', 'Success');
+      } else {
+        this.openSnackBar(res.message, 'close', 'error');
       }
 
     })
@@ -62,5 +67,19 @@ export class AlbumCreateComponent implements OnInit { // Implement OnInit interf
   formatArtistData(): void {
     // Iterate over the artists array and format the data into a string
     this.artistDataString = this.artists.map(artist => `${artist.artistName} - ${artist.gender}`).join('\n');
+  }
+
+  openSnackBar(message: string, action: string, type: string) {
+    this.snackBar.open(message, action, {
+      duration: 5000,
+      panelClass: type == 'error' ? ['snackbar-error'] : ['snackbar-success'],
+      verticalPosition: 'top',
+      horizontalPosition:'right',
+
+    });
+  }
+
+  cancel() {
+    this.location.back();
   }
 }
