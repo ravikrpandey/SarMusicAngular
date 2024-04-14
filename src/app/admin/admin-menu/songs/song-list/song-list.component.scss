@@ -55,18 +55,34 @@
     font-size: 14px;
   }
   
+  // .icons {
+  //   position: absolute;
+  //   bottom: 10px;
+  //   left: 50%;
+  //   transform: translateX(-50%);
+  //   display: flex;
+  //   align-items: center;
+  // }
+
   .icons {
     position: absolute;
-    bottom: 10px;
+    bottom: 4px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     align-items: center;
+    width: 100%; /* Ensure the icons span the entire width of the album */
+    justify-content: center; /* Center the icons horizontally */
   }
+  
   
   .icons span {
     // margin: 0 5px;
     cursor: pointer;
   }
   
+  // .album audio {
+  //   width: 100%; /* Ensure the audio player fills the container */
+  //   margin-top: 10px; /* Add some spacing between the icons and the audio player */
+  // }
   

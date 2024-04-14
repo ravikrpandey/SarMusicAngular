@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login.service';
 import { Location } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-album-edit',
@@ -18,7 +19,8 @@ export class AlbumEditComponent {
     private route: ActivatedRoute,
     private loginService: LoginService,
     private fb: FormBuilder,
-    private location: Location
+    private location: Location,
+    private snackBar: MatSnackBar
   ) {
 
     this.albumForm = this.fb.group({
@@ -49,18 +51,31 @@ export class AlbumEditComponent {
         albumCardUrl: this.album?.albumCardUrl,
         artistName: this.album?.artistName
       })
-      console.log('res of album by id', res)
-
     })
-
-  }
+  };
 
   submit() {
+    this.loginService.updateAlbumById(this.albumId, this.albumForm.value ).subscribe((res: any) => {
+      if (!res) {
+        this.openSnackBar(res.message, "close", "error");
+      } else if(res) {
+        this.openSnackBar(res.message, "close", "success");
+      }
+    })
     
-  }
+  };
 
   cancel() {
     this.location.back();
-  }
+  };
+
+  openSnackBar(message: string, action: string, type: string) {
+    this.snackBar.open(message, action, {
+      duration: 5000,
+      panelClass: type == 'error' ? ['snackbar-error'] : ['snackbar-success'],
+      verticalPosition: 'top',
+      horizontalPosition:'right',
+    });
+  };
 
 }

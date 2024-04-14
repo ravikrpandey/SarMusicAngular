@@ -8,11 +8,11 @@
           <img [src]="album.albumCardUrl" alt="{{ album.albumName }}">
           <div class="album-info">
             <h3>{{ album.albumName }}</h3>
-            <!-- <p></p> -->
+            <p>{{album.genre}}</p>
           </div>
           <div class="icons">
             <span class="edit-icon" (click)="editalbum(album.albumId)">✎</span> 
-            <span class="delete-icon" (click)="deletealbum(album.artistId)">🗑</span>
+            <span class="delete-icon" (click)="deletealbum(album.albumId)">🗑</span>
           </div>
         </div>
       </div>

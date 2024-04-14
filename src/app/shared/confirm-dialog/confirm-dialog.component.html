@@ -1,0 +1,25 @@
+<div style="border-radius: 20px;" class="mat-mdc-dialog-container">
+<h2 mat-dialog-title>Confirmation</h2>
+<div mat-dialog-content>
+  {{ data.message }}
+</div>
+<div mat-dialog-actions align="end">
+  <button style="background-color: #12ec12; border-radius: 5px;" mat-button [mat-dialog-close]="false">Cancel</button>
+
+  <button mat-button [mat-dialog-close]="true" style="background-color: red; margin-left: 10px; border-radius: 5px" cdkFocusInitial>Confirm</button>
+</div>
+</div>
+
+
+
+
+
+<!-- 
+<h2 mat-dialog-title>Confirmation</h2>
+<div mat-dialog-content>
+  {{ data.message }}
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="false">Cancel</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Confirm</button>
+</div> -->

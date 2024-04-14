@@ -1,7 +1,12 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { LoginService } from 'src/app/services/login.service';
+import { Location } from '@angular/common';
+import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-artist-list',
@@ -17,7 +22,10 @@ export class ArtistListComponent implements OnInit {
     private router: Router,
     private loginService: LoginService,
     private toastr: ToastrService,
-    private cdr: ChangeDetectorRef // Inject ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private snackBar: MatSnackBar,
+    private location: Location,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -25,10 +33,9 @@ export class ArtistListComponent implements OnInit {
   }
 
   getAll() {
-    this.loginService.getAllArtist().subscribe((res: any) => { 
-      console.log(res.data, "res-----");
-      this.artists = res.data; 
-      this.cdr.detectChanges(); // Trigger change detection
+    this.loginService.getAllArtist().subscribe((res: any) => {
+      this.artists = res.data;
+      this.cdr.detectChanges();
     }, (error) => {
       console.error('Error fetching artists:', error);
     });
@@ -37,17 +44,36 @@ export class ArtistListComponent implements OnInit {
   editArtist(artistId: string) {
     this.router.navigate(['admin/artist/edit', artistId]);
   }
-  
 
-  deleteArtist(artist: any) {
-    // Implement delete logic here
-    // this.loginService.deleteArtist(artist.id).subscribe(() => {
-    //   // Remove artist from the array
-    //   this.artists = this.artists.filter(a => a.id !== artist.id);
-    //   this.toastr.success('Artist deleted successfully.');
-    // }, (error) => {
-    //   console.error('Error deleting artist:', error);
-    //   this.toastr.error('Failed to delete artist.');
-    // });
+  openSnackBar(message: string, action: string, type: string) {
+    this.snackBar.open(message, action, {
+      duration: 5000,
+      panelClass: type == 'error' ? ['snackbar-error'] : ['snackbar-success'],
+      verticalPosition: 'top',
+      horizontalPosition:'right',
+    });
   }
-}
+
+
+  deleteArtist(artistId: any) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '300px',
+      data: {
+        message: 'Are you sure you want to delete this artist?'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loginService.deleteArtist(artistId).subscribe((res: any) => {
+          if (res && res.message) {
+            this.openSnackBar(res.message, "close", "success");
+            this.getAll();
+          } else {
+            this.openSnackBar("Failed to delete album", "close", "error");
+          }
+        });
+      }
+    });
+  }
+};

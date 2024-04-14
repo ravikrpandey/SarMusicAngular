@@ -54,26 +54,33 @@
   font-size: 14px;
 }
 
-
-
-
-
-
-
-// .album {
-//   position: relative; /* Position icons relative to the album container */
-// }
-
-// .icons {
-//   position: absolute; /* Position icons absolutely */
-//   top: 10px; /* Adjust top position as needed */
-// }
-
-.left-icon {
-  left: 10px; /* Adjust left position as needed */
+.icons {
+  display: flex; /* Use flexbox to align icons horizontally */
 }
 
-.right-icon {
-  right: 40px; /* Adjust right position as needed */
+.edit-icon, .delete-icon {
+font-size: 20px;
+  cursor: pointer;
+  margin-right: 160px; /* Add margin between the icons */
 }
 
+
+/* confirm-dialog.component.css */
+
+/* Style the buttons */
+mat-dialog-actions {
+  justify-content: flex-end; /* Align buttons to the right */
+}
+
+/* Decorate the cancel button */
+mat-dialog-actions button.cancel-button {
+  background-color: #fff;
+  color: #f44336; /* Red color */
+  border: 1px solid #f44336;
+}
+
+/* Decorate the confirm button */
+mat-dialog-actions button.confirm-button {
+  background-color: #4caf50; /* Green color */
+  color: #fff;
+}

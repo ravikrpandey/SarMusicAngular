@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login.service';
 
 @Component({
@@ -15,7 +16,8 @@ export class SongListComponent {
 
   constructor(
     private loginService: LoginService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -62,7 +64,7 @@ export class SongListComponent {
   }
 
   editalbum(songId: any) {
-    // Implement edit method
+    this.router.navigate(['admin/song/edit', songId])
   }
 
   deletealbum(songId: any) {

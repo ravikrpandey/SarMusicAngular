@@ -1,7 +1,10 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { LoginService } from 'src/app/services/login.service';
+import { Location } from '@angular/common';
+
 
 @Component({
   selector: 'app-artist-edit',
@@ -21,7 +24,9 @@ export class ArtistEditComponent implements OnInit {
     private route: ActivatedRoute,
     private loginService: LoginService,
     private toastr: ToastrService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private snackBar: MatSnackBar,
+    private location: Location
   ) { }
 
   ngOnInit(): void {
@@ -34,23 +39,51 @@ export class ArtistEditComponent implements OnInit {
   getArtistDetails(artistId: string): void {
     this.loginService.getArtistById(artistId).subscribe((res: any) => {
       this.artist = res.data;
-      this.cdr.detectChanges(); 
-      console.log(res.data, "res.data-------")
-      this.artistName = this.artist.artistName;
-      this.dob = this.artist.dob;
-      this.gender = this.artist.gender;
-      this.artistProfileUrl = this.artist.artistProfileUrl;
-      this.bio = this.artist.bio;
+      this.patchFormValues();
     }, error => {
       console.error('Error fetching artist details:', error);
-      this.toastr.error('Failed to fetch artist details');
+      this.openSnackBar('Failed to fetch artist details', "close", "error");
     });
   }
 
+  patchFormValues(): void {
+    this.artistName = this.artist.artistName;
+    this.dob = this.artist.dob;
+    this.gender = this.artist.gender;
+    this.artistProfileUrl = this.artist.artistProfileUrl;
+    this.bio = this.artist.bio;
+    this.cdr.detectChanges();
+  }
+
   submit(): void {
-    // Implement your update logic here
-    console.log('Update artist:', this.artist);
-    // Call service method to update artist details
-    // Display success/failure message using ToastrService
+    const artistDataForUpdate: any = {
+      artistName: this.artistName,
+      dob: this.dob,
+      gender: this.gender,
+      artistProfileUrl: this.artistProfileUrl,
+      bio: this.bio
+    }
+    this.loginService.updateArtisById(artistDataForUpdate, this.artistId).subscribe((res: any) => {
+      if (!res) {
+        this.openSnackBar(res.message, "close", "error");
+        this.getArtistDetails(this.artistId);
+      } else {
+        this.openSnackBar(res.message, "close", "success");
+      }
+    })
+  };
+
+  cancel() {
+    this.location.back();
+  }
+
+  openSnackBar(message: string, action: string, type: string) {
+    this.snackBar.open(message, action, {
+      duration: 5000,
+      panelClass: type == 'error' ? ['snackbar-error'] : ['snackbar-success'],
+      verticalPosition: 'top',
+      horizontalPosition:'right',
+
+    });
   }
 }

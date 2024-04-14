@@ -59,6 +59,7 @@ export class SongCreateComponent {
   formatArtistData(): void {
     this.artistDataString = this.artists.map(artist => `${artist.artistName} - ${artist.gender}`).join('\n');
   }
+  
   getAllAlbum(): void {
     this.loginService.getAllAlbum().subscribe(
       (res: any) => {

@@ -1,0 +1,19 @@
+/* confirm-dialog.component.css */
+
+/* Style the buttons */
+mat-dialog-actions {
+  justify-content: flex-end; /* Align buttons to the right */
+}
+
+/* Decorate the cancel button */
+mat-dialog-actions button.cancel-button {
+  background-color: #fff;
+  color: #f44336; /* Red color */
+  border: 1px solid #f44336;
+}
+
+/* Decorate the confirm button */
+mat-dialog-actions button.confirm-button {
+  background-color: #4caf50; /* Green color */
+  color: #fff;
+}
