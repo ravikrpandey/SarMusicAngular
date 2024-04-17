@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-// import { LoginService } from '../services/login.service';
-import { ToastrService } from 'ngx-toastr';
 import { LoginService } from 'src/app/services/login.service';
 
 
@@ -19,6 +17,7 @@ export class UserLoginComponent {
   ) {}
 
   mobileNumber: string = '';
+  type: string = '';
   otp: string = '';
 
   openSnackBar(message: string, action: string, type: string) {
@@ -41,6 +40,9 @@ export class UserLoginComponent {
         alert("Error");
       } else {
       localStorage.setItem('mobileNumber', this.mobileNumber);
+      this.type = res.data;
+      console.log(res.data,'this.type======')
+      localStorage.setItem('type', this.type);
         this.router.navigate(['/main/stream']);
         this.openSnackBar(res.message, 'close', res.status);
       }

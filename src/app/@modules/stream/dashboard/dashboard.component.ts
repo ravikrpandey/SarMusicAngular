@@ -39,6 +39,7 @@ likedSongs: any;
   currentArtistName: string = '';
   songDuration: any;
   showLikedSongs: boolean = false;
+  type: any = ''
 
 
   
@@ -75,8 +76,17 @@ likedSongs: any;
     if (!localStorage.getItem('mobileNumber')) {
       window.location.href = '/login';
     }
+    this.type = localStorage.getItem('type') as string | null;
     this.getAll();
+
   }
+
+  showSongList = false;
+
+  toggleSongList() {
+    this.showSongList = !this.showSongList;
+  }
+
 
   openSnackBar(message: string, action: string, type: string) {
     this.snackBar.open(message, action, {
@@ -91,7 +101,6 @@ likedSongs: any;
   getAll() {
     this.loginService.getAllAlbum().subscribe((res: any) => {
       this.albums = res.data;
-      console.log(res.data, "albumData==========")
       this.cdr.detectChanges();
       if (this.albums.length > 0) {
         this.songsByAlbumId(this.albums[0].albumId);
@@ -106,8 +115,6 @@ likedSongs: any;
   songsByAlbumId(albumId: any) {
     this.loginService.songsByAlbumId(albumId).subscribe((res: any) => {
       this.songs = res.data;
-      console.log(res.data, "res.data=========")
-
     })
   }
 
@@ -198,7 +205,6 @@ likedSongs: any;
 
   adjustVolume(event: Event) {
     const volumeLevel = (event.target as HTMLInputElement).value;
-    console.log('Volume level:', volumeLevel);
     if (this.audioPlayer) {
       const normalizedVolume = parseFloat(volumeLevel) / 100;
       this.audioPlayer.volume = normalizedVolume;
@@ -209,7 +215,7 @@ likedSongs: any;
   togglePlay() {
     if (this.audioPlayer && this.audioPlayer.src) {
       // Check if the audio source is set
-      if (this.audioPlayer.readyState >= 2) {
+      if (this.audioPlayer.readyState >= 1) {
         // Check if the audio is loaded
         if (this.audioPlayer.paused) {
           this.audioPlayer.play();
@@ -230,8 +236,6 @@ likedSongs: any;
   
 
   playSongById(song: any) {
-    console.log("playSongById====", song);
-  
     this.currentMusic = song.songUrl;
     this.currentMusicName = song.songTitle;
     this.currentArtistName = song.artistName;
@@ -311,6 +315,7 @@ previousSong() {
     window.location.href = '/auth';
 
     const mobileNumber = localStorage.getItem('mobileNumber') as string | null;
+    
     if (!mobileNumber) {
       window.location.href = '/auth';
     }
@@ -318,6 +323,8 @@ previousSong() {
 
   adminMenueToggle() {
     this.router.navigate(['/admin']);
+    localStorage.removeItem('mobileNumber');
+    window.location.href = '/auth';
   }
 
 

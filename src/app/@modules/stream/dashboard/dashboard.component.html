@@ -27,14 +27,14 @@
           <h2>Your Library</h2>
         </div>
         <div class="liked-songs">
-          
+
           <h2> &nbsp;&nbsp;&nbsp;<i class="fas fa-heart"></i> &nbsp;&nbsp;&nbsp;Liked Songs </h2>
         </div>
-        
-        
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-uxq/xBbFAO8SXvXVeD6cu7wnb7TdSZ+r3vZdtL3zB9a72g5Qr0x3z2StxOAqJT0Q" crossorigin="anonymous">
 
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+          integrity="sha384-uxq/xBbFAO8SXvXVeD6cu7wnb7TdSZ+r3vZdtL3zB9a72g5Qr0x3z2StxOAqJT0Q" crossorigin="anonymous">
 
 
         <div class="songList">
@@ -50,21 +50,6 @@
           </div>
         </div>
 
-
-
-
-
-
-<!-- 
-        <div class="footer">
-          <div><a href="https://www.spotify.com/jp/legal/"><span>Legal</span></a></div>
-          <div><a href="https://www.spotify.com/jp/privacy/"><span>Privacy Center</span></a></div>
-          <div><a href="https://www.spotify.com/jp/legal/privacy-policy/"><span>Privacy Policy</span></a></div>
-          <div><a href="https://www.spotify.com/jp/legal/cookies-policy/"><span>Cookies</span></a></div>
-          <div><a href="https://www.spotify.com/jp/legal/privacy-policy/#s3"><span>About Ads</span></a></div>
-          
-        </div> -->
-        
       </div>
 
 
@@ -73,22 +58,30 @@
       <div class="header">
         <div class="nav">
           <div class="hamburgerContainer">
+            <img width="40" class="invert hamburger" src="assets/hamburger.svg" alt="" (click)="toggleSongList()">
 
-            <img width="40" class="invert hamburger" src="assets/hamburger.svg" alt="">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M15 6L9.70711 11.2929C9.37377 11.6262 9.20711 11.7929 9.20711 12C9.20711 12.2071 9.37377 12.3738 9.70711 12.7071L15 18"
-                stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M9 18L14.2929 12.7071C14.6262 12.3738 14.7929 12.2071 14.7929 12C14.7929 11.7929 14.6262 11.6262 14.2929 11.2929L9 6"
-                stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
+          <div class="song-list" [class.show]="showSongList">
+            <div class="songList">
+              <div class="songCard" *ngFor="let song of songs">
+                <i class="fas fa-play-circle" *ngIf="!song.isPlaying" (click)="playSongById(song)"></i>
+                <div class="songInfo" (click)="playSongById(song)">
+                  <!-- <span class="songId">{{song.songId}}&nbsp;</span> -->
+                  <span class="songName">{{song.songTitle}} &nbsp;</span>
+                  <span class="artistName">{{song.artistName}} &nbsp;&nbsp;</span>
+                  <i class="fas fa-heart loveIcon" [ngClass]="{'blank-heart': !song.liked, 'bubbling-heart': song.liked}"
+                    (click)="toggleLove(song)"></i> <!-- Love icon button -->
+                </div>
+              </div>
+            </div>
           </div>
+
+        </div>
+
+
         </div>
         <div class="buttons">
-          <button class="signupbtn" (click)="adminMenueToggle()">Admin Menu</button>
+          <button *ngIf="type == 'admin'" class="signupbtn" (click)="adminMenueToggle()">Admin Menu</button>
+
           <button class="loginbtn" (click)="signOutForm()">LogOut</button>
         </div>
       </div>

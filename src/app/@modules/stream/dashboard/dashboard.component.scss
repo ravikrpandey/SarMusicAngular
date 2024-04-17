@@ -741,4 +741,11 @@ body {
     }
   }
   
-  
+  /* dashboard.component.scss */
+.song-list {
+  display: none; /* Initially hide the song list */
+}
+
+.song-list.show {
+  display: block; /* Show the song list when the class "show" is applied */
+}
