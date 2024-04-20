@@ -216,6 +216,17 @@ body {
 .card img {
     width: 100%;
     object-fit: contain;
+
+}
+
+.card[_ngcontent-ng-c512532073] img[_ngcontent-ng-c512532073] {
+  width: 15%;
+  object-fit: contain;
+  background: #0ebb0e;;
+  border-radius: 9px;
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
 }
 
 .play {
@@ -233,6 +244,16 @@ body {
     opacity: var(--a);
     transition: all 1s ease-out;
 }
+
+.play-button {
+  background-color: #007bff; /* Blue background color */
+  color: #fff; /* White text color */
+  border: none; /* Remove border */
+  padding: 10px 20px; /* Add padding */
+  cursor: pointer; /* Add cursor pointer */
+  border-radius: 5px; /* Add border radius */
+}
+
 
 .buttons>* {
     margin: 0 12px;
@@ -370,6 +391,7 @@ body {
 
 .songbuttons img {
     cursor: pointer;
+    width: 25px;
 }
 
 .timevol {

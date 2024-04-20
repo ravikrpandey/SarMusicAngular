@@ -40,6 +40,7 @@ likedSongs: any;
   songDuration: any;
   showLikedSongs: boolean = false;
   type: any = ''
+  abbumIdPlay: any;
 
 
   
@@ -113,6 +114,7 @@ likedSongs: any;
   };
 
   songsByAlbumId(albumId: any) {
+    this.abbumIdPlay = albumId
     this.loginService.songsByAlbumId(albumId).subscribe((res: any) => {
       this.songs = res.data;
     })
@@ -219,6 +221,7 @@ likedSongs: any;
         // Check if the audio is loaded
         if (this.audioPlayer.paused) {
           this.audioPlayer.play();
+          
         } else {
           this.audioPlayer.pause();
         }

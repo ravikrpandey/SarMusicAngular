@@ -91,6 +91,11 @@
         <div class="popular-songs">
           <div class="card" *ngFor="let album of albums" [style.background-image]="'url(' + album.albumCardUrl + ')'">
             <div class="card-body" (click)="songsByAlbumId(album.albumId)">
+              <!-- Play button -->
+      <!-- Play button will only show if album is currently playing -->
+     <div>
+     <img  *ngIf="album.albumId == abbumIdPlay" width="15" id="play" [src]="playPauseSrc" alt="">
+    </div>
             </div>
             <div class="card-footer">
               <p>{{album.albumName}}</p>
