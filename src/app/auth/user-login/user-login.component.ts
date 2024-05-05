@@ -19,6 +19,7 @@ export class UserLoginComponent {
   mobileNumber: string = '';
   type: string = '';
   otp: string = '';
+  loader:boolean=true;
 
   openSnackBar(message: string, action: string, type: string) {
     this.snackBar.open(message, action, {
@@ -30,6 +31,7 @@ export class UserLoginComponent {
   }
 
   submit() {
+    this.loader=false;
     const userData: any = {
       mobileNumber: this.mobileNumber,
       otp: this.otp

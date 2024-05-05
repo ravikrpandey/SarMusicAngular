@@ -18,8 +18,11 @@
       <input type="text" [(ngModel)]="mobileNumber" name="mobileNumber" placeholder="Enter Mobile Number" required pattern="[0-9]{10}" title="Please enter a 10-digit number">
       <br>
       <input type="password" [(ngModel)]="otp" name="otp" placeholder="Enter OTP" required>
-      <br>
-      <input type="submit" value="Login" [disabled]="!loginForm.valid">
+      <br> 
+     <div>
+        <input type="submit" value="Login" [disabled]="!loginForm.valid">
+      </div>
+      
       <div *ngIf="loginForm.submitted && !loginForm.valid" class="error">Please enter valid details.</div>
     </form>
     <div class="social-icons">

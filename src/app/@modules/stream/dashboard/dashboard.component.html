@@ -17,7 +17,7 @@
         <div class="logo"><img width="110" class="invert" src="img/logo.svg" alt=""></div>
         <ul>
           <li><img class="invert" src="assets/home.svg" alt="home">Home</li>
-          <li><img class="invert" src="assets/search.svg" alt="home">Search</li>
+          <li (click)="toggleSearchBar()"><img class="invert" src="assets/search.svg" alt="home">Search</li>
         </ul>
       </div>
 
@@ -57,34 +57,30 @@
     <div class="right bg-grey rounded">
       <div class="header">
         <div class="nav">
-          <div class="hamburgerContainer">
-            <img width="40" class="invert hamburger" src="assets/hamburger.svg" alt="" (click)="toggleSongList()">
-
-          <div class="song-list" [class.show]="showSongList">
-            <div class="songList">
-              <div class="songCard" *ngFor="let song of songs">
-                <i class="fas fa-play-circle" *ngIf="!song.isPlaying" (click)="playSongById(song)"></i>
-                <div class="songInfo" (click)="playSongById(song)">
-                  <!-- <span class="songId">{{song.songId}}&nbsp;</span> -->
-                  <span class="songName">{{song.songTitle}} &nbsp;</span>
-                  <span class="artistName">{{song.artistName}} &nbsp;&nbsp;</span>
-                  <i class="fas fa-heart loveIcon" [ngClass]="{'blank-heart': !song.liked, 'bubbling-heart': song.liked}"
-                    (click)="toggleLove(song)"></i> <!-- Love icon button -->
-                </div>
-              </div>
+            <div class="hamburgerContainer">
+                <img width="40" class="invert hamburger" src="assets/hamburger.svg" alt="" (click)="toggleSongList()">
             </div>
-          </div>
-
-        </div>
-
-
+            <input type="text" class="search-bar" style="border-radius: 07px;" placeholder="Search" id="searchBar" [class.show-search]="showSearch"> <!-- Add this input field -->
+            <div class="song-list" [class.show]="showSongList">
+                <div class="songList">
+                    <div class="songCard" *ngFor="let song of songs">
+                        <i class="fas fa-play-circle" *ngIf="!song.isPlaying" (click)="playSongById(song)"></i>
+                        <div class="songInfo" (click)="playSongById(song)">
+                            <span class="songName">{{song.songTitle}} &nbsp;</span>
+                            <span class="artistName">{{song.artistName}} &nbsp;&nbsp;</span>
+                            <i class="fas fa-heart loveIcon" [ngClass]="{'blank-heart': !song.liked, 'bubbling-heart': song.liked}"
+                                (click)="toggleLove(song)"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="buttons">
-          <button *ngIf="type == 'admin'" class="signupbtn" (click)="adminMenueToggle()">Admin Menu</button>
-
-          <button class="loginbtn" (click)="signOutForm()">LogOut</button>
+            <button *ngIf="type == 'admin'" class="signupbtn" (click)="adminMenueToggle()">Admin Menu</button>
+            <button class="loginbtn" (click)="signOutForm()">LogOut</button>
         </div>
-      </div>
+    </div>
+    
       <!-- song playlist starts -->
       <div class="spotifyPlaylists">
         <h1>Pick Your Mood</h1>
@@ -94,7 +90,15 @@
               <!-- Play button -->
       <!-- Play button will only show if album is currently playing -->
      <div>
-     <img  *ngIf="album.albumId == abbumIdPlay" width="15" id="play" [src]="playPauseSrc" alt="">
+     <img  *ngIf="album.albumId == abbumIdPlay" width="15" style="    background: #1ED760;
+     border-radius: 7px;
+     object-fit: contain;
+     width: 25px;
+     position: absolute;
+     bottom: 5px;
+     right: 5px;" id="play" [src]="playPauseSrc" alt="">
+
+     
     </div>
             </div>
             <div class="card-footer">

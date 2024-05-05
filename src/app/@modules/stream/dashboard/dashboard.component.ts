@@ -41,6 +41,7 @@ likedSongs: any;
   showLikedSongs: boolean = false;
   type: any = ''
   abbumIdPlay: any;
+  showSearch: boolean = false;
 
 
   
@@ -153,6 +154,10 @@ likedSongs: any;
 
     // Get the element reference
     this.spotifyPlaylists = document.querySelector('.spotifyPlaylists');
+  }
+
+  toggleSearchBar() {
+    this.showSearch = !this.showSearch;
   }
   
   
@@ -326,8 +331,8 @@ previousSong() {
 
   adminMenueToggle() {
     this.router.navigate(['/admin']);
-    localStorage.removeItem('mobileNumber');
-    window.location.href = '/auth';
+  //   localStorage.removeItem('mobileNumber');
+  //  window.location.href = '/auth';
   }
 
 
