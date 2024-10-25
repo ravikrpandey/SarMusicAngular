@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { LoginService } from 'src/app/services/login.service';
 import { Location } from '@angular/common';
@@ -7,47 +7,38 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-song-create',
   templateUrl: './song-create.component.html',
-  styleUrl: './song-create.component.scss'
+  styleUrls: ['./song-create.component.scss']
 })
-export class SongCreateComponent {
+export class SongCreateComponent implements OnInit {
 
   albums: any[] = [];
   selectedAlbum: any;
   artists: any[] = [];
   selectedArtist: any;
-  songTitle: string = '';
-  duration: string = '';
-  songUrl: string = '';
-  releaseDate: string = '';
-  genre: string = '';
+  songs: any[] = [
+    { title: '', duration: '', releaseDate: '', genre: '', sourceType: 'url', url: '', file: null }
+  ];
   artistDataString: string = '';
   albumDataString: string = '';
-
 
   constructor(
     private toastr: ToastrService,
     private loginService: LoginService,
-    private cdr: ChangeDetectorRef ,
+    private cdr: ChangeDetectorRef,
     private location: Location,
     private snackBar: MatSnackBar,
-  ) {
-
-  }
+  ) { }
 
   ngOnInit() {
     this.getAllArtists();
-    if (this.selectedArtist) {
-    };
     this.getAllAlbum();
-    if (this.selectedAlbum) {
-    };
   }
 
   getAllArtists(): void {
     this.loginService.getAllArtist().subscribe(
       (res: any) => {
-        this.formatArtistData();
         this.artists = res.data;
+        this.formatArtistData();
         this.cdr.detectChanges();
       },
       (error) => {
@@ -63,57 +54,73 @@ export class SongCreateComponent {
   getAllAlbum(): void {
     this.loginService.getAllAlbum().subscribe(
       (res: any) => {
-        this.formatAlbumData();
         this.albums = res.data;
+        this.formatAlbumData();
         this.cdr.detectChanges();
       },
       (error) => {
-        console.error('Error fetching artists:', error);
+        console.error('Error fetching albums:', error);
       }
     );
   }
 
   formatAlbumData(): void {
-    this.albumDataString = this.albums.map(album => `${album.albunName} - ${album.gender}`).join('\n');
+    this.albumDataString = this.albums.map(album => `${album.albumName} - ${album.genre}`).join('\n');
   }
 
+  addSong() {
+    debugger
+    this.songs.push({ title: '', duration: '', releaseDate: '', genre: '', sourceType: 'url', url: '', file: null });
+  }
 
+  removeSong(index: number) {
+    this.songs.splice(index, 1);
+  }
+
+  onFileChange(event: Event, index: number) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (file) {
+      this.songs[index].file = file;
+    }
+  }
 
   submit() {
-    const songData: any = {
+    const songDataArray = this.songs.map(song => ({
       albumId: this.selectedAlbum.albumId,
       albumName: this.selectedAlbum.albumName,
       albumCardUrl: this.selectedAlbum.albumCardUrl,
       artistId: this.selectedArtist.artistId,
       artistName: this.selectedArtist.artistName,
-      songTitle: this.songTitle,
-      duration: this.duration,
-      songUrl: this.songUrl,
-      releaseDate: this.releaseDate,
-      genre: this.genre
-    };
+      songTitle: song.title,
+      duration: song.duration,
+      songUrl: song.sourceType === 'url' ? song.url : '',
+      songFile: song.sourceType === 'file' ? song.file : null,
+      releaseDate: song.releaseDate,
+      genre: song.genre
+    }));
 
-    this.loginService.createSong(songData).subscribe((res: any) => {
-      if (res) {
-        this.openSnackBar(res.message, 'close', 'Success');
-      } else {
-        this.openSnackBar(res.message, 'close', 'error');
-      }
+    songDataArray.forEach(songData => {
+      this.loginService.createSong(songData).subscribe((res: any) => {
+        if (res) {
+          this.openSnackBar(res.message, 'close', 'Success');
+        } else {
+          this.openSnackBar(res.message, 'close', 'error');
+        }
+      });
     });
   }
 
   openSnackBar(message: string, action: string, type: string) {
     this.snackBar.open(message, action, {
       duration: 5000,
-      panelClass: type == 'error' ? ['snackbar-error'] : ['snackbar-success'],
+      panelClass: type === 'error' ? ['snackbar-error'] : ['snackbar-success'],
       verticalPosition: 'top',
-      horizontalPosition:'right',
-
+      horizontalPosition: 'right',
     });
   }
 
   cancel() {
     this.location.back();
   }
-
-};
+}
