@@ -22,7 +22,6 @@ export class SongCreateComponent implements OnInit {
   albumDataString: string = '';
 
   constructor(
-    private toastr: ToastrService,
     private loginService: LoginService,
     private cdr: ChangeDetectorRef,
     private location: Location,
@@ -81,11 +80,23 @@ export class SongCreateComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
     if (file) {
-      this.songs[index].file = file;
+      this.convertFileToBase64(file).then((base64String: string) => {
+        this.songs[index].file = base64String;  // Store base64 string instead of file
+      });
     }
   }
 
+  convertFileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = error => reject(error);
+    });
+  }
+
   submit() {
+    debugger;
     const songDataArray = this.songs.map(song => ({
       albumId: this.selectedAlbum.albumId,
       albumName: this.selectedAlbum.albumName,
@@ -100,14 +111,12 @@ export class SongCreateComponent implements OnInit {
       genre: song.genre
     }));
 
-    songDataArray.forEach(songData => {
-      this.loginService.createSong(songData).subscribe((res: any) => {
-        if (res) {
-          this.openSnackBar(res.message, 'close', 'Success');
-        } else {
-          this.openSnackBar(res.message, 'close', 'error');
-        }
-      });
+    this.loginService.createSongs(songDataArray).subscribe((res: any) => {
+      if (res) {
+        this.openSnackBar(res.message, 'close', 'Success');
+      } else {
+        this.openSnackBar(res.message, 'close', 'error');
+      }
     });
   }
 

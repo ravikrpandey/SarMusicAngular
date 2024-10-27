@@ -106,9 +106,10 @@ export class LoginService {
   
 
   //================ Song =================
-  createSong(songData: any): Observable<any> {
-    return this.http.post<any>(routes.createSong(), songData)
-  };
+  createSongs(songDataArray: any[]): Observable<any> {
+    return this.http.post<any>(routes.createSong(), songDataArray);
+  }
+  
 
   getAllSongs(): Observable<any[]> {
     return this.http.get<any[]>(routes.getAllSongs())
