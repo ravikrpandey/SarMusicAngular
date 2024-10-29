@@ -25,9 +25,13 @@ const routes = {
   songsByAlbumId: (albumId: string) => `${SERVER_API_URL}/api/getSongsByAlbumId/${albumId}`,
   getSongById: (songId: number) => `${SERVER_API_URL}/api/getSongById/${songId}`,
   updateSongById: (songId: number) => `${SERVER_API_URL}/api/updateSong/${songId}`,
+  deleteSong: (songId: number) => `${SERVER_API_URL}/api/deleteSong/${songId}`,
 
   // add song list == playlist creation
-  addToLikedSongs: () => `${SERVER_API_URL}/api/createsongPlayList`
+  addToLikedSongs: () => `${SERVER_API_URL}/api/createsongPlayList`,
+
+  // dashboard //
+  getAllDashCount: () => `${SERVER_API_URL}/api/getAllDashBoardCount`
 
 }
 
@@ -129,10 +133,18 @@ export class LoginService {
   updateSongById(songId: number, songDataToUpdate: any) {
     return this.http.patch<any>(routes.updateSongById(songId), songDataToUpdate)
   };
+  deleteSong(songId: number) {
+    return this.http.delete<any>(routes.deleteSong(songId))
+  };
 
   //============= Liked Song Playlist =================
   addToLikedSongs(likedSongDetails: any): Observable<any> {
     return this.http.post<any>(routes.addToLikedSongs(), likedSongDetails)
+  };
+
+  //======== Dashboard =========
+  getAllDashCount():Observable<any> {
+    return this.http.get<any>(routes.getAllDashCount())
   };
 
 

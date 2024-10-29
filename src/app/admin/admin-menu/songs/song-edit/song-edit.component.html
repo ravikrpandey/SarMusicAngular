@@ -1,41 +1,55 @@
 <div class="card">
-    <div class="card-header">
-        ADD SONG
-    </div>
-    <div class="card-body">
-        <form>
-            <div class="form-group">
-                <label for="albumId">Select Album</label>
-                <select id="albumId" [(ngModel)]="selectedAlbum" name="albumId" class="form-control" placeholder="Enter album name">
+  <div class="card-header">
+      EDIT SONG
+  </div>
+  <div class="card-body">
+      <form>
+          <div class="form-group">
+              <label for="albumId">Select Album</label>
+              <select id="albumId" [(ngModel)]="selectedAlbum" name="albumId" class="form-control" placeholder="Enter album name">
                   <option *ngFor="let album of albums" [ngValue]="album">{{ album.albumName }}</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="artistId">Select Artist</label>
-                <select id="artistId" [(ngModel)]="selectedArtist" name="artistId" class="form-control" placeholder="Enter artist name">
+              </select>
+          </div>
+          <div class="form-group">
+              <label for="artistId">Select Artist</label>
+              <select id="artistId" [(ngModel)]="selectedArtist" name="artistId" class="form-control" placeholder="Enter artist name">
                   <option *ngFor="let artist of artists" [ngValue]="artist">{{ artist.artistName }}</option>
-                </select>
+              </select>
+          </div>
+          <div class="form-group">
+              <label for="songTitle">Song Title</label>
+              <input type="text" id="songTitle" [(ngModel)]="songTitle" name="songTitle" class="form-control">
+          </div>
+          <div class="form-group">
+              <label for="duration">Duration</label>
+              <input type="time" id="duration" [(ngModel)]="duration" name="duration" class="form-control">
+          </div>
+          <div class="form-group">
+              <label for="songSource">Song Source</label>
+              <div>
+                  <label>
+                      <input type="radio" [(ngModel)]="sourceType" name="sourceType" value="url"> URL
+                  </label>
+                  <label>
+                      <input type="radio" [(ngModel)]="sourceType" name="sourceType" value="file"> File
+                  </label>
               </div>
-            <div class="form-group">
-                <label for="songTitle">Song Title</label>
-                <input type="text" id="songTitle" [(ngModel)]="songTitle" name="songTitle" class="form-control">
-            </div>
-            <div class="form-group">
-                <label for="duration">Duration</label>
-                <input type="time" id="duration" [(ngModel)]="duration" name="duration" class="form-control">
-            </div>
-            <div class="form-group">
-                <label for="songUrl">Song URL</label>
-                <input type="text" id="songUrl" [(ngModel)]="songUrl" name="songUrl" class="form-control"
-                    placeholder="Enter Song URL">
-            </div>
-            <div class="form-group">
-                <label for="releaseDate">Release Date</label>
-                <input type="date" id="releaseDate" [(ngModel)]="releaseDate" name="releaseDate" class="form-control">
-            </div>
-            <div class="form-group">
-                <label for="genre">Genre</label>
-                <select id="genre" [(ngModel)]="genre" name="genre" class="form-control">
+          </div>
+          <div class="form-group" *ngIf="sourceType === 'url'">
+              <label for="songUrl">Song URL</label>
+              <input type="text" id="songUrl" [(ngModel)]="songUrl" name="songUrl" class="form-control" placeholder="Enter Song URL">
+          </div>
+          <div class="form-group" *ngIf="sourceType === 'file'">
+              <label for="songFile">Song File</label>
+              <input type="file" id="songFile" (change)="onFileChange($event)" name="songFile" class="form-control">
+          </div>
+          <div class="form-group">
+              <label for="releaseDate">Release Date</label>
+              <input type="date" id="releaseDate" [(ngModel)]="releaseDate" name="releaseDate" class="form-control">
+          </div>
+          <div class="form-group">
+              <label for="genre">Genre</label>
+              <select id="genre" [(ngModel)]="genre" name="genre" class="form-control">
                   <option value="" disabled selected>Select Genre</option>
                   <option value="pop">Pop</option>
                   <option value="rock">Rock</option>
@@ -58,12 +72,12 @@
                   <option value="experimental">Experimental</option>
                   <option value="ambient">Ambient</option>
                   <option value="bhojpuri">Bhojpuri</option>
-                </select>
-              </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary" (click)="submit()">Save</button>
-                <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
-            </div>
-        </form>
-    </div>
+              </select>
+          </div>
+          <div class="form-group">
+              <button type="submit" class="btn btn-primary" (click)="submit()">Save</button>
+              <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+          </div>
+      </form>
+  </div>
 </div>

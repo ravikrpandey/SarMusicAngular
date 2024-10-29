@@ -11,8 +11,8 @@
             <!-- <h3>{{ song.duration }}</h3> -->
             <p>{{ song.songTitle }}</p>
             <!-- <p>{{ song.genre }}</p> -->
-            <span class="edit-icon" (click)="editalbum(song.songId)">✎</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <span class="delete-icon" (click)="deletealbum(song.songId)">🗑</span>
+            <span class="edit-icon" (click)="editSong(song.songId)">✎</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="delete-icon" (click)="deleteSong(song.songId)">🗑</span>
           </div>
           <div class="icons">
             <audio [id]="'audioPlayer_' + song.songId" [src]="song.songUrl" controls></audio>

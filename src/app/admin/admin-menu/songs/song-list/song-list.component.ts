@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login.service';
 
@@ -17,11 +18,21 @@ export class SongListComponent {
   constructor(
     private loginService: LoginService,
     private cdr: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
     this.getAll();
+  }
+
+  openSnackBar(message: string, action: string, type: string) {
+    this.snackBar.open(message, action, {
+      duration: 5000,
+      panelClass: type === 'error' ? ['snackbar-error'] : ['snackbar-success'],
+      verticalPosition: 'top',
+      horizontalPosition: 'right',
+    });
   }
 
   getAll() {
@@ -50,7 +61,6 @@ export class SongListComponent {
   }
 
   playSong(song: any) {
-    
     const audioPlayer = this.audioPlayers.get(song.songId);
     console.log("loged play button", audioPlayer)
     if (audioPlayer) {
@@ -63,11 +73,18 @@ export class SongListComponent {
     }
   }
 
-  editalbum(songId: any) {
+  editSong(songId: any) {
     this.router.navigate(['admin/song/edit', songId])
   }
 
-  deletealbum(songId: any) {
-    // Implement delete method
+  deleteSong(songId: any) {
+    this.loginService.deleteSong(songId).subscribe((res: any) => {
+      if (res) {
+        this.openSnackBar(res.message, 'close', 'Success');
+        window.location.reload();
+      } else {
+        this.openSnackBar(res.message, 'close', 'error');
+      }
+    })
   }
 }

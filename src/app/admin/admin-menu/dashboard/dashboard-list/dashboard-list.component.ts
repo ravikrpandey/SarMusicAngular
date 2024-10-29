@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { NavigationExtras } from '@angular/router';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { LoginService } from 'src/app/services/login.service';
 
 @Component({
   selector: 'app-dashboard-list',
@@ -13,17 +15,25 @@ export class DashboardListComponent {
   myForm: any;
 
   activeUser: any;
-  TotalSale: any;
+  totalEventCount: any;
   startDate: any;
   endDate: any;
   startDateCustom: any = null;
   endDateCustom: any = null;
   filData: any = 'today';
   showCustomDateFilters: boolean = false;
-  constructor( private router: Router, private toastr: ToastrService) { }
+  constructor(private router: Router,
+    private toastr: ToastrService,
+    private loginService: LoginService,
+    // private location: Location,
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef, // Inject ChangeDetectorRef
+    private ngZone: NgZone
+  ) { }
 
 
   ngOnInit(): void {
+    this.getAllDashboardCount();
     // Get the current date
     const today = new Date();
 
@@ -41,7 +51,19 @@ export class DashboardListComponent {
       endDate: formattedEndDate,
       type: this.filData
     };
-   
+
+  }
+
+  getAllDashboardCount() {
+    this.loginService.getAllDashCount().subscribe((res: any) => {
+      this.totalEventCount = res.data;
+      if (res) {
+        this.ngZone.run(() => {  // Ensure the update is detected within Angular’s zone
+          this.totalEventCount = res?.data;
+          this.cdr.detectChanges();  // Manually trigger change detection
+        });
+      }
+    })
   }
 
   activeUserDetailClick() {
@@ -57,11 +79,11 @@ export class DashboardListComponent {
       queryParams: { callFrom: 'retentionRateData', startDte: this.startDate, endDate: this.endDate },
       skipLocationChange: true,
     };
-    this.router.navigate(['/home/retentionRate'],  navigationExtras);
+    this.router.navigate(['/home/retentionRate'], navigationExtras);
   }
 
   repeateCustemerData() {
-    this.router.navigate(['/home/customer'], { queryParams: { callFrom: 'repeatCustomerData', startDate: this.startDate, endDate: this.endDate }});
+    this.router.navigate(['/home/customer'], { queryParams: { callFrom: 'repeatCustomerData', startDate: this.startDate, endDate: this.endDate } });
   }
 
   searchByDateCustom() {
@@ -106,8 +128,8 @@ export class DashboardListComponent {
   }
 
   searchByDate(filter = '') {
-   
-    }
+
+  }
 
 
   customData(cus: any) {
