@@ -143,7 +143,7 @@
         <div class="popular-songs">
           <div class="card" 
                [style.background-image]="song.songCardUrl ? 'url(' + song.songCardUrl + ')' : 'url(' + song.albumCardUrl + ')'" 
-               *ngFor="let song of songs">
+               *ngFor="let song of mostPlayedSongs">
             <div class="card-body" (click)="playSongById(song)">
               <!-- <img [src]="song.songCardUrl ? song.songCardUrl : song.albumCardUrl" class="song-image" /> -->
               <p class="song-title" style="color: white;">{{ song.songTitle }}</p>
