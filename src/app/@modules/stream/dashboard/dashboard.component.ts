@@ -239,6 +239,7 @@ export class DashboardComponent implements AfterViewInit {
     debugger;
     if (localStorage.getItem('mobileNumber')) {
       this.mobileNumber = localStorage.getItem('mobileNumber');
+      this.getMostPlayedSongsByUser();
       this.loginService.increaseSongCount(this.songId, this.mobileNumber).subscribe((res: any) => {
         console.log("add count called")
 
