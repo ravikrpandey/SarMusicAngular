@@ -38,10 +38,14 @@ likedSongs: any;
   currentMusicName: any;
   currentArtistName: string = '';
   songDuration: any;
+  songId: any;
   showLikedSongs: boolean = false;
   type: any = ''
   abbumIdPlay: any;
   showSearch: boolean = false;
+  mobileNumber: any;
+  mostPlayedSongs: any;
+
 
 
   
@@ -78,8 +82,10 @@ likedSongs: any;
     if (!localStorage.getItem('mobileNumber')) {
       window.location.href = '/login';
     }
+    this.mobileNumber = localStorage.getItem('mobileNumber') as string | null;
     this.type = localStorage.getItem('type') as string | null;
     this.getAll();
+    this.getMostPlayedSongsByUser();
 
   }
 
@@ -248,6 +254,15 @@ likedSongs: any;
     this.currentMusicName = song.songTitle;
     this.currentArtistName = song.artistName;
     this.songDuration = song.duration;
+    this.songId = song.songId;
+debugger;
+    if (localStorage.getItem('mobileNumber')) {
+      this.mobileNumber = localStorage.getItem('mobileNumber');
+      this.loginService.increaseSongCount(this.songId, this.mobileNumber).subscribe((res: any) => {
+        console.log("add count called")
+
+      })
+    }
   
     // Set the new source and wait for it to be ready to play
     this.audioPlayer.src = this.currentMusic;
@@ -412,6 +427,34 @@ previousSong() {
 
   //   this.lastScrollTop = currentScroll;
   // }
+
+
+  getMostPlayedSongsByUser(): void {
+    this.loginService.getMostPlayed(this.mobileNumber).subscribe(
+      (res: any) => {
+        if (res?.mostPlayed) {
+          // Collect all songs arrays from `mostPlayed` and assign to `this.songs`
+          this.songs = res.mostPlayed.reduce((acc: any[], pl: any) => acc.concat(pl.songs), []);
+        } else {
+          console.warn('No songs found for this user.');
+          this.songs = []; // Reset `songs` if no data is returned
+        }
+      },
+      (error) => {
+        console.error('Error fetching most played songs:', error);
+      }
+    );
+  }
+  
+    
+  
+  
+
+  // playSong(song: any): void {
+  //   console.log('Playing song:', song);
+  //   // Add further functionality as needed
+  // }
+
 }
   
 

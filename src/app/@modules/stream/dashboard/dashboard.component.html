@@ -141,157 +141,21 @@
         <h1>Most Played</h1>
         <!-- <div class="cardContainer">  </div> -->
         <div class="popular-songs">
-          <div class="card">
-            <!-- <div class="card-header">
-              <h2>Popular Songs</h2>
-            </div> -->
-            <div class="card-body">
-              <!-- <ul class="song-list">
-                <li class="song">Song 1 - Artist 1</li>
-                <li class="song">Song 2 - Artist 2</li>
-                <li class="song">Song 3 - Artist 3</li>
-              </ul> -->
+          <div class="card" 
+               [style.background-image]="song.songCardUrl ? 'url(' + song.songCardUrl + ')' : 'url(' + song.albumCardUrl + ')'" 
+               *ngFor="let song of songs">
+            <div class="card-body" (click)="playSongById(song)">
+              <!-- <img [src]="song.songCardUrl ? song.songCardUrl : song.albumCardUrl" class="song-image" /> -->
+              <p class="song-title" style="color: white;">{{ song.songTitle }}</p>
             </div>
-            <div class="card-footer">
-              <p>KIARA</p>
-            </div>
-          </div>
-          <div class="card">
-            <!-- <div class="card-header">
-              <h2>Popular Songs</h2>
-            </div> -->
-            <div class="card-body">
-              <!-- <ul class="song-list">
-                <li class="song">Song 1 - Artist 1</li>
-                <li class="song">Song 2 - Artist 2</li>
-                <li class="song">Song 3 - Artist 3</li>
-              </ul> -->
-            </div>
-            <div class="card-footer">
-              <p>KIARA</p>
-            </div>
-          </div>
-          <div class="card">
-            <!-- <div class="card-header">
-              <h2>Popular Songs</h2>
-            </div> -->
-            <div class="card-body">
-              <!-- <ul class="song-list">
-                <li class="song">Song 1 - Artist 1</li>
-                <li class="song">Song 2 - Artist 2</li>
-                <li class="song">Song 3 - Artist 3</li>
-              </ul> -->
-            </div>
-            <div class="card-footer">
-              <p>KIARA</p>
-            </div>
-          </div>
-          <div class="card">
-            <!-- <div class="card-header">
-              <h2>Popular Songs</h2>
-            </div> -->
-            <div class="card-body">
-              <!-- <ul class="song-list">
-                <li class="song">Song 1 - Artist 1</li>
-                <li class="song">Song 2 - Artist 2</li>
-                <li class="song">Song 3 - Artist 3</li>
-              </ul> -->
-            </div>
-            <div class="card-footer">
-              <p>KIARA</p>
-            </div>
-          </div>
-          <div class="card">
-            <!-- <div class="card-header">
-              <h2>Popular Songs</h2>
-            </div> -->
-            <div class="card-body">
-              <!-- <ul class="song-list">
-                <li class="song">Song 1 - Artist 1</li>
-                <li class="song">Song 2 - Artist 2</li>
-                <li class="song">Song 3 - Artist 3</li>
-              </ul> -->
-            </div>
-            <div class="card-footer">
-              <p>KIARA</p>
-            </div>
-          </div>
-          <div class="card">
-            <!-- <div class="card-header">
-              <h2>Popular Songs</h2>
-            </div> -->
-            <div class="card-body">
-              <!-- <ul class="song-list">
-                <li class="song">Song 1 - Artist 1</li>
-                <li class="song">Song 2 - Artist 2</li>
-                <li class="song">Song 3 - Artist 3</li>
-              </ul> -->
-            </div>
-            <div class="card-footer">
-              <p>KIARA</p>
-            </div>
-          </div>
-          <div class="card">
-            <!-- <div class="card-header">
-              <h2>Popular Songs</h2>
-            </div> -->
-            <div class="card-body">
-              <!-- <ul class="song-list">
-                <li class="song">Song 1 - Artist 1</li>
-                <li class="song">Song 2 - Artist 2</li>
-                <li class="song">Song 3 - Artist 3</li>
-              </ul> -->
-            </div>
-            <div class="card-footer">
-              <p>KIARA</p>
-            </div>
-          </div>
-          <div class="card">
-            <!-- <div class="card-header">
-              <h2>Popular Songs</h2>
-            </div> -->
-            <div class="card-body">
-              <!-- <ul class="song-list">
-                <li class="song">Song 1 - Artist 1</li>
-                <li class="song">Song 2 - Artist 2</li>
-                <li class="song">Song 3 - Artist 3</li>
-              </ul> -->
-            </div>
-            <div class="card-footer">
-              <p>KIARA</p>
-            </div>
-          </div>
-          <div class="card">
-            <!-- <div class="card-header">
-              <h2>Popular Songs</h2>
-            </div> -->
-            <div class="card-body">
-              <!-- <ul class="song-list">
-                <li class="song">Song 1 - Artist 1</li>
-                <li class="song">Song 2 - Artist 2</li>
-                <li class="song">Song 3 - Artist 3</li>
-              </ul> -->
-            </div>
-            <div class="card-footer">
-              <p>KIARA</p>
-            </div>
-          </div>
-          <div class="card">
-            <!-- <div class="card-header">
-              <h2>Popular Songs</h2>
-            </div> -->
-            <div class="card-body">
-              <!-- <ul class="song-list">
-                <li class="song">Song 1 - Artist 1</li>
-                <li class="song">Song 2 - Artist 2</li>
-                <li class="song">Song 3 - Artist 3</li>
-              </ul> -->
-            </div>
-            <div class="card-footer">
-              <p>KIARA</p>
-            </div>
+            <!-- <div class="card-footer"> -->
+              <!-- Uncomment if you want to display the artist name -->
+              <!-- <p class="artist-name">{{ song.artist }}</p> -->
+            <!-- </div> -->
           </div>
         </div>
+        
+        
 
         <!-- audio play back controls go here, hidden by default -->
         <div class="playbar">

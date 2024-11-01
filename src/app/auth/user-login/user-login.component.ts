@@ -43,7 +43,7 @@ export class UserLoginComponent {
       } else {
       localStorage.setItem('mobileNumber', this.mobileNumber);
       this.type = res.data;
-      console.log(res.data,'this.type======')
+      console.log(res,'this.res======')
       localStorage.setItem('type', this.type);
         this.router.navigate(['/main/stream']);
         this.openSnackBar(res.message, 'close', res.status);

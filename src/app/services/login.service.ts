@@ -31,7 +31,13 @@ const routes = {
   addToLikedSongs: () => `${SERVER_API_URL}/api/createsongPlayList`,
 
   // dashboard //
-  getAllDashCount: () => `${SERVER_API_URL}/api/getAllDashBoardCount`
+  getAllDashCount: () => `${SERVER_API_URL}/api/getAllDashBoardCount`,
+
+  // main stream //
+  increaseSongCount: (songId:any, mobileNumber:any) => `${SERVER_API_URL}/api/updateSongPlayedCount/${songId}/${mobileNumber}`,
+
+  getMostPlayed: (mobileNumber:any) => `${SERVER_API_URL}/api/getUsersPlaylist/${mobileNumber}`,
+
 
 }
 
@@ -145,6 +151,15 @@ export class LoginService {
   //======== Dashboard =========
   getAllDashCount():Observable<any> {
     return this.http.get<any>(routes.getAllDashCount())
+  };
+
+  //==========main stream =========
+  increaseSongCount(songId: any, mobileNumber:any):Observable<any> {
+    return this.http.get<any>(routes.increaseSongCount(songId, mobileNumber))
+  };
+
+  getMostPlayed(mobileNumber:any):Observable<any> {
+    return this.http.get<any>(routes.getMostPlayed(mobileNumber))
   };
 
 
