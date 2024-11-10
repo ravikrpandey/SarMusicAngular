@@ -1,5 +1,6 @@
 const db = require("../../IndexFiles/modelsIndex");
 const tbl_artist = db.artist;
+// const sequelize = require('../../config/db.config')
 
 exports.createArtist = async (req, res) => {
   try {
@@ -27,6 +28,22 @@ exports.geAllArtist = async (req, res) => {
     console.log("Error", error);
     return res.status(500).send({ code: 500, message: error.message || "Internal server error" });
   }
+}
+
+exports.getAllPopularArtist = async (req, res) => {
+  try {
+    const [getAllPopularArtist] = await db.sequelize.query(`SELECT a.artistId,a.artistName,a.artistProfileUrl from artists a where isDeleted = FALSE;`);
+
+    if (getAllPopularArtist.length == 0) {
+      return res.status(404).send({status: false, message: 'No Record to list'})
+    }
+
+    return res.status(200).send({status: true, message: 'Record listed successfully', data: getAllPopularArtist})
+
+    
+  } catch (error) {
+    return res.status(500).send({status:false, message: error.meassage || 'server error'})
+}
 }
 
 //================== get artist by id ================//
@@ -103,3 +120,5 @@ exports.deleteArtist = async (req, res) => {
       .send({ code: 500, message: error.message || "internal server" });
   }
 };
+
+

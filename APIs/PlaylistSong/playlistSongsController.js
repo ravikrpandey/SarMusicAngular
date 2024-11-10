@@ -238,7 +238,8 @@ exports.updateSongPlayedCount = async (req, res) => {
               { playedCount: { [Op.gte]: 3 } },
               { like: 'Liked' }
             ]
-          }
+          },
+          order: [['playedCount', 'DESC']]
         });
 
         const songsWithUrls = await Promise.all(
@@ -248,7 +249,7 @@ exports.updateSongPlayedCount = async (req, res) => {
               attributes: ['songId', 'songUrl', 'songCardUrl', 'albumCardUrl', 'songTitle', 'artistName' ]
             });
 
-            let songTitle = song.songTitle.length > 15 ? song.songTitle.substring(0, 24) : song.songTitle;
+            let songTitle = song?.songTitle?.length > 15 ? song?.songTitle?.substring(0, 24) : song?.songTitle;
 
             
             return song ? { ...playlistSong.dataValues, songUrl: song.songUrl, songCardUrl: song.songCardUrl, albumCardUrl: song.albumCardUrl, songTitle:songTitle, artistName:song.artistName } : null;
@@ -292,3 +293,5 @@ exports.updateSongPlayedCount = async (req, res) => {
       res.status(500).json({ code: 500, message: 'server error' });
     }
   }
+
+

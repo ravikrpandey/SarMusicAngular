@@ -12,7 +12,7 @@ exports.createSong = async (req, res) => {
     try {
         const createdSongs = [];
         for (let songData of req.body) {
-            const { albumId, albumName, artistId, artistName, songTitle, duration, songUrl, songFile, releaseDate, genre, albumCardUrl } = songData;
+            const { albumId, albumName, artistId, artistName, songTitle, duration, songUrl, songFile, releaseDate, genre, albumCardUrl, songCardUrl } = songData;
 
             let filePath = songUrl;
             if (songFile) {
@@ -30,7 +30,8 @@ exports.createSong = async (req, res) => {
                 songUrl: filePath,
                 releaseDate,
                 genre,
-                albumCardUrl
+                albumCardUrl,
+                songCardUrl
             });
             createdSongs.push(createdSong);
         }
@@ -78,7 +79,7 @@ exports.getSongById = async (req, res) => {
 exports.updateSong = async (req, res) => {
     try {
         const { id } = req.params;
-        const { albumId, albumName, artistId, artistName, songTitle, duration, songUrl, songFile, releaseDate, genre } = req.body;
+        const { albumId, albumName, artistId, artistName, songTitle, duration, songUrl, songFile, releaseDate, genre , songCardUrl} = req.body;
 
         const song = await tbl_song.findOne({
             where: {
@@ -106,7 +107,8 @@ exports.updateSong = async (req, res) => {
                 duration,
                 songUrl: filePath,
                 releaseDate,
-                genre
+                genre,
+                songCardUrl
             },
             {
                 where: {
@@ -165,6 +167,21 @@ exports.getSongsByAlbumId = async (req, res) => {
             }, attribute: ['songTitle', 'songId', 'songUrl', 'artistName']
         })
         return res.status(200).send({ code: 200, message: "song is fetched by album id", data: data })
+    } catch (error) {
+        return res.status(500).send({ code: 500, message: error.message || "internal server error" });
+    }
+};
+
+exports.getSongsByArtistId = async (req, res) => {
+    try {
+        const { artistId } = req.params;
+        const data = await tbl_song.findAll({
+            where: {
+                artistId: artistId,
+                isDeleted: false
+            }, attribute: ['songTitle', 'songId', 'songUrl', 'artistName']
+        })
+        return res.status(200).send({ code: 200, message: "song is fetched successfully", data: data })
     } catch (error) {
         return res.status(500).send({ code: 500, message: error.message || "internal server error" });
     }
