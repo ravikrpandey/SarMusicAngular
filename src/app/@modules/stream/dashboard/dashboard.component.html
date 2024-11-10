@@ -28,7 +28,7 @@
         </div>
         <div class="liked-songs">
 
-          <h2> &nbsp;&nbsp;&nbsp;<i class="fas fa-heart"></i> &nbsp;&nbsp;&nbsp;Liked Songs </h2>
+          <h2><i class="fas fa-heart"></i> &nbsp;&nbsp;&nbsp;Liked Songs </h2>
         </div>
 
 
@@ -37,18 +37,18 @@
           integrity="sha384-uxq/xBbFAO8SXvXVeD6cu7wnb7TdSZ+r3vZdtL3zB9a72g5Qr0x3z2StxOAqJT0Q" crossorigin="anonymous">
 
 
-        <div class="songList">
-          <div class="songCard" *ngFor="let song of songs">
-            <i class="fas fa-play-circle" *ngIf="!song.isPlaying" (click)="playSongById(song)"></i>
-            <div class="songInfo" (click)="playSongById(song)">
-              <!-- <span class="songId">{{song.songId}}&nbsp;</span> -->
-              <span class="songName">{{song.songTitle}} &nbsp;</span>
-              <span class="artistName">{{song.artistName}} &nbsp;&nbsp;</span>
-              <i class="fas fa-heart loveIcon" [ngClass]="{'blank-heart': !song.liked, 'bubbling-heart': song.liked}"
-                (click)="toggleLove(song)"></i> <!-- Love icon button -->
+          <div class="songList">
+            <div class="songCard" *ngFor="let song of songs">
+              <!-- Check if songCardUrl exists, otherwise use a default image -->
+              <img [src]="song.songCardUrl ? song.songCardUrl : '/assets/default-song-card.jpg'" alt="Song Image" class="songImage" (click)="playSongById(song)">
+              <div class="songInfo" (click)="playSongById(song)">
+                <span class="songName">{{song.songTitle}} &nbsp;</span>
+                <span class="artistName">{{song.artistName}} &nbsp;&nbsp;</span>
+                <i class="fas fa-heart loveIcon" [ngClass]="{'blank-heart': !song.liked, 'bubbling-heart': song.liked}"
+                  (click)="toggleLove(song)"></i> <!-- Love icon button -->
+              </div>
             </div>
-          </div>
-        </div>
+          </div>          
 
       </div>
 
@@ -145,6 +145,22 @@
                [style.background-image]="song.songCardUrl ? 'url(' + song.songCardUrl + ')' : 'url(' + song.albumCardUrl + ')'" 
                *ngFor="let song of mostPlayedSongs">
             <div class="card-body" (click)="playSongById(song)">
+              <!-- <img [src]="song.songCardUrl ? song.songCardUrl : song.albumCardUrl" class="song-image" /> -->
+              <p class="song-title" style="color: white;">{{ song.songTitle }}</p>
+            </div>
+            <!-- <div class="card-footer"> -->
+              <!-- Uncomment if you want to display the artist name -->
+              <!-- <p class="artist-name">{{ song.artist }}</p> -->
+            <!-- </div> -->
+          </div>
+        </div>
+
+        <h1>Popular Artists</h1>
+        <div class="popular-artist">
+          <div class="artist-card" 
+               [style.background-image]="song.artistProfileUrl ? 'url(' + song.artistProfileUrl + ')' : 'url(' + song.artistProfileUrl + ')'" 
+               *ngFor="let song of populatArtist">
+            <div class="artist-card-body" (click)="songsByArtistId(song.artistId)">
               <!-- <img [src]="song.songCardUrl ? song.songCardUrl : song.albumCardUrl" class="song-image" /> -->
               <p class="song-title" style="color: white;">{{ song.songTitle }}</p>
             </div>

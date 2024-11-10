@@ -36,6 +36,7 @@ export class SongListComponent {
   }
 
   getAll() {
+    debugger
     this.loginService.getAllSongs().subscribe((res: any) => {
       this.songs = res.data;
       this.cdr.detectChanges();

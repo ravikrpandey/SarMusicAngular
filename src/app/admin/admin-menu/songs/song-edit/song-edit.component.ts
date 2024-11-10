@@ -14,15 +14,16 @@ export class SongEditComponent {
   albums: any[] = [];
   selectedArtist: any;
   artists: any[] = [];
-  songTitle: string = '';
-  duration: string = '';
-  songUrl: string = '';
-  releaseDate: string = '';
-  genre: string = '';
+  songTitle: string | null = null;
+  duration!: string;
+  songUrl: string | null = null;
+  releaseDate: string | null = null;
+  genre: string | null = null;
   sourceType: 'url' | 'file' = 'url'; // Track the selected source type (URL or File)
   songId!: number;
   songFile: string | null = null; // To store base64-encoded file content if file is chosen
   song: any = {};
+  songCardUrl!: String
 
   constructor(
     private route: ActivatedRoute,
@@ -106,6 +107,7 @@ export class SongEditComponent {
       releaseDate: this.releaseDate,
       genre: this.genre,
       sourceType: this.sourceType,
+      songCardUrl: this.songCardUrl,
       // Conditionally add either the URL or file based on source type
       ...(this.sourceType === 'url' ? { songUrl: this.songUrl } : { songFile: this.songFile })
     };

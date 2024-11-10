@@ -16,7 +16,7 @@ export class SongCreateComponent implements OnInit {
   artists: any[] = [];
   selectedArtist: any;
   songs: any[] = [
-    { title: '', duration: '', releaseDate: '', genre: '', sourceType: 'url', url: '', file: null }
+    { title: '', duration: '', releaseDate: '', genre: '', sourceType: 'url', url: '', file: null, songCardUrl: '' }
   ];
   artistDataString: string = '';
   albumDataString: string = '';
@@ -69,7 +69,7 @@ export class SongCreateComponent implements OnInit {
 
   addSong() {
     debugger
-    this.songs.push({ title: '', duration: '', releaseDate: '', genre: '', sourceType: 'url', url: '', file: null });
+    this.songs.push({ title: '', duration: '', releaseDate: '', genre: '', sourceType: 'url', url: '', file: null, songCardUrl: '' });
   }
 
   removeSong(index: number) {
@@ -97,6 +97,7 @@ export class SongCreateComponent implements OnInit {
 
   submit() {
     debugger;
+    if (this.songs.length) {
     const songDataArray = this.songs.map(song => ({
       albumId: this.selectedAlbum.albumId,
       albumName: this.selectedAlbum.albumName,
@@ -108,8 +109,10 @@ export class SongCreateComponent implements OnInit {
       songUrl: song.sourceType === 'url' ? song.url : '',
       songFile: song.sourceType === 'file' ? song.file : null,
       releaseDate: song.releaseDate,
-      genre: song.genre
+      genre: song.genre,
+      songCardUrl: song.songCardUrl
     }));
+  
 
     this.loginService.createSongs(songDataArray).subscribe((res: any) => {
       if (res) {
@@ -118,7 +121,11 @@ export class SongCreateComponent implements OnInit {
         this.openSnackBar(res.message, 'close', 'error');
       }
     });
+  } else {
+    this.openSnackBar('Please enter all required fields', 'close', 'error');
   }
+  }
+
 
   openSnackBar(message: string, action: string, type: string) {
     this.snackBar.open(message, action, {

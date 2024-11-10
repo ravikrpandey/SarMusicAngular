@@ -17,65 +17,71 @@
               </select>
           </div>
 
-          <div *ngFor="let song of songs; let i = index" class="song-entry">
-              <div class="form-group">
-                  <label for="songTitle">Song Title</label>
-                  <input type="text" id="songTitle" [(ngModel)]="song.title" name="songTitle{{i}}" class="form-control">
-              </div>
-              <div class="form-group">
-                  <label for="releaseDate">Release Date</label>
-                  <input type="date" id="releaseDate" [(ngModel)]="song.releaseDate" name="releaseDate{{i}}" class="form-control">
-              </div>
-              <div class="form-group">
-                  <label for="genre">Genre</label>
-                  <select id="genre" [(ngModel)]="song.genre" name="genre{{i}}" class="form-control">
-                      <!-- Your genre options here -->
-                      <option value="" disabled selected>Select Genre</option>
-                      <option value="pop">Pop</option>
-                      <option value="rock">Rock</option>
-                      <option value="hip-hop">Hip-hop/Rap</option>
-                      <option value="r&b">R&B/Soul</option>
-                      <option value="country">Country</option>
-                      <option value="jazz">Jazz</option>
-                      <option value="blues">Blues</option>
-                      <option value="electronic">Electronic/Dance</option>
-                      <option value="reggae">Reggae</option>
-                      <option value="classical">Classical</option>
-                      <option value="metal">Metal</option>
-                      <option value="punk">Punk</option>
-                      <option value="folk">Folk</option>
-                      <option value="indie">Indie</option>
-                      <option value="funk">Funk</option>
-                      <option value="gospel">Gospel</option>
-                      <option value="alternative">Alternative</option>
-                      <option value="world">World</option>
-                      <option value="experimental">Experimental</option>
-                      <option value="ambient">Ambient</option>
-                      <option value="bhojpuri">Bhojpuri</option>
-                  </select>
-              </div>
-              <div class="form-group">
-                  <label for="songSource">Song Source</label>
-                  <div>
-                      <label>
-                          <input type="radio" [(ngModel)]="song.sourceType" name="sourceType{{i}}" value="url"> URL
-                      </label>
-                      <label>
-                          <input type="radio" [(ngModel)]="song.sourceType" name="sourceType{{i}}" value="file"> File
-                      </label>
-                  </div>
-              </div>
-              <div class="form-group" *ngIf="song.sourceType === 'url'">
-                  <label for="songUrl">Song URL</label>
-                  <input type="text" id="songUrl" [(ngModel)]="song.url" name="songUrl{{i}}" class="form-control" placeholder="Enter Song URL">
-              </div>
-              <div class="form-group" *ngIf="song.sourceType === 'file'">
-                  <label for="songFile">Song File</label>
-                  <input type="file" id="songFile" (change)="onFileChange($event, i)" name="songFile{{i}}" class="form-control">
-              </div>
-              <button type="button" class="btn btn-danger" (click)="removeSong(i)">Remove</button>
-              <hr>
-          </div>
+        <div *ngFor="let song of songs; let i = index" class="song-entry">
+            <div class="form-group">
+                <label for="songTitle">Song Title</label>
+                <input type="text" id="songTitle" [(ngModel)]="song.title" name="songTitle{{i}}" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="releaseDate">Release Date</label>
+                <input type="date" id="releaseDate" [(ngModel)]="song.releaseDate" name="releaseDate{{i}}" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="genre">Genre</label>
+                <select id="genre" [(ngModel)]="song.genre" name="genre{{i}}" class="form-control">
+                    <!-- Your genre options here -->
+                    <option value="" disabled selected>Select Genre</option>
+                    <option value="pop">Pop</option>
+                    <option value="rock">Rock</option>
+                    <option value="hip-hop">Hip-hop/Rap</option>
+                    <option value="r&b">R&B/Soul</option>
+                    <option value="country">Country</option>
+                    <option value="jazz">Jazz</option>
+                    <option value="blues">Blues</option>
+                    <option value="electronic">Electronic/Dance</option>
+                    <option value="reggae">Reggae</option>
+                    <option value="classical">Classical</option>
+                    <option value="metal">Metal</option>
+                    <option value="punk">Punk</option>
+                    <option value="folk">Folk</option>
+                    <option value="indie">Indie</option>
+                    <option value="funk">Funk</option>
+                    <option value="gospel">Gospel</option>
+                    <option value="alternative">Alternative</option>
+                    <option value="world">World</option>
+                    <option value="experimental">Experimental</option>
+                    <option value="ambient">Ambient</option>
+                    <option value="bhojpuri">Bhojpuri</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="songCardUrl">Song Card URL</label>
+                <input type="text" id="songCardUrl{{i}}" [(ngModel)]="song.songCardUrl" placeholder="Enter Song Card URL"
+                    class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="songSource">Song Source</label>
+                <div>
+                    <label>
+                        <input type="radio" [(ngModel)]="song.sourceType" name="sourceType{{i}}" value="url"> URL
+                    </label>
+                    <label>
+                        <input type="radio" [(ngModel)]="song.sourceType" name="sourceType{{i}}" value="file"> File
+                    </label>
+                </div>
+            </div>
+            <div class="form-group" *ngIf="song.sourceType === 'url'">
+                <label for="songUrl">Song URL</label>
+                <input type="text" id="songUrl" [(ngModel)]="song.url" name="songUrl{{i}}" class="form-control"
+                    placeholder="Enter Song URL">
+            </div>
+            <div class="form-group" *ngIf="song.sourceType === 'file'">
+                <label for="songFile">Song File</label>
+                <input type="file" id="songFile" (change)="onFileChange($event, i)" name="songFile{{i}}" class="form-control">
+            </div>
+            <button type="button" class="btn btn-danger" (click)="removeSong(i)">Remove</button>
+            <hr>
+        </div>
 
           <div class="form-group">
               <button type="button" class="btn btn-secondary" (click)="addSong()">Add Another Song</button>

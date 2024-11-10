@@ -38,6 +38,9 @@ const routes = {
 
   getMostPlayed: (mobileNumber:any) => `${SERVER_API_URL}/api/getUsersPlaylist/${mobileNumber}`,
 
+  getAllPopularArtist:  () => `${SERVER_API_URL}/api/getAllPopularArtist`,
+  songsByArtistId:  (artistId:any) => `${SERVER_API_URL}/api/getSongsByArtistId/${artistId}`,
+
 
 }
 
@@ -132,6 +135,13 @@ export class LoginService {
     )
   };
 
+  songsByArtistId(artistId: string): Observable<any> {
+    return this.http.get<any>(routes.songsByArtistId(artistId))
+    .pipe(
+      catchError(this.handleError)
+    )
+  };
+
   getSongById(songId: any): Observable<any> {
     return this.http.get<any>(routes.getSongById(songId))
   };
@@ -160,6 +170,9 @@ export class LoginService {
 
   getMostPlayed(mobileNumber:any):Observable<any> {
     return this.http.get<any>(routes.getMostPlayed(mobileNumber))
+  };
+  getAllPopularArtist():Observable<any> {
+    return this.http.get<any>(routes.getAllPopularArtist())
   };
 
 

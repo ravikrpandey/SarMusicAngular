@@ -42,6 +42,7 @@ export class DashboardComponent implements AfterViewInit {
   showSearch: boolean = false;
   mobileNumber: any;
   mostPlayedSongs: any;
+  populatArtist: any;
 
   // Define variables for the audio player and buttons
   audioPlayer!: HTMLAudioElement;
@@ -80,6 +81,7 @@ export class DashboardComponent implements AfterViewInit {
     this.type = localStorage.getItem('type') as string | null;
     this.getAll();
     this.getMostPlayedSongsByUser();
+    this.getAllPopularArtist();
 
   }
 
@@ -103,13 +105,9 @@ export class DashboardComponent implements AfterViewInit {
     this.loginService.getAllAlbum().subscribe((res: any) => {
       this.albums = res.data;
       this.cdr.detectChanges();
-      if (this.albums.length > 0) {
-        this.songsByAlbumId(this.albums[0].albumId);
-        // Load the first song after fetching all songs
-        if (this.songs.length > 0) {
-          this.playSongById(this.songs[0]); // Assuming you want to play the first song
-        }
-      }
+      // if (this.albums.length > 0) {
+      //   this.songsByAlbumId(this.albums[0].albumId);
+      // }
     })
   };
 
@@ -117,6 +115,9 @@ export class DashboardComponent implements AfterViewInit {
     this.abbumIdPlay = albumId
     this.loginService.songsByAlbumId(albumId).subscribe((res: any) => {
       this.songs = res.data;
+      if (this.songs.length > 0) {
+        this.playSongById(this.songs[0]);
+      }
     })
   }
 
@@ -397,6 +398,37 @@ export class DashboardComponent implements AfterViewInit {
         console.error('Error fetching most played songs:', error);
       }
     );
+  }
+
+  getAllPopularArtist(): void {
+    debugger
+    this.loginService.getAllPopularArtist().subscribe(
+      (res: any) => {
+        if (res?.data) {
+          this.populatArtist = res.data;
+          this.cdr.detectChanges();
+        } else {
+          console.warn('No songs found for this user.');
+        }
+      },
+      (error) => {
+        console.error('Error fetching most played songs:', error);
+      }
+    );
+  }
+
+  songsByArtistId(artistId: any): void {
+    debugger
+    this.loginService.songsByArtistId(artistId).subscribe((res:any) => {
+      if (res.data.length > 0) {
+        this.songs = res.data;
+        if (this.songs.length > 0) {
+          this.playSongById(this.songs[0]);
+        }
+      }
+
+    })
+
   }
 
 };

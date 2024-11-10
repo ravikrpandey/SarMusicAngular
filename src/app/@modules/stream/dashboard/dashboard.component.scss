@@ -112,14 +112,14 @@ body {
   gap: 15px;
   width: 100%;
   padding-top: 14px;
-  padding: 23px 14px;
+  padding: 4px 10px;
   font-weight: bold;
   align-items: center;
   font-size: 13px;
 }
 
 .heading img {
-  width: 30px;
+  width: 20px;
 }
 
 .library {
@@ -190,11 +190,11 @@ body {
 }
 
 .spotifyPlaylists {
-  padding: 16px;
+  padding: 5px;
 }
 
 .spotifyPlaylists h1 {
-  padding: 16px;
+  padding: 0px;
 }
 
 .cardContainer {
@@ -422,7 +422,7 @@ body {
 
 .songinfo {
   color: black;
-  padding: 0 12px;
+  padding: 0 0px 0 0;
   width: 250px;
 }
 
@@ -521,7 +521,7 @@ body {
 
   .abovebar {
     flex-direction: column;
-    gap: 23px;
+    gap: 15px;
     align-items: center;
   }
 
@@ -554,7 +554,7 @@ body {
   }
 
   .spotifyPlaylists h1 {
-    padding: 4px;
+    padding: 2px;
   }
 
   .library {
@@ -714,32 +714,88 @@ body {
   /* Show slide button on hover */
 }
 
-// songList
+
+/* popular-artist */
+.popular-artist {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none; /* Hide scrollbar in Firefox */
+  -ms-overflow-style: none; /* Hide scrollbar in IE/Edge */
+  gap: 20px; /* Space between items */
+  padding: 10px 0; /* Vertical padding */
+}
+
+.popular-artist::-webkit-scrollbar {
+  display: none; /* Hide scrollbar in Chrome/Safari/Opera */
+}
+
+/* artist-card */
+.artist-card {
+  flex: 0 0 auto;
+  width: 150px; /* Adjusted width for circular shape */
+  height: 150px; /* Same as width to create a circle */
+  border-radius: 50%; /* Make it circular */
+  overflow: hidden; /* Ensure image fits within circle */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #d4d4d4;
+  background-size: cover; /* Cover the entire card */
+  background-position: center; /* Center the background image */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: transform 0.2s; /* Smooth hover effect */
+}
+
+.artist-card:hover {
+  transform: scale(1.05); /* Slight zoom on hover */
+}
+
+/* artist-card-body (Optional for text styling below image) */
+.artist-card-body {
+  text-align: center;
+  padding: 10px 0 0; /* Adjust padding as needed */
+  font-size: 1rem; /* Adjust font size */
+  color: #333; /* Text color */
+}
 
 
+
+
+/* songList */
 .songList {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  /* Spacing between song cards */
-  width: 300px;
+  gap: 10px; /* Space between song cards */
+  width: 350px; /* Slightly wider width for better song info visibility */
   margin: 20px auto;
+  padding: 10px; /* Add padding around the list */
 }
 
 .songCard {
   display: flex;
   align-items: center;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  padding: 12px; /* Add padding for better spacing */
+  border: 1px solid #282828; /* Subtle border for card separation */
+  border-radius: 8px; /* Rounded corners for a modern look */
   background-color: #31363F;
-  box-shadow: 0 2px 4px rgba(224, 31, 31, 0.1);
+  transition: background-color 0.3s ease; /* Smooth transition on hover */
+}
+
+.songCard:hover {
+  background-color: #1db954; /* Change background on hover */
+}
+
+.songCard img {
+  width: 60px; /* Adjust the width of the image */
+  height: 60px; /* Adjust the height of the image */
+  border-radius: 50%; /* Make the image circular */
+  object-fit: cover; /* Ensure the image fits inside the circle */
+  margin-right: 15px; /* Space between the image and text */
 }
 
 .songCard i {
-  margin-right: 10px;
-  color: #1DB954;
-  font-size: 20px;
+  margin-right: 15px; /* More space between icon and text */
+  color: #1DB954; /* Spotify-like green color */
+  font-size: 24px; /* Increase icon size */
+  cursor: pointer; /* Make icon clickable */
 }
 
 .songInfo {
@@ -748,28 +804,45 @@ body {
 
 .songName {
   font-weight: bold;
-  margin-bottom: 5px;
+  font-size: 16px; /* Adjusted font size */
+  color: #fff; /* Ensure the text is white for visibility */
+  margin-bottom: 3px; /* Space between song title and artist */
 }
 
 .artistName {
-  color: #999;
+  color: #b3b3b3; /* Lighter grey for artist name */
+  font-size: 14px; /* Smaller font size for artist name */
+  margin-bottom: 5px; /* Add space below artist name */
 }
 
+.songCard .loveIcon {
+  font-size: 18px; /* Adjust size of the heart icon */
+  cursor: pointer; /* Make icon clickable */
+  color: #b3b3b3; /* Grey color for inactive heart icon */
+  transition: color 0.3s ease;
+}
 
-/* Define the animation */
-@keyframes wave {
+.songCard .loveIcon:hover {
+  color: #ff6b81; /* Pink color on hover */
+}
+
+.songCard .loveIcon.bubbling-heart {
+  color: #ff6b81; /* Active heart icon color */
+  animation: bubble 1s ease-in-out infinite; /* Add bubble effect for active state */
+}
+
+@keyframes bubble {
   0% {
-    transform: translateY(0);
+    transform: scale(1);
   }
-
   50% {
-    transform: translateY(-4px);
+    transform: scale(1.2);
   }
-
   100% {
-    transform: translateY(0);
+    transform: scale(1);
   }
 }
+
 
 /* Apply the animation to the wave icon */
 .fa-wave-square {

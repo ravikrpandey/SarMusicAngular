@@ -1,25 +1,26 @@
 <div class="card">
-    <div class="card-header">
-      <span>ALL SONGS</span>
-    </div>
-    <div class="card-body">
-      <div class="album-container">
-        <div class="album" *ngFor="let song of songs">
-          <!-- Attach click event to the image -->
-          <img [src]="song.albumCardUrl" alt="{{ song.songTitle }}" (click)="playSong(song)">
-          <div class="album-info">
-            <!-- <h3>{{ song.duration }}</h3> -->
-            <p>{{ song.songTitle }}</p>
-            <!-- <p>{{ song.genre }}</p> -->
-            <span class="edit-icon" (click)="editSong(song.songId)">✎</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <span class="delete-icon" (click)="deleteSong(song.songId)">🗑</span>
-          </div>
-          <div class="icons">
-            <audio [id]="'audioPlayer_' + song.songId" [src]="song.songUrl" controls></audio>
-            <span class="play-icon" (click)="togglePlay(song.songUrl)"></span>
-          </div>
+  <div class="card-header">
+    <span>ALL SONGS</span>
+  </div>
+  <div class="card-body">
+    <div class="album-container">
+      <div class="album" *ngFor="let song of songs">
+        <!-- Attach click event to the image -->
+        <img [src]="song.songCardUrl || 'assets/default-song-card.jpg'"
+          alt="{{ song.songTitle || 'Default Song Title' }}" (click)="playSong(song)" class="song-card-image" />
+
+        <div class="album-info">
+          <!-- <h3>{{ song.duration }}</h3> -->
+          <p>{{ song.songTitle }}</p>
+          <!-- <p>{{ song.genre }}</p> -->
+          <span class="edit-icon" (click)="editSong(song.songId)">✎</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <span class="delete-icon" (click)="deleteSong(song.songId)">🗑</span>
+        </div>
+        <div class="icons">
+          <audio [id]="'audioPlayer_' + song.songId" [src]="song.songUrl" controls></audio>
+          <span class="play-icon" (click)="togglePlay(song.songUrl)"></span>
         </div>
       </div>
     </div>
   </div>
-  
+</div>
