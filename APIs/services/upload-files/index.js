@@ -7,6 +7,7 @@ const baseUrl = process.env.BASE_URL;
 require('dotenv').config();
 const baseDirectory = path.join(__dirname, 'uploaded-local-files');
 
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         const uploadDir = path.join(__dirname, '/uploaded-local-files');
@@ -67,6 +68,8 @@ const saveBase64File = (base64Data, directory, fileName) => {
         throw new Error('Failed to save image');
     }
 };
+
+
 
 module.exports = {
     upload,
