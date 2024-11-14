@@ -14,10 +14,11 @@
         <img width="30" class="invert" src="assets/close.svg" alt="">
       </div>
       <div class="home bg-grey rounded m-1 p-1">
-        <div class="logo"><img width="110" class="invert" src="img/logo.svg" alt=""></div>
+        <div class="logo"><img width="38%" class="invert" src="assets/elGttE01.svg" alt=""></div>
         <ul>
-          <li><img class="invert" src="assets/home.svg" alt="home">Home</li>
+          <!-- <li><img class="invert" src="assets/home.svg" alt="home"></li>  -->
           <li (click)="toggleSearchBar()"><img class="invert" src="assets/search.svg" alt="home">Search</li>
+          <h3 style="block-size: auto;">💖Lkd Sngs </h3>
         </ul>
       </div>
 
@@ -26,15 +27,18 @@
           <img class="invert" src="assets/playlist.svg" alt="">
           <h2>Your Library</h2>
         </div>
-        <div class="liked-songs">
+        <!-- <div class="liked-songs">
 
           <h2><i class="fas fa-heart"></i> &nbsp;&nbsp;&nbsp;Liked Songs </h2>
-        </div>
+        </div> -->
 
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-          integrity="sha384-uxq/xBbFAO8SXvXVeD6cu7wnb7TdSZ+r3vZdtL3zB9a72g5Qr0x3z2StxOAqJT0Q" crossorigin="anonymous">
+        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+          integrity="sha384-uxq/xBbFAO8SXvXVeD6cu7wnb7TdSZ+r3vZdtL3zB9a72g5Qr0x3z2StxOAqJT0Q" crossorigin="anonymous"> -->
+
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 
 
           <div class="songList">
@@ -60,7 +64,28 @@
             <div class="hamburgerContainer">
                 <img width="40" class="invert hamburger" src="assets/hamburger.svg" alt="" (click)="toggleSongList()">
             </div>
-            <input type="text" class="search-bar" style="border-radius: 07px;" placeholder="Search" id="searchBar" [class.show-search]="showSearch"> <!-- Add this input field -->
+            <div class="search-container">
+              <input 
+                type="text" 
+                class="search-bar" 
+                style="border-radius: 7px; padding-left: 15px;" 
+                placeholder="Search Songs" 
+                [formControl]="searchControl"
+                (click)="showSearch = true" 
+              >
+            </div>
+            
+            <div *ngIf="searchResults.length > 0" class="search-results">
+              <pre>{{ searchResults | json }}</pre>
+              <ul>
+                <li *ngFor="let song of searchResults" class="search-item">
+                  <div class="song-title">{{ song.songTitle }}</div>
+                  <div class="artist-name">{{ song.artistName }}</div>
+                </li>
+              </ul>
+            </div>
+            
+          
             <div class="song-list" [class.show]="showSongList">
                 <div class="songList">
                     <div class="songCard" *ngFor="let song of songs">

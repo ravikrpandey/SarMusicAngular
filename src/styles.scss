@@ -25,7 +25,7 @@
 }
 
 .logo img {
-    width: 70%;
+    width: 38%;
 }
 
 .float__right {
@@ -272,3 +272,58 @@ a:not([href]):not([class]), a:not([href]):not([class]):hover {
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+
+.search-bar {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    transition: 0.3s;
+  }
+  
+  .show-search {
+    background-color: #f0f0f0;
+  }
+  
+  .search-bar:focus {
+    outline: none;
+    border-color: #4CAF50;
+  }
+  
+  
+  .search-container {
+    position: relative;
+  }
+  
+  .search-results {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    background: #282828;
+    border-radius: 7px;
+    color: white;
+    z-index: 100;
+  }
+  
+  .search-item {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #404040;
+  }
+  
+  .search-item:hover {
+    background-color: #333333;
+  }
+  
+  .song-title {
+    font-weight: bold;
+  }
+  
+  .artist-name {
+    font-size: 0.9em;
+    color: #b3b3b3;
+  }
+  

@@ -52,11 +52,15 @@ export class LoginService {
 
   constructor(private http: HttpClient) { }
 
-  createUser(data: any): Observable<any> {
+  loginOrRegister(data: any): Observable<any> {
     return this.http.post<any>(routes.createUser(), data)
       .pipe(
         catchError(this.handleError)
       );
+  }
+
+  masterSearch(searchKey: string): Observable<any> {
+    return this.http.get(`${SERVER_API_URL}/api/masterSearchForSongOrAlbum/${searchKey}`);
   }
 
   // ===============Artist==============

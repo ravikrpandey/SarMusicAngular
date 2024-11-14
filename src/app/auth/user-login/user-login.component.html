@@ -6,25 +6,179 @@
   <title>Music Login</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: url('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      padding: 40px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      font-size: 16px;
+      transition: all 0.3s;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      outline: none;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    button,
+    input[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      padding: 15px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+      margin-top: 10px;
+    }
+
+    button:hover,
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    .social-icons {
+      margin-top: 20px;
+    }
+
+    .social-icons a {
+      color: #333;
+      font-size: 24px;
+      margin: 0 10px;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .social-icons a:hover {
+      color: #4CAF50;
+    }
+
     .error {
-      color: red; /* Style error messages */
+      color: red;
+    }
+
+    .countdown {
+      margin-top: 5px;
+      color: #666;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Welcome to Music Login</h1>
-    <form (ngSubmit)="submit()" #loginForm="ngForm">
-      <input type="text" [(ngModel)]="mobileNumber" name="mobileNumber" placeholder="Enter Mobile Number" required pattern="[0-9]{10}" title="Please enter a 10-digit number">
-      <br>
-      <input type="password" [(ngModel)]="otp" name="otp" placeholder="Enter OTP" required>
-      <br> 
-     <div>
-        <input type="submit" value="Login" [disabled]="!loginForm.valid">
-      </div>
-      
-      <div *ngIf="loginForm.submitted && !loginForm.valid" class="error">Please enter valid details.</div>
-    </form>
+    <h1>Welcome to SaRMusic Login</h1>
+    <form #loginForm="ngForm" (ngSubmit)="submit()">
+  <!-- Email Field -->
+  <input 
+    type="text" 
+    [(ngModel)]="email" 
+    name="email" 
+    placeholder="Email To Receive OTP" 
+    required
+    pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$"
+    #emailInput="ngModel"
+  />
+  <!-- Email Error -->
+  <div *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)">
+    <span *ngIf="emailInput.errors?.['required']" class="error">Email is required.</span>
+    <span *ngIf="emailInput.errors?.['pattern']" class="error">Please enter a valid email address.</span>
+  </div>
+
+  <!-- Full Name Field -->
+  <input 
+    type="text" 
+    [(ngModel)]="fullName" 
+    name="fullName" 
+    placeholder="Full Name" 
+    required 
+    #fullNameInput="ngModel"
+  />
+  <!-- Full Name Error -->
+  <div *ngIf="fullNameInput.invalid && (fullNameInput.dirty || fullNameInput.touched)">
+    <span class="error">Full name is required.</span>
+  </div>
+
+  <!-- Mobile Number Field -->
+  <input 
+    type="text" 
+    [(ngModel)]="mobileNumber" 
+    name="mobileNumber" 
+    placeholder="Mobile Number" 
+    required 
+    pattern="^[1-9][0-9]{9}$" 
+    #mobileInput="ngModel"
+  />
+  <!-- Mobile Number Error -->
+  <div *ngIf="mobileInput.invalid && (mobileInput.dirty || mobileInput.touched)">
+    <span *ngIf="mobileInput.errors?.['required']" class="error">Mobile number is required.</span>
+    <span *ngIf="mobileInput.errors?.['pattern']" class="error">Please enter a valid 10-digit mobile number.</span>
+  </div>
+
+  <!-- OTP Button -->
+  <button type="button" (click)="sendOtp()" [disabled]="!loginForm.valid || !canResendOtp">Send OTP</button>
+
+    <!-- Countdown Timer -->
+    <div *ngIf="!canResendOtp">
+      <p>Resend OTP in {{ resendCountdown }} seconds</p>
+    </div>
+  
+  <div *ngIf="otpSent">
+    <!-- OTP Field -->
+    <input 
+      type="text" 
+      [(ngModel)]="otp" 
+      name="otp" 
+      maxlength="6" 
+      placeholder="Enter OTP" 
+      required
+      #otpInput="ngModel"
+    />
+    <!-- OTP Error -->
+    <div *ngIf="otpInput.invalid && (otpInput.dirty || otpInput.touched)">
+      <span class="error">OTP is required.</span>
+    </div>
+
+    <input type="submit" value="Login" [disabled]="!loginForm.valid">
+  </div>
+  
+  <!-- General Form Error -->
+  <div *ngIf="loginForm.submitted && !loginForm.valid" class="error">Please enter valid details.</div>
+</form>
+
+
     <div class="social-icons">
       <a href="#"><i class="fab fa-facebook-f"></i></a>
       <a href="#"><i class="fab fa-twitter"></i></a>
@@ -34,4 +188,3 @@
   </div>
 </body>
 </html>
-
