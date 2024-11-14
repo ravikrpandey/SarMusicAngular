@@ -22,7 +22,7 @@ async function sendOTPEmail(to, otp) {
     try {
       const htmlContent = otpTemplate(otp);
       const mailOptions = {
-        from: `"Your App Name" <${process.env.EMAIL_USER}>`,
+        from: `"SAR Music" <${process.env.EMAIL_USER}>`,
         to,
         subject: 'Your OTP Code',
         html: htmlContent,

@@ -1,64 +1,84 @@
 const db = require("../../IndexFiles/modelsIndex");
 const tbl_loginUser = db.user;
 const SECRET_KEY = process.env.SECRET_KEY || "";
-const TOKEN_EXPIRES_TIME = parseInt(process.env.TOKEN_EXPIRES_TIME, 10) || 600; 
+const TOKEN_EXPIRES_TIME = parseInt(process.env.TOKEN_EXPIRES_TIME, 10) || 600;
 const jwt = require('jsonwebtoken');
-const {sendOTPEmail, generateOTP} = require('../services/node-mailer.js/index');
+const { sendOTPEmail, generateOTP } = require('../services/node-mailer.js/index');
 
 
-exports.loginUser = async (req, res) => {
+exports.loginOrRegisterUser = async (req, res) => {
     try {
-        const { email, mobileNumber, otp, userName, type } = req.body;
-        const masterOtp = "1234"; // Define master OTP
-        let generatedOtp = generateOTP();
+        const { email, mobileNumber, otp, fullName } = req.body;
+        const masterOtp = "9955"; // master OTP for testing
+        let generatedOtp = generateOTP(); // assume generateOTP() function exists
 
-        let userData = await tbl_loginUser.findOne({
-            where: { mobileNumber }
-        });
+        // Check if user exists by mobile number
+        let userData = await tbl_loginUser.findOne({ where: { mobileNumber } });
 
-        if (userData) {
-            // If user exists, update with master OTP
+        if (userData && (otp == null || otp == undefined)) {
+            // Update OTP if user exists
             await tbl_loginUser.update({ otp: generatedOtp }, { where: { mobileNumber } });
-        } else {
-            // If user does not exist, create new user with master OTP
+        } else if (!userData){
+            // Register a new user
             userData = await tbl_loginUser.create({
                 mobileNumber,
-                userName,
-                type,
+                userName: fullName,
+                email,
+                type: 'user',
                 otp: generatedOtp
             });
         }
 
-        userData = await tbl_loginUser.findOne({
-            where: { mobileNumber }
-        });
+        // Retrieve user data to verify OTP
+        userData = await tbl_loginUser.findOne({ where: { mobileNumber } });
 
-        if (otp === userData?.otp || otp === masterOtp) {
-            const token = jwt.sign({ userName: userData.userName, mobileNumber }, SECRET_KEY, {
-                expiresIn: TOKEN_EXPIRES_TIME
-            });
+        // Verify OTP or use master OTP
+        if (otp == undefined && otp == null) {
+                // Generate JWT token
+                const token = jwt.sign(
+                    { email: userData.email, userName: userData.userName, mobileNumber },
+                    SECRET_KEY,
+                    { expiresIn: TOKEN_EXPIRES_TIME }
+                );
 
-            await sendOTPEmail(email, generatedOtp);
+            // Send OTP via email (assume sendOTPEmail() is defined)
+            // await sendOTPEmail(email, generatedOtp);
 
             return res.status(200).send({
                 code: 200,
-                message: "User login successfully",
+                message: "User created successfull",
                 data: userData.type,
                 token
             });
-        } else {
-            return res.status(403).send({
-                code: 403,
-                message: "Please enter a valid OTP"
+
+        } else if (otp) {
+            let token = null
+            if (otp === userData?.otp || otp === masterOtp) {
+                // Generate JWT token
+                token = jwt.sign(
+                    { email: userData.email, userName: userData.userName, mobileNumber },
+                    SECRET_KEY,
+                    { expiresIn: TOKEN_EXPIRES_TIME }
+                );
+            } else {
+                return res.status(403).send({ code: 403, message: "Please enter a valid OTP" });
+            }
+
+            return res.status(200).send({
+                code: 200,
+                message: "User login successfull",
+                data: userData,
+                token
             });
+
         }
     } catch (error) {
-        return res.status(500).send({
-            code: 500,
-            message: error.message || "Server Error!"
-        });
+        return res.status(500).send({ code: 500, message: error.message || "Server Error!" });
     }
 };
+
+
+
 
 //========================= 
 

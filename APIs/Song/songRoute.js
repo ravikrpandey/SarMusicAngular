@@ -9,4 +9,5 @@ app.get("/api/getSongsByArtistId/:artistId", songRoute.getSongsByArtistId);
 app.patch("/api/updateSong/:id", songRoute.updateSong);
 app.delete("/api/deleteSong/:id", songRoute.deleteSong);
 app.get("/api/getSongUrlByYoutubeLink", songRoute.getSongUrlByYoutubeLink);
+app.get("/api/masterSearchForSongOrAlbum/:searchKey", songRoute.masterSearchForSongOrAlbum);
 }

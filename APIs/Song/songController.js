@@ -248,3 +248,37 @@ exports.getSongUrlByYoutubeLink = async (req, res) => {
 //         });
 //     });
 // }
+
+
+exports.masterSearchForSongOrAlbum = async (req, res) => {
+    try {
+        const searchKey = req.params.searchKey;
+
+        async function searchSongs(searchTerm) {
+            const query = `
+                SELECT * FROM songs
+                WHERE songTitle LIKE ?
+                   OR artistName LIKE ?
+                   OR albumName LIKE ?
+                   OR genre LIKE ?`;
+            const likeSearchTerm = `%${searchTerm}%`;
+            const data = await db.sequelize.query(query, {
+                replacements: [likeSearchTerm, likeSearchTerm, likeSearchTerm, likeSearchTerm],
+                type: db.sequelize.QueryTypes.SELECT
+            });
+            return data;
+        }
+
+        if (searchKey) {
+            const data = await searchSongs(searchKey);
+            return res.status(200).send({ code: 200, message: 'Searched result', data });
+        } else {
+            return res.status(400).json({ code: 400, message: 'No search key provided' });
+        }
+        
+    } catch (error) {
+        console.error('Error:', error.message);
+        res.status(500).json({ code: 500, message: 'Failed to retrieve search results' });
+    }
+};
+
