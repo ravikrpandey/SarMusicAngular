@@ -42,7 +42,7 @@ exports.loginOrRegisterUser = async (req, res) => {
                 );
 
             // Send OTP via email (assume sendOTPEmail() is defined)
-            // await sendOTPEmail(email, generatedOtp);
+            await sendOTPEmail(email, generatedOtp);
 
             return res.status(200).send({
                 code: 200,
