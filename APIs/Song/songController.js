@@ -165,7 +165,7 @@ exports.getSongsByAlbumId = async (req, res) => {
                 albumId: albumId,
                 isDeleted: false
             },
-            attributes: ['songTitle', 'songId', 'songUrl', 'artistName'],
+            attributes: ['songTitle', 'songId', 'songUrl', 'artistName', 'songCardUrl'],
             order: Sequelize.fn('RAND')
         });
 
