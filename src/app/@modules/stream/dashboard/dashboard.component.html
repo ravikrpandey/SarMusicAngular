@@ -18,7 +18,7 @@
         <ul>
           <!-- <li><img class="invert" src="assets/home.svg" alt="home"></li>  -->
           <li (click)="toggleSearchBar()"><img class="invert" src="assets/search.svg" alt="home">Search</li>
-          <h3 style="block-size: auto;">💖Lkd Sngs </h3>
+          <h3 (click)="getLikedSongByUser()" style="block-size: auto;">💖Lkd Sngs </h3>
         </ul>
       </div>
 
@@ -32,14 +32,11 @@
           <h2><i class="fas fa-heart"></i> &nbsp;&nbsp;&nbsp;Liked Songs </h2>
         </div> -->
 
-
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
         <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
           integrity="sha384-uxq/xBbFAO8SXvXVeD6cu7wnb7TdSZ+r3vZdtL3zB9a72g5Qr0x3z2StxOAqJT0Q" crossorigin="anonymous"> -->
-
-          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-
+      
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
           <div class="songList">
             <div class="songCard" *ngFor="let song of songs">
@@ -68,22 +65,27 @@
               <input 
                 type="text" 
                 class="search-bar" 
-                style="border-radius: 7px; padding-left: 15px;" 
                 placeholder="Search Songs" 
                 [formControl]="searchControl"
-                (click)="showSearch = true" 
-              >
+                (click)="showSearch = true">
+              
+              <div *ngIf="searchResults.length > 0" class="search-results">
+                <ul>
+                  <li *ngFor="let song of searchResults" class="search-item">
+                    <div (click)="songsByAlbumId(song.albumId)" (click)="playSongById(song)" class="song-card">
+                      <img [src]="song.songCardUrl" alt="{{ song.songTitle }}" class="song-image">
+                      <div class="song-details">
+                        <div class="song-title">{{ song.songTitle }}</div>
+                        <div class="artist-name">{{ song.artistName }}</div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
             </div>
             
-            <div *ngIf="searchResults.length > 0" class="search-results">
-              <pre>{{ searchResults | json }}</pre>
-              <ul>
-                <li *ngFor="let song of searchResults" class="search-item">
-                  <div class="song-title">{{ song.songTitle }}</div>
-                  <div class="artist-name">{{ song.artistName }}</div>
-                </li>
-              </ul>
-            </div>
+            
+            
             
           
             <div class="song-list" [class.show]="showSongList">
@@ -163,7 +165,7 @@
 
 
       <div class="spotifyPlaylists">
-        <h1>Most Played</h1>
+        <h1 *ngIf="haveMostPlayed == true">Most Played</h1>
         <!-- <div class="cardContainer">  </div> -->
         <div class="popular-songs">
           <div class="card" 
@@ -182,19 +184,23 @@
 
         <h1>Popular Artists</h1>
         <div class="popular-artist">
-          <div class="artist-card" 
-               [style.background-image]="song.artistProfileUrl ? 'url(' + song.artistProfileUrl + ')' : 'url(' + song.artistProfileUrl + ')'" 
-               *ngFor="let song of populatArtist">
-            <div class="artist-card-body" (click)="songsByArtistId(song.artistId)">
-              <!-- <img [src]="song.songCardUrl ? song.songCardUrl : song.albumCardUrl" class="song-image" /> -->
+          <div 
+            class="artist-card" 
+            *ngFor="let song of populatArtist"
+            [style.background-image]="song.artistProfileUrl ? 'url(' + song.artistProfileUrl + ')' : 'url(/assets/default-artist.png)'" 
+            (click)="songsByArtistId(song.artistId)">
+            
+            <div class="artist-card-body">
               <p class="song-title" style="color: white;">{{ song.songTitle }}</p>
             </div>
-            <!-- <div class="card-footer"> -->
-              <!-- Uncomment if you want to display the artist name -->
-              <!-- <p class="artist-name">{{ song.artist }}</p> -->
-            <!-- </div> -->
+        
+            <!-- Uncomment if you want to display additional details -->
+            <!-- <div class="card-footer">
+                 <p class="artist-name">{{ song.artist }}</p>
+            </div> -->
           </div>
         </div>
+        
         
         
 

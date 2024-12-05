@@ -907,15 +907,10 @@ body {
   transition: 0.3s;
 }
 
-.show-search {
-  background-color: #f0f0f0;
-}
-
 .search-bar:focus {
   outline: none;
   border-color: #4CAF50;
 }
-
 
 .search-container {
   position: relative;
@@ -924,11 +919,14 @@ body {
 .search-results {
   position: absolute;
   top: 100%;
+  max-height: 300px; /* Limit the height to make it scrollable */
+  overflow-y: auto; /* Add vertical scroll */
   width: 100%;
   background: #282828;
   border-radius: 7px;
   color: white;
   z-index: 100;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .search-item {
@@ -941,6 +939,24 @@ body {
   background-color: #333333;
 }
 
+.song-card {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between image and details */
+}
+
+.song-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+.song-details {
+  display: flex;
+  flex-direction: column;
+}
+
 .song-title {
   font-weight: bold;
 }
@@ -948,4 +964,17 @@ body {
 .artist-name {
   font-size: 0.9em;
   color: #e31515;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

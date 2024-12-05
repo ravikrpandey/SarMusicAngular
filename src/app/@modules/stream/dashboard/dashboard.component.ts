@@ -36,7 +36,7 @@ export class DashboardComponent implements AfterViewInit {
   ) {    
     // Set up debounce on searchControl
     this.searchControl.valueChanges
-      .pipe(debounceTime(800))  // Wait for 500 ms of inactivity
+      .pipe(debounceTime(500))  // Wait for 500 ms of inactivity
       .subscribe(value => {
         this.masterSearch(value);
       });
@@ -88,6 +88,7 @@ export class DashboardComponent implements AfterViewInit {
   // Assuming you have a property to track the currently playing song
   currentSong: any;
   showSongList = false;
+  haveMostPlayed = false;
   
 
   ngOnInit() {
@@ -101,25 +102,24 @@ export class DashboardComponent implements AfterViewInit {
 
   
   masterSearch(searchKey: string) {
-    debugger
-    // if (searchKey.trim()) {
-    //   this.loginService.masterSearch(searchKey).subscribe(
-    //     (response) => {
-    //       if (response.code === 200) {
-    //         this.searchResults = response.data; 
-    //         console.log("searchResults",this.searchResults)
-    //       } else {
-    //         this.searchResults = []; // Clear results on unsuccessful response
-    //       }
-    //     },
-    //     (error) => {
-    //       console.error('Error fetching search results', error);
-    //       this.searchResults = []; // Clear results on error
-    //     }
-    //   );
-    // } else {
-    //   this.searchResults = []; // Clear results if search term is empty
-    // }
+    if (searchKey.trim()) {
+      this.loginService.masterSearch(searchKey).subscribe(
+        (response) => {
+          if (response.code === 200) {
+            this.searchResults = response.data; 
+            console.log("searchResults",this.searchResults)
+          } else {
+            this.searchResults = []; // Clear results on unsuccessful response
+          }
+        },
+        (error) => {
+          console.error('Error fetching search results', error);
+          this.searchResults = []; // Clear results on error
+        }
+      );
+    } else {
+      this.searchResults = []; // Clear results if search term is empty
+    }
   }
   
   
@@ -152,7 +152,7 @@ export class DashboardComponent implements AfterViewInit {
     this.abbumIdPlay = albumId
     this.loginService.songsByAlbumId(albumId).subscribe((res: any) => {
       this.songs = res.data;
-      if (this.songs.length > 0) {
+      if (this.songs.length > 0 && this.songId == null) {
         this.playSongById(this.songs[0]);
       }
     })
@@ -261,7 +261,7 @@ export class DashboardComponent implements AfterViewInit {
         }
       } else {
         console.warn('Audio is still loading.');
-        this.openSnackBar('Audio is still loading.', 'close', 'error');
+        this.openSnackBar('Please tap on any card to play song.', 'close', 'error');
       }
     } else {
       console.warn('Audio source is not set.');
@@ -426,10 +426,11 @@ export class DashboardComponent implements AfterViewInit {
       (res: any) => {
         if (res?.mostPlayed) {
           // Collect all songs arrays from `mostPlayed` and assign to `this.songs`
+          this.haveMostPlayed = true;
           this.mostPlayedSongs = res.mostPlayed.reduce((acc: any[], pl: any) => acc.concat(pl.songs), []);
         } else {
           console.warn('No songs found for this user.');
-          this.mostPlayedSongs = []; // Reset `songs` if no data is returned
+          this.mostPlayedSongs = [];
         }
       },
       (error) => {
@@ -453,7 +454,9 @@ export class DashboardComponent implements AfterViewInit {
     );
   }
 
-  songsByArtistId(artistId: any): void {    this.loginService.songsByArtistId(artistId).subscribe((res:any) => {
+  songsByArtistId(artistId: any): void {  
+    debugger 
+     this.loginService.songsByArtistId(artistId).subscribe((res:any) => {
       if (res.data.length > 0) {
         this.songs = res.data;
         if (this.songs.length > 0) {
@@ -463,6 +466,18 @@ export class DashboardComponent implements AfterViewInit {
 
     })
 
+  }
+
+  getLikedSongByUser() {
+    if (this.mobileNumber) {
+      this.loginService.getLikedSongByUser(this.mobileNumber).subscribe((response: any) => {
+        if (response) {
+          this.songs = response.data
+          this.searchResults = [];
+        }
+      })
+
+    }
   }
 
 };

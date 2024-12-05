@@ -37,6 +37,7 @@ const routes = {
   increaseSongCount: (songId:any, mobileNumber:any) => `${SERVER_API_URL}/api/updateSongPlayedCount/${songId}/${mobileNumber}`,
 
   getMostPlayed: (mobileNumber:any) => `${SERVER_API_URL}/api/getUsersPlaylist/${mobileNumber}`,
+  getLikedSongByUser: (mobileNumber:any) => `${SERVER_API_URL}/api/getLikedSongByUser/${mobileNumber}`,
 
   getAllPopularArtist:  () => `${SERVER_API_URL}/api/getAllPopularArtist`,
   songsByArtistId:  (artistId:any) => `${SERVER_API_URL}/api/getSongsByArtistId/${artistId}`,
@@ -177,6 +178,9 @@ export class LoginService {
   };
   getAllPopularArtist():Observable<any> {
     return this.http.get<any>(routes.getAllPopularArtist())
+  };
+  getLikedSongByUser(mobileNumber: any):Observable<any> {
+    return this.http.get<any>(routes.getLikedSongByUser(mobileNumber))
   };
 
 
