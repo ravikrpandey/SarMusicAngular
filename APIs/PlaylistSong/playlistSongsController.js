@@ -25,7 +25,7 @@ exports.createsongPlayList = async (req, res) => {
         }});
 
         if (checkSongId && liked === true) {
-            tbl_songPlayList.update({isDeleted: false}, {where: {
+            await tbl_songPlayList.update({like: 'Liked'}, {where: {
                 userId: checkSongId.userId,
                 songId: songId
             }})
@@ -33,7 +33,7 @@ exports.createsongPlayList = async (req, res) => {
             return res.status(200).send({code: 200, message: `Added To ${playlistName} Playlist`});
 
         } else if (checkSongId && liked === false) {
-            tbl_songPlayList.update({isDeleted: true}, {where: {
+            await tbl_songPlayList.update({like: 'unLiked'}, {where: {
                 userId: checkSongId.userId,
                 songId: songId
             }})
@@ -42,7 +42,7 @@ exports.createsongPlayList = async (req, res) => {
         }
         
         const data = await tbl_songPlayList.create({
-            playlistName, playlistId, songId, userId
+            playlistName, playlistId, songId, userId, like: 'Liked'
         });
         return res.status(200).send({code: 200, message: `Song Added To ${playlistName} Playlist`, data: data});
     }catch (error){
@@ -282,16 +282,68 @@ exports.updateSongPlayedCount = async (req, res) => {
   
   //======================== api for get all updated played count ================//
   
-  exports.getAllUpdatedPlayedCount = async (req, res) => {
-    try{
-      const data = await db.song.findAll({
-        attributes:["songId", "playedCount"],
-      })
-      return res.status(200).send({code: 200, meassage:"song played count is fetched succesfully", data: data});
-    }catch (error) {
+  exports.getLikedSongByUser = async (req, res) => {
+    try {
+      const { mobileNumber } = req.params;
+  
+      // Fetch userId based on mobileNumber
+      const user = await db.user.findOne({
+        where: { mobileNumber },
+        attributes: ['userId']
+      });
+  
+      if (!user) {
+        return res.status(404).send({ code: 404, message: "User not found" });
+      }
+  
+      const userId = user.userId;
+  
+      // Fetch liked songs from the playlist
+      const likedSongs = await tbl_songPlayList.findAll({
+        where: {
+          playlistName: 'Liked Song',
+          like: 'Liked',
+          userId
+        },
+        attributes: ['songId']
+      });
+  
+      if (!likedSongs.length) {
+        return res.status(200).send({ code: 200, message: "No liked songs found", data: [] });
+      }
+  
+      const songIds = likedSongs.map(song => song.songId);
+  
+      // Fetch song details for the liked songs
+      const songs = await db.song.findAll({
+        where: {
+          songId: songIds
+        },
+        attributes: [
+          'songId', 
+          'albumId', 
+          'albumName', 
+          'albumCardUrl', 
+          'artistId', 
+          'artistName', 
+          'songTitle', 
+          'songUrl', 
+          'songCardUrl'
+        ]
+      });
+  
+      return res.status(200).send({ 
+        code: 200, 
+        message: "Liked songs listed successfully", 
+        data: songs 
+      });
+    } catch (error) {
       console.error('Error:', error.message);
-      res.status(500).json({ code: 500, message: 'server error' });
+      return res.status(500).json({ code: 500, message: 'Server error' });
     }
-  }
+  };
+  
+
+
 
 

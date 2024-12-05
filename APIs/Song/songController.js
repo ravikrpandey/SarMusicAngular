@@ -5,7 +5,7 @@ const ytdl = require('ytdl-core');
 const { exec } = require('child_process');
 const { where } = require("sequelize");
 const {saveFileAndGetNameByBase64} = require('../services/upload-files/service')
-
+const { Sequelize } = require('sequelize'); // Ensure Sequelize is imported
 //=============== create song  ======//
 
 exports.createSong = async (req, res) => {
@@ -154,23 +154,34 @@ exports.deleteSong = async (req, res) => {
 
 //================ getSonsByAlbumId ===========//
 
+
+
 exports.getSongsByAlbumId = async (req, res) => {
     try {
         const { albumId } = req.params;
-        // const [data] = await db.sequelize.query(`select s."songTitle", s."songId", s."songUrl", s."artistName" from songs s
-        // where "albumId" = '${albumId}' and "isDeleted" = false;`);
 
         const data = await tbl_song.findAll({
             where: {
                 albumId: albumId,
                 isDeleted: false
-            }, attribute: ['songTitle', 'songId', 'songUrl', 'artistName']
-        })
-        return res.status(200).send({ code: 200, message: "song is fetched by album id", data: data })
+            },
+            attributes: ['songTitle', 'songId', 'songUrl', 'artistName'],
+            order: Sequelize.fn('RAND')
+        });
+
+        return res.status(200).send({ 
+            code: 200, 
+            message: "Songs fetched successfully by album ID", 
+            data: data 
+        });
     } catch (error) {
-        return res.status(500).send({ code: 500, message: error.message || "internal server error" });
+        return res.status(500).send({ 
+            code: 500, 
+            message: error.message || "Internal server error" 
+        });
     }
 };
+
 
 exports.getSongsByArtistId = async (req, res) => {
     try {

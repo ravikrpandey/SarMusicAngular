@@ -8,7 +8,7 @@ module.exports = app => {
     app.delete("/api/deleteSongPlayList/:playlistSongId", songPlayListController.deleteSongPlayList);
     app.get("/api/updateSongPlayedCount/:songId/:mobileNumber", songPlayListController.updateSongPlayedCount);
     app.get("/api/getUsersPlaylist/:mobileNumber", songPlayListController.getUsersPlaylist);
-    app.get("/api/getAllUpdatedPlayedCount", songPlayListController.getAllUpdatedPlayedCount);
+    app.get("/api/getLikedSongByUser/:mobileNumber", songPlayListController.getLikedSongByUser);
 
 
 }

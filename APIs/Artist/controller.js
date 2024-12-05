@@ -32,7 +32,11 @@ exports.geAllArtist = async (req, res) => {
 
 exports.getAllPopularArtist = async (req, res) => {
   try {
-    const [getAllPopularArtist] = await db.sequelize.query(`SELECT a.artistId,a.artistName,a.artistProfileUrl from artists a where isDeleted = FALSE;`);
+    const [getAllPopularArtist] = await db.sequelize.query(`
+      SELECT a.artistId, a.artistName, a.artistProfileUrl 
+      FROM artists a 
+      WHERE isDeleted = FALSE 
+      ORDER BY RAND();`);
 
     if (getAllPopularArtist.length == 0) {
       return res.status(404).send({status: false, message: 'No Record to list'})
