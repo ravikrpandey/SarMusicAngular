@@ -28,7 +28,7 @@ async function sendOTPEmail(to, otp) {
         html: htmlContent,
       };
   
-      const info = await transporter.sendMail(mailOptions);
+      const info =  transporter.sendMail(mailOptions);
       console.log('Email sent: %s', info.messageId);
       return true;
     } catch (error) {

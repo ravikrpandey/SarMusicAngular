@@ -9,60 +9,48 @@ const { sendOTPEmail, generateOTP } = require('../services/node-mailer.js/index'
 exports.loginOrRegisterUser = async (req, res) => {
     try {
         const { email, mobileNumber, otp, fullName } = req.body;
-        const masterOtp = "9955"; // master OTP for testing
-        let generatedOtp = generateOTP(); // assume generateOTP() function exists
+        const masterOtp = "9955"; // Master OTP for testing
+        const generatedOtp = generateOTP(); // Assume generateOTP() function exists
 
-        // Check if user exists by mobile number
-        let userData = await tbl_loginUser.findOne({ where: { mobileNumber } });
-
-        if (userData && (otp == null || otp == undefined)) {
-            // Update OTP if user exists
-            await tbl_loginUser.update({ otp: generatedOtp }, { where: { mobileNumber } });
-        } else if (!userData){
-            // Register a new user
-            userData = await tbl_loginUser.create({
-                mobileNumber,
+        // Check or create user in a single database call
+        let [userData, created] = await tbl_loginUser.findOrCreate({
+            where: { mobileNumber },
+            defaults: {
                 userName: fullName,
                 email,
                 type: 'user',
                 otp: generatedOtp
-            });
+            }
+        });
+
+        if (!created && !otp) {
+            // Update OTP for existing user
+            await userData.update({ otp: generatedOtp });
         }
 
-        // Retrieve user data to verify OTP
-        userData = await tbl_loginUser.findOne({ where: { mobileNumber } });
+        if (!otp) {
+            // If OTP is not provided, generate and send it
+            const token = jwt.sign(
+                { email: userData.email, userName: userData.userName, mobileNumber },
+                SECRET_KEY,
+                { expiresIn: TOKEN_EXPIRES_TIME }
+            );
 
-        // Verify OTP or use master OTP
-        if (otp == undefined && otp == null) {
-                // Generate JWT token
-                const token = jwt.sign(
-                    { email: userData.email, userName: userData.userName, mobileNumber },
-                    SECRET_KEY,
-                    { expiresIn: TOKEN_EXPIRES_TIME }
-                );
-
-            // Send OTP via email (assume sendOTPEmail() is defined)
-            await sendOTPEmail(email, generatedOtp);
-
+            // Send OTP via email (assume sendOTPEmail is defined)
+            sendOTPEmail(email, generatedOtp); // Make this async for performance
             return res.status(200).send({
                 code: 200,
-                message: "User created successfull",
+                message: "User created successfully",
                 data: userData.type,
                 token
             });
-
-        } else if (otp) {
-            let token = null
-            if (otp === userData?.otp || otp === masterOtp) {
-                // Generate JWT token
-                token = jwt.sign(
-                    { email: userData.email, userName: userData.userName, mobileNumber },
-                    SECRET_KEY,
-                    { expiresIn: TOKEN_EXPIRES_TIME }
-                );
-            } else {
-                return res.status(403).send({ code: 403, message: "Please enter a valid OTP" });
-            }
+        } else if (otp === userData.otp || otp === masterOtp) {
+            // Verify OTP or Master OTP
+            const token = jwt.sign(
+                { email: userData.email, userName: userData.userName, mobileNumber },
+                SECRET_KEY,
+                { expiresIn: TOKEN_EXPIRES_TIME }
+            );
 
             return res.status(200).send({
                 code: 200,
@@ -70,12 +58,14 @@ exports.loginOrRegisterUser = async (req, res) => {
                 data: userData,
                 token
             });
-
+        } else {
+            return res.status(200).send({ success: false, message: "Invalid OTP" });
         }
     } catch (error) {
-        return res.status(500).send({ code: 500, message: error.message || "Server Error!" });
+        return res.status(500).send({ success: false, message: error.message || "Something went wrong!" });
     }
 };
+
 
 
 
