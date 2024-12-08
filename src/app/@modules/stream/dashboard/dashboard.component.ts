@@ -97,8 +97,14 @@ export class DashboardComponent implements AfterViewInit {
     this.getAll();
     this.getMostPlayedSongsByUser();
     this.getAllPopularArtist();
-
+  
+    // Retrieve and play the last played song from localStorage
+    const lastPlayedSong = JSON.parse(localStorage.getItem('lastPlayedSong') || 'null');
+    if (lastPlayedSong) {
+      this.playSongById(lastPlayedSong);
+    }
   }
+  
 
   
   masterSearch(searchKey: string) {
@@ -261,7 +267,7 @@ export class DashboardComponent implements AfterViewInit {
         }
       } else {
         console.warn('Audio is still loading.');
-        this.openSnackBar('Please tap on any card to play song.', 'close', 'error');
+        this.openSnackBar('Please hold tight its going to rock.', 'close', 'error');
       }
     } else {
       console.warn('Audio source is not set.');
@@ -276,6 +282,16 @@ export class DashboardComponent implements AfterViewInit {
     this.currentArtistName = song.artistName;
     this.songDuration = song.duration;
     this.songId = song.songId;
+
+      // Save last played song in localStorage
+  localStorage.setItem('lastPlayedSong', JSON.stringify({
+    songId: song.songId,
+    songUrl: song.songUrl,
+    songTitle: song.songTitle,
+    artistName: song.artistName,
+    duration: song.duration
+  }));
+    
     if (localStorage.getItem('mobileNumber')) {
       this.mobileNumber = localStorage.getItem('mobileNumber');
       this.getMostPlayedSongsByUser();

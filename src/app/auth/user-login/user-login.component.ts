@@ -37,7 +37,7 @@ export class UserLoginComponent {
 
   openSnackBar(message: string, action: string, type: string) {
     this.snackBar.open(message, action, {
-      duration: 3000,
+      duration: 5000,
       panelClass: type === 'error' ? ['snackbar-error'] : ['snackbar-success'],
       verticalPosition: 'top',
       horizontalPosition: 'right',
@@ -46,21 +46,29 @@ export class UserLoginComponent {
 
   // Send OTP method
   sendOtp() {
+    // Prevent duplicate requests
     if (!this.canResendOtp) return;
-
+  
+    // Disable the button immediately
+    this.canResendOtp = false;
+  
     const userData = { email: this.email, fullName: this.fullName, mobileNumber: this.mobileNumber };
+  
     this.loginService.loginOrRegister(userData).subscribe(
       (res: any) => {
-        this.otpSent = true;
-        this.canResendOtp = false;
-        this.startCountdown();
-        this.openSnackBar(`OTP sent on email ${this.trimEmail(this.email)} successfully`, 'close', 'success');
+        this.otpSent = true; // Mark OTP as sent
+        this.startCountdown(); // Start the countdown timer
+        this.openSnackBar(`OTP sent on email ${this.trimEmail(this.email)} `, 'close', 'success');
       },
       (err) => {
+        // In case of an error, re-enable the button
+        this.canResendOtp = true;
         this.openSnackBar('Error sending OTP', 'close', 'error');
       }
     );
   }
+  
+  
 
   // Login method
   submit() {
@@ -73,7 +81,7 @@ export class UserLoginComponent {
 
     this.loginAuthService.login(loginData).subscribe(
       (res: any) => {
-        if (res.code === 200) {
+        if (res.code == 200) {
           this.router.navigate(['/main/stream']);
           this.openSnackBar(res.message, 'close', 'success');
         } else {
@@ -81,7 +89,7 @@ export class UserLoginComponent {
         }
       },
       (err) => {
-        this.openSnackBar('Login failed', 'close', 'error');
+        this.openSnackBar(err.message, 'close', 'error');
       }
     );
   }

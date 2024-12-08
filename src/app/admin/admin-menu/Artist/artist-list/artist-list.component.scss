@@ -1,11 +1,14 @@
+/* Basic styles for .card */
 .card {
   border: 1px solid #d4d4d4;
   border-radius: 8px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  margin: 20px;
-  width: 1280px; /* Adjust width as needed */
+  margin: 10px;
+  max-width: 985px;
+  width: 100%; /* Ensure the card takes up available space */
 }
 
+/* Card Header */
 .card-header {
   background-color: #f5f5f5;
   border-bottom: 1px solid #d4d4d4;
@@ -15,38 +18,42 @@
   font-weight: bold;
 }
 
+/* Album Container */
 .album-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
 
+/* Album Styles */
 .album {
-  margin: 10px;
-  width: 200px; /* Adjust width as needed */
-  height: 300px; /* Adjust height as needed */
+  margin: 12px;
+  width: 134px;
+  height: 180px;
   border: 1px solid #ccc;
   border-radius: 5px;
   overflow: hidden;
+  transition: all 0.3s ease; /* Smooth transition for responsiveness */
 }
 
 .album img {
   width: 100%;
   height: 60%;
-  object-fit: cover; /* Ensure the image covers the entire container */
+  object-fit: cover;
 }
 
+/* Album Information */
 .album-info {
-  padding: 10px;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-  color: white; /* Text color */
-  text-align: center; /* Center the text */
+  padding: 0px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  text-align: center;
 }
 
 .album-info h3 {
   margin: 0;
-  font-size: 18px;
-  margin-bottom: 5px; /* Add spacing between elements */
+  font-size: 12px;
+  margin-bottom: 0px;
 }
 
 .album-info p {
@@ -54,33 +61,69 @@
   font-size: 14px;
 }
 
+/* Icon Styles */
 .icons {
-  display: flex; /* Use flexbox to align icons horizontally */
+  display: flex;
+  justify-content: space-between; /* Use space-between for better alignment */
 }
 
 .edit-icon, .delete-icon {
-font-size: 20px;
+  font-size: 20px;
   cursor: pointer;
-  margin-right: 160px; /* Add margin between the icons */
+  margin-right: 10px; /* Reduced margin for more compact look */
 }
 
+/* Responsive Styles */
 
-/* confirm-dialog.component.css */
+/* For tablet and smaller screens */
+@media screen and (max-width: 768px) {
+  .card {
+    max-width: 100%; /* Allow card to take up full width on smaller screens */
+    margin: 10px 0; /* Adjust margin for smaller screens */
+  }
 
-/* Style the buttons */
-mat-dialog-actions {
-  justify-content: flex-end; /* Align buttons to the right */
+  .card-header {
+    font-size: 16px; /* Smaller font for smaller screens */
+  }
+
+  .album {
+    width: 45%; /* Reduce album width to fit multiple items */
+    height: auto; /* Let the height adjust based on content */
+  }
+
+  .album img {
+    height: 50%; /* Adjust image height for smaller containers */
+  }
+
+  .icons {
+    flex-direction: row; /* Make icons align horizontally */
+    justify-content: flex-start; /* Align icons to the left */
+  }
 }
 
-/* Decorate the cancel button */
-mat-dialog-actions button.cancel-button {
-  background-color: #fff;
-  color: #f44336; /* Red color */
-  border: 1px solid #f44336;
-}
+/* For mobile screens */
+@media screen and (max-width: 480px) {
+  .album {
+    width: 100%; /* Make albums full width on very small screens */
+    height: auto; /* Let the height adjust based on content */
+  }
 
-/* Decorate the confirm button */
-mat-dialog-actions button.confirm-button {
-  background-color: #4caf50; /* Green color */
-  color: #fff;
+  .album img {
+    height: 40%; /* Further reduce image height for mobile */
+  }
+
+  .icons {
+    flex-direction: column; /* Stack icons vertically */
+    justify-content: center; /* Center icons */
+    align-items: center; /* Center icons */
+  }
+
+  .edit-icon, .delete-icon {
+    margin-right: 0; /* Remove right margin on mobile */
+    margin-bottom: 10px; /* Space icons when stacked */
+  }
+
+  .card-header {
+    font-size: 14px; /* Smaller font size for mobile */
+  }
 }

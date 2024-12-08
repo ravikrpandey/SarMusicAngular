@@ -148,7 +148,13 @@
   </div>
 
   <!-- OTP Button -->
-  <button type="button" (click)="sendOtp()" [disabled]="!loginForm.valid || !canResendOtp">Send OTP</button>
+  <button 
+  type="button" 
+  (click)="sendOtp()" 
+  [disabled]="!loginForm.valid || !canResendOtp">
+  {{ otpSent ? 'Resend OTP' : 'Send OTP' }}
+</button>
+
 
     <!-- Countdown Timer -->
     <div *ngIf="!canResendOtp">

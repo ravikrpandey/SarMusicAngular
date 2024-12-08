@@ -3,7 +3,7 @@
     border-radius: 8px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     margin: 20px;
-    width: 1280px; /* Adjust width as needed */
+    width: 965px; /* Adjust width as needed */
   }
   
   .card-header {
@@ -23,8 +23,8 @@
   
   .album {
     margin: 10px;
-    width: 200px; /* Adjust width as needed */
-    height: 300px; /* Adjust height as needed */
+    height: 180px;
+    width: 134px;
     border: 1px solid #ccc;
     border-radius: 5px;
     overflow: hidden;
@@ -37,7 +37,7 @@
   }
   
   .album-info {
-    padding: 10px;
+    padding: 0px;
     background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
     color: white; /* Text color */
     text-align: center; /* Center the text */
@@ -45,8 +45,8 @@
   
   .album-info h3 {
     margin: 0;
-    font-size: 18px;
-    margin-bottom: 5px; /* Add spacing between elements */
+    font-size: 10px;
+    margin-bottom: 0px; /* Add spacing between elements */
   }
   
   .album-info p {
@@ -54,40 +54,6 @@
     font-size: 14px;
   }
   
-  
-  
-  
-  
-  
-  
-  // .album {
-  //   position: relative; /* Position icons relative to the album container */
-  // }
-  
-  // .icons {
-  //   position: absolute; /* Position icons absolutely */
-  //   top: 10px; /* Adjust top position as needed */
-  // }
-  
-  // .left-icon {
-  //   left: 10px; /* Adjust left position as needed */
-  //   transition: left 0.3s ease; /* Add transition for smooth animation */
-  // }
-  
-  // .right-icon {
-  //   right: 40px; /* Adjust right position as needed */
-  //   transition: right 0.3s ease; /* Add transition for smooth animation */
-  // }
-  
-  // /* Define hover effects */
-  // .left-icon:hover {
-  //   left: 5px; /* Adjust left position on hover */
-  // }
-  
-  // .right-icon:hover {
-  //   right: 45px; 
-  // }
-
   
   .icons {
     display: flex; /* Use flexbox to align icons horizontally */

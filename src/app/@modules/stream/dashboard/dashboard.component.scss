@@ -314,7 +314,7 @@ body {
   justify-content: center;
   align-items: center;
   position: fixed;
-  bottom: 30px;
+  bottom: 3px;
   filter: invert(1);
   background: #e2d9d9;
   border-radius: 10px;
@@ -322,6 +322,7 @@ body {
   padding: 12px;
   width: 70vw;
   min-height: 40px;
+  margin-left: 32px;
 }
 
 .songbuttons {
@@ -429,7 +430,7 @@ body {
 .songtime {
   width: 125px;
   color: black;
-  padding: 0 12px;
+  padding: 0 5px;
 }
 
 
@@ -437,7 +438,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 12px;
+  gap: 5px;
   cursor: pointer;
 }
 
@@ -448,7 +449,7 @@ body {
 .abovebar {
   display: flex;
   justify-content: space-between;
-  margin: 20px 0;
+  margin: 10px 0;
   width: 100%;
 }
 
@@ -483,7 +484,7 @@ body {
     justify-content: space-evenly;
     align-items: center;
     flex-direction: column;
-    gap: 13px;
+    gap: 0px;
   }
 
   .right {
@@ -521,7 +522,7 @@ body {
 
   .abovebar {
     flex-direction: column;
-    gap: 15px;
+    gap: 0px;
     align-items: center;
   }
 
@@ -532,7 +533,7 @@ body {
   }
 
   .playbar {
-    right: 25px;
+    right: 34px;
   }
 }
 
@@ -977,4 +978,48 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+
+
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #121212;
+  color: white;
+}
+
+.card-container-big {
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+}
+
+.bigcard {
+  width: 606px;
+  background: #1e1e1e;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.content {
+  padding: 16px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.details {
+  font-size: 14px;
+  color: #a5a5a5;
 }
