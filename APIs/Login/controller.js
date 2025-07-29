@@ -10,7 +10,7 @@ exports.loginOrRegisterUser = async (req, res) => {
     try {
         const { email, mobileNumber, otp, fullName } = req.body;
         const masterOtp = "9955"; // Master OTP for testing
-        const generatedOtp = generateOTP(); // Assume generateOTP() function exists
+        const generatedOtp = await generateOTP(); // Assume generateOTP() function exists
 
         // Check or create user in a single database call
         let [userData, created] = await tbl_loginUser.findOrCreate({
@@ -37,7 +37,7 @@ exports.loginOrRegisterUser = async (req, res) => {
             );
 
             // Send OTP via email (assume sendOTPEmail is defined)
-            sendOTPEmail(email, generatedOtp); // Make this async for performance
+           await sendOTPEmail(email, generatedOtp); // Make this async for performance
             return res.status(200).send({
                 code: 200,
                 message: "User created successfully",

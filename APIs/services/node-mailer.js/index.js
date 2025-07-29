@@ -3,14 +3,23 @@ const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 // Function to generate a 6-digit OTP
-function generateOTP() {
+async function generateOTP() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
+// const transporter = nodemailer.createTransport({
+//     host: process.env.EMAIL_HOST,
+//     port: process.env.EMAIL_PORT,
+//     secure: false,
+//     auth: {
+//       user: process.env.EMAIL_USER,
+//       pass: process.env.EMAIL_PASS,
+//     },
+//   });
 const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST,
-    port: process.env.EMAIL_PORT,
-    secure: false,
+     port: parseInt(process.env.EMAIL_PORT),
+    secure: process.env.EMAIL_PORT || '587',
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
@@ -33,7 +42,7 @@ async function sendOTPEmail(to, otp) {
       return true;
     } catch (error) {
       console.error('Error sending email:', error);
-      return false;
+      // return false;
     }
   }
 
