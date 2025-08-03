@@ -4,7 +4,7 @@ import { AuthGuard } from './auth/guards/auth.guard';
 
 // debugger
 const routes: Routes = [
-  {path:'', redirectTo:'publicis-sapient', pathMatch:'full'},
+  {path:'', redirectTo:'auth', pathMatch:'full'},
   { path: 'publicis-sapient', loadChildren: () => import('./publicis-sapient/publicis-sapient.module').then(m => m.PublicisSapientModule) },
   { path: 'auth', loadChildren: () => import('../app/auth/auth.module').then(m => m.AuthModule), },
   { path: 'main', loadChildren: () => import('../app/@modules/main.module').then(m => m.MainModule), canActivate: [AuthGuard] },
