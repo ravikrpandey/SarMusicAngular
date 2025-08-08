@@ -496,6 +496,10 @@ export class DashboardComponent implements AfterViewInit {
     }
   }
 
+  navigateToEaseOnTech() {
+    this.router.navigate(['/easeontech']);
+  }
+
 };
 
 

@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PublicisSapientComponent } from './publicis-sapient.component';
+import { EaseontechComponent } from './easeontech.component';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', component: PublicisSapientComponent }
+  { path: '', component: EaseontechComponent }
 ];
 
 @NgModule({
   declarations: [
-    PublicisSapientComponent
+    EaseontechComponent
   ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes)
   ]
 })
-export class PublicisSapientModule { } 
+export class EaseontechModule { } 

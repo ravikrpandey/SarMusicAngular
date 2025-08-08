@@ -14,124 +14,131 @@
         <img width="30" class="invert" src="assets/close.svg" alt="">
       </div>
       <div class="home bg-grey rounded m-1 p-1">
-        <div class="logo"><img width="38%" class="invert" src="assets/elGttE01.svg" alt=""></div>
+        <li style="cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 28px 0;">
+          <img class="invert" src="assets/music.svg" alt="music" style="width: 20px;" (click)="navigateToEaseOnTech()">
+          <span style="font-weight: 500; color: #007bff;" (click)="navigateToEaseOnTech()">EaseOnTech</span>
+          <span (click)="getLikedSongByUser()" style="block-size: auto; cursor: pointer;">💖Liked Songs </span>
+        </li>
         <ul>
-          <!-- <li><img class="invert" src="assets/home.svg" alt="home"></li>  -->
-          <li (click)="toggleSearchBar()"><img class="invert" src="assets/search.svg" alt="home">Search</li>
-          <h3 (click)="getLikedSongByUser()" style="block-size: auto;">💖Lkd Sngs </h3>
         </ul>
       </div>
-
       <div class="library bg-grey rounded m-1 p-1">
         <div class="heading">
           <img class="invert" src="assets/playlist.svg" alt="">
           <h2>Your Library</h2>
         </div>
-        <!-- <div class="liked-songs">
-
-          <h2><i class="fas fa-heart"></i> &nbsp;&nbsp;&nbsp;Liked Songs </h2>
-        </div> -->
-
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-          integrity="sha384-uxq/xBbFAO8SXvXVeD6cu7wnb7TdSZ+r3vZdtL3zB9a72g5Qr0x3z2StxOAqJT0Q" crossorigin="anonymous"> -->
-      
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-          <div class="songList">
-            <div class="songCard" *ngFor="let song of songs">
-              <!-- Check if songCardUrl exists, otherwise use a default image -->
-              <img [src]="song.songCardUrl ? song.songCardUrl : '/assets/default-song-card.jpg'" alt="Song Image" class="songImage" (click)="playSongById(song)">
-              <div class="songInfo" (click)="playSongById(song)">
-                <span class="songName">{{song.songTitle}} &nbsp;</span>
-                <span class="artistName">{{song.artistName}} &nbsp;&nbsp;</span>
-                <i class="fas fa-heart loveIcon" [ngClass]="{'blank-heart': !song.liked, 'bubbling-heart': song.liked}"
-                  (click)="toggleLove(song)"></i> <!-- Love icon button -->
+        <div class="songList">
+          <!-- Default songs shown if library is empty -->
+          <ng-container *ngIf="!songs || songs.length === 0">
+            <div *ngIf="mostPlayedSongs && mostPlayedSongs.length > 0">
+              <div class="songCard" *ngFor="let song of mostPlayedSongs" (click)="playSongById(song)">
+                <img [src]="song.songCardUrl ? song.songCardUrl : 'https://www.shutterstock.com/image-vector/music-display-theme-platform-sample-260nw-2248655619.jpg'" alt="Song Image" class="songImage">
+                <div class="songInfo">
+                  <span class="songName">{{song.songTitle}} &nbsp;</span>
+                  <span class="artistName">{{song.artistName}} &nbsp;&nbsp;</span>
+                  <i 
+                    class="fas fa-heart loveIcon" 
+                    [ngClass]="{'blank-heart': !song.liked, 'bubbling-heart': song.liked}" 
+                    [style.color]="song.liked ? 'red' : ''"
+                    (click)="toggleLove(song); $event.stopPropagation()">
+                  </i>
+                </div>
               </div>
             </div>
-          </div>          
+            <div *ngIf="!mostPlayedSongs || mostPlayedSongs.length === 0">
+              <div class="songCard">
+                <img src="/assets/default-song-card.jpg" alt="Song Image" class="songImage">
+                <div class="songInfo">
+                  <span class="songName">No songs to display &nbsp;</span>
+                  <span class="artistName">-- &nbsp;&nbsp;</span>
+                  <i class="fas fa-heart loveIcon blank-heart"></i>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <!-- User's songs -->
+          <div class="songCard" *ngFor="let song of songs" (click)="playSongById(song)">
+            <img [src]="song.songCardUrl ? song.songCardUrl : '/assets/default-song-card.jpg'" alt="Song Image" class="songImage">
+            <div class="songInfo">
+              <span class="songName">{{song.songTitle}} &nbsp;</span>
+              <span class="artistName">{{song.artistName}} &nbsp;&nbsp;</span>
+              <i 
+                class="fas fa-heart loveIcon" 
+                [ngClass]="{'blank-heart': !song.liked, 'bubbling-heart': song.liked}"
+                [style.color]="song.liked ? 'red' : ''"
+                (click)="toggleLove(song); $event.stopPropagation()">
+              </i>
+            </div>
+          </div>
+        </div>
       </div>
-
-
     </div>
     <div class="right bg-grey rounded">
       <div class="header">
         <div class="nav">
-            <div class="hamburgerContainer">
-                <img width="40" class="invert hamburger" src="assets/hamburger.svg" alt="" (click)="toggleSongList()">
-            </div>
-            <div class="search-container">
-              <input 
-                type="text" 
-                class="search-bar" 
-                placeholder="Search Songs" 
-                [formControl]="searchControl"
-                (click)="showSearch = true">
-              
-              <div *ngIf="searchResults.length > 0" class="search-results">
-                <ul>
-                  <li *ngFor="let song of searchResults" class="search-item">
-                    <div (click)="songsByAlbumId(song.albumId)" (click)="playSongById(song)" class="song-card">
-                      <img [src]="song.songCardUrl" alt="{{ song.songTitle }}" class="song-image">
-                      <div class="song-details">
-                        <div class="song-title">{{ song.songTitle }}</div>
-                        <div class="artist-name">{{ song.artistName }}</div>
-                      </div>
+          <div class="hamburgerContainer">
+            <img width="40" class="invert hamburger" src="assets/hamburger.svg" alt="" (click)="toggleSongList()">
+          </div>
+          <div class="search-container">
+            <input 
+              type="text" 
+              class="search-bar" 
+              placeholder="Search By Name/Artis/Album" 
+              [formControl]="searchControl"
+              (click)="showSearch = true">
+            <div *ngIf="searchResults.length > 0" class="search-results">
+              <ul>
+                <li *ngFor="let song of searchResults" class="search-item">
+                  <div (click)="playSongById(song)" class="song-card">
+                    <img [src]="song.songCardUrl" alt="{{ song.songTitle }}" class="song-image">
+                    <div class="song-details">
+                      <div class="song-title">{{ song.songTitle }}</div>
+                      <div class="artist-name">{{ song.artistName }}</div>
                     </div>
-                  </li>
-                </ul>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="song-list" [class.show]="showSongList">
+            <div class="songList">
+              <div class="songCard" *ngFor="let song of songs" (click)="playSongById(song)">
+                <i class="fas fa-play-circle" *ngIf="!song.isPlaying"></i>
+                <div class="songInfo">
+                  <span class="songName">{{song.songTitle}} &nbsp;</span>
+                  <span class="artistName">{{song.artistName}} &nbsp;&nbsp;</span>
+                  <i 
+                    class="fas fa-heart loveIcon" 
+                    [ngClass]="{'blank-heart': !song.liked, 'bubbling-heart': song.liked}"
+                    [style.color]="song.liked ? 'red' : ''"
+                    (click)="toggleLove(song); $event.stopPropagation()">
+                  </i>
+                </div>
               </div>
             </div>
-            
-            
-            
-            
-          
-            <div class="song-list" [class.show]="showSongList">
-                <div class="songList">
-                    <div class="songCard" *ngFor="let song of songs">
-                        <i class="fas fa-play-circle" *ngIf="!song.isPlaying" (click)="playSongById(song)"></i>
-                        <div class="songInfo" (click)="playSongById(song)">
-                            <span class="songName">{{song.songTitle}} &nbsp;</span>
-                            <span class="artistName">{{song.artistName}} &nbsp;&nbsp;</span>
-                            <i class="fas fa-heart loveIcon" [ngClass]="{'blank-heart': !song.liked, 'bubbling-heart': song.liked}"
-                                (click)="toggleLove(song)"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
         <div class="buttons">
-            <button *ngIf="type == 'admin'" class="signupbtn" (click)="adminMenueToggle()">Admin Menu</button>
-            <button class="loginbtn" (click)="signOutForm()">LogOut</button>
+          <button *ngIf="type == 'admin'" class="signupbtn" (click)="adminMenueToggle()">Admin Menu</button>
         </div>
-    </div>
-    
+      </div>
       <!-- song playlist starts -->
       <div class="spotifyPlaylists">
         <h1>Pick Your Mood</h1>
         <div class="popular-songs">
           <div class="card" *ngFor="let album of albums" [style.background-image]="'url(' + album.albumCardUrl + ')'">
             <div class="card-body" (click)="songsByAlbumId(album.albumId)">
-              <!-- Play button -->
-      <!-- Play button will only show if album is currently playing -->
-     <div>
-     <img  *ngIf="album.albumId == abbumIdPlay" width="15" style="    background: #1ED760;
-     border-radius: 7px;
-     object-fit: contain;
-     width: 25px;
-     position: absolute;
-     bottom: 5px;
-     right: 5px;" id="play" [src]="playPauseSrc" alt="">
-
-     
-    </div>
+              <div>
+                <img  *ngIf="album.albumId == abbumIdPlay" width="15" style="background: #1ED760; border-radius: 7px; object-fit: contain; width: 25px; position: absolute; bottom: 5px; right: 5px;" id="play" [src]="playPauseSrc" alt="">
+              </div>
             </div>
             <div class="card-footer">
               <p>{{album.albumName}}</p>
             </div>
           </div>
         </div>
-
         <div class="playbar">
           <audio #audioPlayer id="audioPlayer" [src]="currentMusic"></audio>
           <div class="seekbar" (click)="adjustSong($event)">
@@ -160,26 +167,17 @@
         </div>
       </div>
       <audio #audioPlayer [src]="currentMusic" (timeupdate)="updateSeekBar()"></audio>
-
-
       <div class="spotifyPlaylists">
         <h1 *ngIf="haveMostPlayed == true">Most Played</h1>
-        <!-- <div class="cardContainer">  </div> -->
         <div class="popular-songs">
           <div class="card" 
                [style.background-image]="song.songCardUrl ? 'url(' + song.songCardUrl + ')' : 'url(' + song.albumCardUrl + ')'" 
                *ngFor="let song of mostPlayedSongs">
             <div class="card-body" (click)="playSongById(song)">
-              <!-- <img [src]="song.songCardUrl ? song.songCardUrl : song.albumCardUrl" class="song-image" /> -->
               <p class="song-title" style="color: white;">{{ song.songTitle }}</p>
             </div>
-            <!-- <div class="card-footer"> -->
-              <!-- Uncomment if you want to display the artist name -->
-              <!-- <p class="artist-name">{{ song.artist }}</p> -->
-            <!-- </div> -->
           </div>
         </div>
-
         <h1>Popular Artists</h1>
         <div class="popular-artist">
           <div 
@@ -187,47 +185,35 @@
             *ngFor="let song of populatArtist"
             [style.background-image]="song.artistProfileUrl ? 'url(' + song.artistProfileUrl + ')' : 'url(/assets/default-artist.png)'" 
             (click)="songsByArtistId(song.artistId)">
-            
             <div class="artist-card-body">
               <p class="song-title" style="color: white;">{{ song.songTitle }}</p>
             </div>
-        
-            <!-- Uncomment if you want to display additional details -->
-            <!-- <div class="card-footer">
-                 <p class="artist-name">{{ song.artist }}</p>
-            </div> -->
           </div>
         </div>
-
-
-<!--         
-        <div class="card-container-big">
-          <div class="bigcard">
-            <div class="thumbnail">
-              <img src="https://images.news18.com/ibnlive/uploads/2024/07/himesh-reshammiya-birthday-2024-07-c738aaf5cc5f07e911be84c64422fc32-16x9.jpg" alt="Yaara">
-            </div>
-            <div class="content">
-              <h2 class="title">Yaara</h2>
-              <p class="details">Single • Mamta Sharma</p>
+        <!-- Dynamic Company Story Card START -->
+        <div class="company-story-card" style="margin: 30px 0; display: flex; align-items: center; justify-content: center;">
+          <div style="background: linear-gradient(135deg, #1DB954 0%, #191414 100%); border-radius: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); padding: 40px 32px; display: flex; align-items: center; gap: 40px; min-width: 350px; max-width: 700px; width: 100%;">
+            <img src="https://i1.sndcdn.com/artworks-b5Ens5oAZX2XT6u3-75k5tA-t240x240.jpg" alt="EaseOnTech Story" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.15); background: #fff;">
+            <div style="flex: 1;">
+              <h2 style="color: #fff; font-size: 2rem; margin-bottom: 10px; font-weight: 700; letter-spacing: 1px;">
+                🚀 About <span style="color: #1DB954;">EaseOnTech</span>
+              </h2>
+              <p style="color: #e0e0e0; font-size: 1.1rem; margin-bottom: 18px;">
+                At EaseOnTech, we believe music is for everyone. Our mission is to make streaming seamless, fun, and social. Discover, share, and vibe with your favorite tracks and artists, all in one place. 
+                <span style="color: #1DB954; font-weight: 600;">#ByYourSide</span> for every beat of your journey!
+              </p>
+              <div style="display: flex; align-items: center; gap: 16px;">
+                <button (click)="navigateToEaseOnTech()" style="background: #1DB954; color: #fff; border: none; border-radius: 20px; padding: 10px 28px; font-weight: 600; font-size: 1rem; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.12); transition: background 0.2s;">
+                  Learn More
+                </button>
+                <span style="color: #fff; font-size: 1.2rem; font-weight: 500;">
+                  <i class="fas fa-users" style="color: #1DB954;"></i> By Ravi pandey
+                </span>
+              </div>
             </div>
           </div>
-        
-          <div class="bigcard">
-            <div class="thumbnail">
-              <img src="https://images.news18.com/ibnlive/uploads/2024/07/himesh-reshammiya-birthday-2024-07-c738aaf5cc5f07e911be84c64422fc32-16x9.jpg" alt="Long Drive With Himesh">
-            </div>
-            <div class="content">
-              <h2 class="title">Long Drive With Himesh Reshammiya</h2>
-              <p class="details">Album • Himesh Reshammiya</p>
-            </div>
-          </div>
-        </div> -->
-        
-        
-        
-        
-
-        <!-- audio play back controls go here, hidden by default -->
+        </div>
+        <!-- Dynamic Company Story Card END -->
         <div class="playbar">
           <audio #audioPlayer id="audioPlayer" [src]="currentMusic"></audio>
           <div class="seekbar" (click)="adjustSong($event)">
@@ -257,11 +243,70 @@
           </div>
         </div>
         <audio #audioPlayer [src]="currentMusic" (timeupdate)="updateSeekBar()"></audio>
-
       </div>
     </div>
   </div>
+  <!-- Attractive Footer Card -->
+  <!-- <div class="footer-card">
+    <div class="footer-container">
+      <div class="footer-section">
+        <div class="footer-logo">
+          <h3>🎵 SaR Music</h3>
+          <p>Your ultimate music streaming experience</p>
+        </div>
+        <div class="footer-social">
+          <a href="#" class="social-link">
+            <i class="fab fa-facebook"></i>
+          </a>
+          <a href="#" class="social-link">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="#" class="social-link">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="#" class="social-link">
+            <i class="fab fa-youtube"></i>
+          </a>
+        </div>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#library">Library</a></li>
+          <li><a href="#playlists">Playlists</a></li>
+          <li><a href="#artists">Artists</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Discover</h4>
+        <ul class="footer-links">
+          <li><a href="#trending">Trending</a></li>
+          <li><a href="#new-releases">New Releases</a></li>
+          <li><a href="#genres">Genres</a></li>
+          <li><a href="#mood">Mood</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Company</h4>
+        <ul class="footer-links">
+          <li><a href="/easeontech">About Us</a></li>
+          <li><a href="#careers">Careers</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#support">Support</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-content">
+        <p>&copy; 2025 SaR Music. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <span>Made with ❤️ by</span>
+          <a href="/easeontech" class="easeontech-link">🚀 EaseOnTech</a>
+        </div>
+      </div>
+    </div>
+  </div> -->
   <script src="js/script.js"></script>
 </body>
-
 </html>

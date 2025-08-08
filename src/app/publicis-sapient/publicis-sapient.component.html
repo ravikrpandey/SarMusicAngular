@@ -2,19 +2,19 @@
 <nav class="navbar">
   <div class="nav-container">
     <div class="nav-logo">
-      <h2>Publicis Sapient</h2>
+      <h2>🎵 EaseOnTech</h2>
     </div>
-    <div class="nav-actions">
-      <div class="nav-contact">
-        <a href="mailto:contact@publicissapient.com" class="nav-contact-item">
-          <span class="material-icons">email</span>
-        </a>
-        <a href="tel:+15551234567" class="nav-contact-item">
-          <span class="material-icons">phone</span>
-        </a>
+          <div class="nav-actions">
+        <div class="nav-contact">
+          <a href="mailto:contact@easeontech.com" class="nav-contact-item">
+            <span class="material-icons">email</span>
+          </a>
+          <a href="tel:+15551234567" class="nav-contact-item">
+            <span class="material-icons">phone</span>
+          </a>
+        </div>
+        <button class="btn btn-outline" (click)="navigateToMusic()">🎵 Music App</button>
       </div>
-      <button class="btn btn-outline">DBT GPT</button>
-    </div>
     <ul class="nav-menu">
       <li class="nav-item">
         <a href="#home" class="nav-link" (click)="scrollToSection('home')">Home</a>
@@ -42,29 +42,29 @@
   <div class="hero-container">
     <div class="hero-content">
       <h1 class="hero-title">
-        Unlock a world of <span class="highlight">digital possibilities</span>
+        Unlock a world of <span class="highlight">musical possibilities</span>
       </h1>
       <p class="hero-subtitle">
-        Modernize your business and energize your audience with AI-powered transformation.
+        Ease on Tech - Making music technology accessible and enjoyable for everyone.
       </p>
       <div class="hero-buttons">
-        <button class="btn btn-primary">Contact Us</button>
+        <button class="btn btn-primary" (click)="navigateToMusic()">🎵 Start Listening</button>
         <button class="btn btn-secondary">Learn More</button>
       </div>
     </div>
     <div class="hero-image">
       <div class="hero-visual">
         <div class="floating-card card-1">
-          <div class="card-icon">🤖</div>
-          <h4>AI Solutions</h4>
+          <div class="card-icon">🎵</div>
+          <h4>Music Streaming</h4>
         </div>
         <div class="floating-card card-2">
-          <div class="card-icon">💼</div>
-          <h4>Digital Business</h4>
+          <div class="card-icon">🎧</div>
+          <h4>Audio Quality</h4>
         </div>
         <div class="floating-card card-3">
-          <div class="card-icon">⚡</div>
-          <h4>Transformation</h4>
+          <div class="card-icon">🎼</div>
+          <h4>Playlists</h4>
         </div>
       </div>
     </div>
@@ -75,8 +75,8 @@
 <section id="services" class="services">
   <div class="container">
     <div class="section-header">
-      <h2>What We Do</h2>
-      <p>Comprehensive digital solutions to transform your business</p>
+      <h2>What We Offer</h2>
+      <p>Comprehensive music streaming solutions for the modern listener</p>
     </div>
     <div class="services-grid">
       <div class="service-card" *ngFor="let service of services">
@@ -96,36 +96,36 @@
   <div class="container">
     <div class="about-content">
       <div class="about-text">
-        <h2>About Publicis Sapient</h2>
+        <h2>About EaseOnTech</h2>
         <p>
-          We are a digital business transformation company helping organizations navigate the digital landscape with innovative solutions that drive growth, efficiency, and competitive advantage.
+          We are a music technology company dedicated to making music accessible and enjoyable for everyone. Our mission is to "Ease on Tech" - simplifying technology to enhance your musical journey.
         </p>
         <p>
-          Our team of experts combines deep industry knowledge with cutting-edge technology to deliver exceptional results for our clients worldwide.
+          Our team combines passion for music with cutting-edge technology to create seamless, intuitive music streaming experiences that connect people through the universal language of music.
         </p>
-        <div class="stats">
-          <div class="stat">
-            <h3>20+</h3>
-            <p>Years Experience</p>
+                  <div class="stats">
+            <div class="stat">
+              <h3>1M+</h3>
+              <p>Songs Available</p>
+            </div>
+            <div class="stat">
+              <h3>100K+</h3>
+              <p>Happy Users</p>
+            </div>
+            <div class="stat">
+              <h3>24/7</h3>
+              <p>Music Streaming</p>
+            </div>
           </div>
-          <div class="stat">
-            <h3>500+</h3>
-            <p>Global Clients</p>
-          </div>
-          <div class="stat">
-            <h3>50+</h3>
-            <p>Countries</p>
+      </div>
+              <div class="about-image">
+          <div class="image-placeholder">
+            <div class="overlay">
+              <h3>Music Everywhere</h3>
+              <p>Streaming music to listeners worldwide</p>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="about-image">
-        <div class="image-placeholder">
-          <div class="overlay">
-            <h3>Global Presence</h3>
-            <p>Operating in over 50 countries worldwide</p>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </section>
@@ -134,8 +134,8 @@
 <section class="clients">
   <div class="container">
     <div class="section-header">
-      <h2>Industries</h2>
-      <p>We work with organizations across industries to drive digital transformation</p>
+      <h2>Music Genres</h2>
+      <p>Explore diverse music genres and discover your perfect sound</p>
     </div>
     <div class="clients-grid">
       <div class="client-item" *ngFor="let client of clients">
@@ -157,7 +157,7 @@
         <div class="contact-details">
           <div class="contact-item">
             <span class="material-icons">email</span>
-            <p>contact&#64;publicissapient.com</p>
+            <p>contact&#64;easeontech.com</p>
           </div>
           <div class="contact-item">
             <span class="material-icons">phone</span>
@@ -165,7 +165,7 @@
           </div>
           <div class="contact-item">
             <span class="material-icons">location_on</span>
-            <p>Global Offices Worldwide</p>
+            <p>Music Everywhere</p>
           </div>
         </div>
       </div>
@@ -192,16 +192,16 @@
   <div class="container">
     <div class="footer-content">
       <div class="footer-section">
-        <h3>Publicis Sapient</h3>
-        <p>Digital business transformation company helping organizations navigate the digital landscape.</p>
+        <h3>🎵 EaseOnTech</h3>
+        <p>Making music technology accessible and enjoyable for everyone. Ease on Tech.</p>
       </div>
       <div class="footer-section">
-        <h4>Solutions</h4>
+        <h4>Features</h4>
         <ul>
-          <li><a href="#">Artificial Intelligence</a></li>
-          <li><a href="#">Experience Transformation</a></li>
-          <li><a href="#">Digital Commerce</a></li>
-          <li><a href="#">Digital Engineering</a></li>
+          <li><a href="#">High-Quality Streaming</a></li>
+          <li><a href="#">Smart Playlists</a></li>
+          <li><a href="#">Cross-Platform Sync</a></li>
+          <li><a href="#">Music Discovery</a></li>
         </ul>
       </div>
       <div class="footer-section">
@@ -209,8 +209,8 @@
         <ul>
           <li><a href="#">About Us</a></li>
           <li><a href="#">Careers</a></li>
-          <li><a href="#">Client Stories</a></li>
-          <li><a href="#">Insights</a></li>
+          <li><a href="#">Music Stories</a></li>
+          <li><a href="#">Blog</a></li>
         </ul>
       </div>
       <div class="footer-section">
@@ -223,7 +223,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2025 Publicis Sapient. All rights reserved. A Publicis Groupe Company.</p>
+      <p>&copy; 2025 EaseOnTech. All rights reserved. Making music technology accessible.</p>
     </div>
   </div>
 </footer> 

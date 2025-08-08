@@ -5,7 +5,7 @@ import { AuthGuard } from './auth/guards/auth.guard';
 // debugger
 const routes: Routes = [
   {path:'', redirectTo:'auth', pathMatch:'full'},
-  { path: 'publicis-sapient', loadChildren: () => import('./publicis-sapient/publicis-sapient.module').then(m => m.PublicisSapientModule) },
+  { path: 'easeontech', loadChildren: () => import('./easeontech/easeontech.module').then(m => m.EaseontechModule) },
   { path: 'auth', loadChildren: () => import('../app/auth/auth.module').then(m => m.AuthModule), },
   { path: 'main', loadChildren: () => import('../app/@modules/main.module').then(m => m.MainModule), canActivate: [AuthGuard] },
   { path: 'admin', loadChildren: () => import('../app/admin/admin-menu/admin-menu.module').then(m => m.AdminMenuModule), canActivate: [AuthGuard]  }

@@ -1,0 +1,305 @@
+<!-- Enhanced, Eye-catching, and Professional Navigation -->
+<nav class="navbar enhanced-navbar">
+  <div class="nav-container">
+    <!-- Logo with subtle animation and gradient text -->
+    <div class="nav-logo">
+      <a href="#home" (click)="scrollToSection('home')" class="logo-link">
+        <span class="logo-icon">🚀</span>
+        <span class="logo-text gradient-text">EaseOnTech</span>
+      </a>
+    </div>
+    <!-- Navigation Menu -->
+    <ul class="nav-menu" [class.open]="isMenuOpen">
+      <li class="nav-item">
+        <a href="#home" class="nav-link" (click)="scrollToSection('home')">
+          <span class="material-icons nav-icon">home</span>
+          Home
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#ai" class="nav-link" (click)="scrollToSection('ai')">
+          <span class="material-icons nav-icon">smart_toy</span>
+          AI Solutions
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#services" class="nav-link" (click)="scrollToSection('services')">
+          <span class="material-icons nav-icon">build_circle</span>
+          What We Do
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#process" class="nav-link" (click)="scrollToSection('process')">
+          <span class="material-icons nav-icon">timeline</span>
+          How We Do
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#about" class="nav-link" (click)="scrollToSection('about')">
+          <span class="material-icons nav-icon">info</span>
+          About
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#contact" class="nav-link" (click)="scrollToSection('contact')">
+          <span class="material-icons nav-icon">contact_mail</span>
+          Contact
+        </a>
+      </li>
+    </ul>
+    <!-- Navigation Actions: Contact & CTA -->
+    <div class="nav-actions">
+      <div class="nav-contact">
+        <a href="mailto:contact@easeontech.com" class="nav-contact-item" title="Email Us">
+          <span class="material-icons">email</span>
+        </a>
+        <a href="tel:+15551234567" class="nav-contact-item" title="Call Us">
+          <span class="material-icons">phone</span>
+        </a>
+        <a href="https://www.linkedin.com/company/easeontech" target="_blank" class="nav-contact-item" title="LinkedIn">
+          <span class="material-icons">linkedin</span>
+        </a>
+      </div>
+      <button class="btn btn-gradient" (click)="navigateToMusic()">
+        <span class="material-icons">music_note</span>
+        Music Platform
+      </button>
+    </div>
+    <!-- Hamburger for mobile -->
+    <div class="hamburger" [class.active]="isMenuOpen" (click)="toggleMenu()" aria-label="Toggle navigation" tabindex="0">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section id="home" class="hero">
+  <div class="hero-container">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        Transforming Ideas into <span class="highlight">Digital Reality</span>
+      </h1>
+      <p class="hero-subtitle">
+        EaseOnTech - Your trusted partner for custom software development, web applications, and innovative digital solutions that drive business growth.
+      </p>
+      <div class="hero-buttons">
+        <button class="btn btn-primary" (click)="scrollToSection('portfolio')">View Our Work</button>
+        <button class="btn btn-secondary" (click)="scrollToSection('contact')">Get Quote</button>
+      </div>
+    </div>
+    <div class="hero-image">
+      <div class="hero-visual">
+        <div class="floating-card card-1">
+          <div class="card-icon">💻</div>
+          <h4>Web Development</h4>
+        </div>
+        <div class="floating-card card-2">
+          <div class="card-icon">📱</div>
+          <h4>Mobile Apps</h4>
+        </div>
+        <div class="floating-card card-3">
+          <div class="card-icon">☁️</div>
+          <h4>Cloud Solutions</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Services Section -->
+<section id="services" class="services">
+  <div class="container">
+    <div class="section-header">
+      <h2>Our Services</h2>
+      <p>Comprehensive software development solutions tailored to your business needs</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card" *ngFor="let service of services">
+        <div class="service-icon">
+          <span class="material-icons">{{ service.icon }}</span>
+        </div>
+        <h3>{{ service.title }}</h3>
+        <p>{{ service.description }}</p>
+        <a href="#" class="service-link">Learn More →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Portfolio Section -->
+<section id="portfolio" class="portfolio">
+  <div class="container">
+    <div class="section-header">
+      <h2>Featured Projects</h2>
+      <p>Showcasing our latest work and successful client collaborations</p>
+    </div>
+    <div class="portfolio-grid">
+      <div class="portfolio-card" *ngFor="let project of portfolio" (click)="openPortfolioLink(project.link)">
+        <div class="portfolio-image" [style.background-image]="'url(' + project.image + ')'">
+          <div class="portfolio-overlay">
+            <div class="portfolio-category">{{ project.category }}</div>
+            <div class="portfolio-tech">
+              <span *ngFor="let tech of project.technologies" class="tech-tag">{{ tech }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="portfolio-content">
+          <h3>{{ project.title }}</h3>
+          <p>{{ project.description }}</p>
+          <div class="portfolio-actions">
+            <button class="btn btn-primary">View Project</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="about">
+  <div class="container">
+    <div class="about-content">
+      <div class="about-text">
+        <h2>About EaseOnTech</h2>
+        <p>
+          We are a passionate team of software developers dedicated to creating innovative digital solutions that transform businesses. With years of experience in web development, mobile applications, and custom software solutions, we help companies achieve their digital goals.
+        </p>
+        <p>
+          Our mission is to "Ease on Tech" - making technology accessible and powerful for businesses of all sizes. We combine cutting-edge technologies with proven development practices to deliver exceptional results.
+        </p>
+        <div class="stats">
+          <div class="stat" *ngFor="let stat of stats">
+            <h3>{{ stat.number }}</h3>
+            <p>{{ stat.label }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="about-image">
+        <div class="image-placeholder">
+          <div class="overlay">
+            <h3>Technology Stack</h3>
+            <div class="tech-grid">
+              <span *ngFor="let tech of technologies" class="tech-item">{{ tech }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials">
+  <div class="container">
+    <div class="section-header">
+      <h2>What Our Clients Say</h2>
+      <p>Real feedback from satisfied clients who trusted us with their projects</p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card" *ngFor="let testimonial of testimonials">
+        <div class="testimonial-rating">
+          <span *ngFor="let star of getStarRating(testimonial.rating)" class="star">⭐</span>
+        </div>
+        <p class="testimonial-content">"{{ testimonial.content }}"</p>
+        <div class="testimonial-author">
+          <h4>{{ testimonial.name }}</h4>
+          <p>{{ testimonial.position }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="contact">
+  <div class="container">
+    <div class="contact-content">
+      <div class="contact-info">
+        <h2>Ready to Start Your Project?</h2>
+        <p>Let's discuss how we can help you achieve your digital transformation goals. Get in touch for a free consultation.</p>
+        <div class="contact-details">
+          <div class="contact-item">
+            <span class="material-icons">email</span>
+            <p>contact&#64;easeontech.com</p>
+          </div>
+          <div class="contact-item">
+            <span class="material-icons">phone</span>
+            <p>+1 (555) 123-4567</p>
+          </div>
+          <div class="contact-item">
+            <span class="material-icons">location_on</span>
+            <p>Remote & On-site Development</p>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form">
+        <form>
+          <div class="form-group">
+            <input type="text" placeholder="Your Name" required>
+          </div>
+          <div class="form-group">
+            <input type="email" placeholder="Your Email" required>
+          </div>
+          <div class="form-group">
+            <select required>
+              <option value="">Select Service</option>
+              <option value="web">Web Development</option>
+              <option value="mobile">Mobile Applications</option>
+              <option value="ecommerce">E-commerce Solutions</option>
+              <option value="custom">Custom Software</option>
+              <option value="api">API Development</option>
+              <option value="cloud">Cloud Solutions</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <textarea placeholder="Tell us about your project" rows="5" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>🚀 EaseOnTech</h3>
+        <p>Transforming ideas into digital reality. Your trusted partner for custom software development and innovative digital solutions.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="/src/assets/sarmusic-streaming.png">Web Development</a></li>
+          <li><a href="#">Mobile Applications</a></li>
+          <li><a href="#">E-commerce Solutions</a></li>
+          <li><a href="#">Custom Software</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Portfolio</h4>
+        <ul>
+          <li><a href="/auth">SaR Music Platform</a></li>
+          <li><a href="https://mytaxfinder.com">MyTaxFinder.com</a></li>
+          <li><a href="/easeontech">Corporate Website</a></li>
+          <li><a href="#portfolio">View All Projects</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Connect</h4>
+        <div class="social-links">
+          <a href="#" class="social-link">LinkedIn</a>
+          <a href="#" class="social-link">GitHub</a>
+          <a href="#" class="social-link">Twitter</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 EaseOnTech. All rights reserved. Transforming businesses through technology.</p>
+    </div>
+  </div>
+</footer> 
