@@ -69,7 +69,7 @@ export class SongCreateComponent implements OnInit {
 
   addSong() {
     debugger
-    this.songs.push({ title: '', duration: '', releaseDate: '', genre: '', sourceType: 'url', url: '', file: null, songCardUrl: '' });
+    this.songs.push({ title: '', duration: '', releaseDate: '', genre: '', sourceType: 'url', url: '', file: null, youtubeUrl: '', songCardUrl: '' });
   }
 
   removeSong(index: number) {
@@ -102,15 +102,16 @@ export class SongCreateComponent implements OnInit {
       albumId: this.selectedAlbum.albumId,
       albumName: this.selectedAlbum.albumName,
       albumCardUrl: this.selectedAlbum.albumCardUrl,
-      artistId: this.selectedArtist.artistId,
-      artistName: this.selectedArtist.artistName,
-      songTitle: song.title,
-      duration: song.duration,
+      artistId: this.selectedArtist?.artistId,
+      artistName: this.selectedArtist?.artistName,
+      songTitle: song?.title,
+      duration: song?.duration,
       songUrl: song.sourceType === 'url' ? song.url : '',
       songFile: song.sourceType === 'file' ? song.file : null,
+      youtubeUrl: song.sourceType === 'youtubeUrl' ? song.youtubeUrl : '',
       releaseDate: song.releaseDate,
-      genre: song.genre,
-      songCardUrl: song.songCardUrl
+      genre: song?.genre,
+      songCardUrl: song?.songCardUrl
     }));
   
 

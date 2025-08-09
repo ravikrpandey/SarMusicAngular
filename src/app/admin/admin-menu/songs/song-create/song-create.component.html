@@ -68,6 +68,9 @@
                     <label>
                         <input type="radio" [(ngModel)]="song.sourceType" name="sourceType{{i}}" value="file"> File
                     </label>
+                    <label>
+                        <input type="radio" [(ngModel)]="song.sourceType" name="sourceType{{i}}" value="youtubeUrl"> YoutubeUrl
+                    </label>
                 </div>
             </div>
             <div class="form-group" *ngIf="song.sourceType === 'url'">
@@ -78,6 +81,10 @@
             <div class="form-group" *ngIf="song.sourceType === 'file'">
                 <label for="songFile">Song File</label>
                 <input type="file" id="songFile" (change)="onFileChange($event, i)" name="songFile{{i}}" class="form-control">
+            </div>
+            <div class="form-group" *ngIf="song.sourceType === 'youtubeUrl'">
+                <label for="youtubeUrl">Youtube Url</label>
+                <input type="text" id="youtubeUrl" [(ngModel)]="song.youtubeUrl" name="youtubeUrl{{i}}" class="form-control" placeholder="Enter Youtube URL">
             </div>
             <button type="button" class="btn btn-danger" (click)="removeSong(i)">Remove</button>
             <hr>

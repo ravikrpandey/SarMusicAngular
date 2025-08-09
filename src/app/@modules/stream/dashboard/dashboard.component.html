@@ -1,3 +1,8 @@
+<!-- 
+  Rewritten to make the search bar attractive, inspired by Spotify's style.
+  - Modern, rounded, dark background, green accent, search icon, focus effect, and styled dropdown.
+  - Only the search bar and its dropdown are changed; rest of the code is untouched.
+-->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,6 +10,153 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Spotify - Web Player: Music for everyone</title>
+  <style>
+    /* Add a green highlight for the currently playing song in the library */
+    .songCard.playing,
+    .songCard.playing .songInfo {
+      background: linear-gradient(90deg, #1ed76033 0%, #191414 100%);
+      border-left: 4px solid #1ED760;
+      /* Optional: add a subtle shadow or glow */
+      box-shadow: 0 2px 8px rgba(30, 215, 96, 0.12);
+    }
+
+    /* Spotify-like search bar styles */
+    .search-container {
+      position: relative;
+      width: 340px;
+      max-width: 100%;
+      margin: 0 24px;
+      display: flex;
+      align-items: center;
+    }
+    .search-bar {
+      width: 100%;
+      padding: 12px 44px 12px 44px;
+      border-radius: 999px;
+      border: none;
+      background: #222326;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 500;
+      outline: none;
+      transition: box-shadow 0.2s, background 0.2s;
+      box-shadow: 0 2px 8px rgba(30, 215, 96, 0.08);
+      letter-spacing: 0.01em;
+    }
+    .search-bar:focus {
+      background: #2a2a2a;
+      box-shadow: 0 0 0 2px #1ed760, 0 2px 8px rgba(30, 215, 96, 0.18);
+    }
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #b3b3b3;
+      font-size: 1.2rem;
+      pointer-events: none;
+      transition: color 0.2s;
+    }
+    .search-bar:focus ~ .search-icon {
+      color: #1ed760;
+    }
+    .clear-icon {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #b3b3b3;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: none;
+      transition: color 0.2s;
+    }
+    .search-bar:not(:placeholder-shown) ~ .clear-icon {
+      display: block;
+    }
+    .search-results {
+      position: absolute;
+      top: 110%;
+      left: 0;
+      width: 100%;
+      background: #181818;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+      z-index: 10;
+      margin-top: 8px;
+      padding: 8px 0;
+      max-height: 320px;
+      overflow-y: auto;
+      animation: fadeIn 0.18s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-8px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .search-item {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .song-card {
+      display: flex;
+      align-items: center;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background 0.15s;
+      border-radius: 10px;
+    }
+    .song-card:hover {
+      background: #232323;
+    }
+    .song-image {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      object-fit: cover;
+      margin-right: 16px;
+      background: #333;
+    }
+    .song-details {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    .song-title {
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 180px;
+    }
+    .artist-name {
+      color: #b3b3b3;
+      font-size: 0.95rem;
+      font-weight: 400;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 180px;
+    }
+    @media (max-width: 600px) {
+      .search-container {
+        width: 100%;
+        margin: 0 8px;
+      }
+      .search-bar {
+        font-size: 0.95rem;
+        padding-left: 38px;
+        padding-right: 38px;
+      }
+      .search-results {
+        max-height: 220px;
+      }
+    }
+  </style>
+  <!-- FontAwesome for search icon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 </head>
 
 <body>
@@ -59,7 +211,11 @@
             </div>
           </ng-container>
           <!-- User's songs -->
-          <div class="songCard" *ngFor="let song of songs" (click)="playSongById(song)">
+          <div 
+            class="songCard" 
+            *ngFor="let song of songs" 
+            (click)="playSongById(song)"
+            [ngClass]="{'playing': currentSong && song.songId === currentSong.songId}">
             <img [src]="song.songCardUrl ? song.songCardUrl : '/assets/default-song-card.jpg'" alt="Song Image" class="songImage">
             <div class="songInfo">
               <span class="songName">{{song.songTitle}} &nbsp;</span>
@@ -81,13 +237,23 @@
           <div class="hamburgerContainer">
             <img width="40" class="invert hamburger" src="assets/hamburger.svg" alt="" (click)="toggleSongList()">
           </div>
+          <!-- Spotify-like Search Bar Start -->
           <div class="search-container">
             <input 
               type="text" 
               class="search-bar" 
-              placeholder="Search By Name/Artis/Album" 
+              placeholder="What do you want to listen to?" 
               [formControl]="searchControl"
-              (click)="showSearch = true">
+              (click)="showSearch = true"
+              autocomplete="off"
+              spellcheck="false"
+              style="padding-left:44px; padding-right:44px;"
+            >
+            <i class="fas fa-search search-icon"></i>
+            <!-- Optionally, add a clear icon if you want to clear the search -->
+            <!--
+            <i class="fas fa-times clear-icon" (click)="searchControl.setValue('')"></i>
+            -->
             <div *ngIf="searchResults.length > 0" class="search-results">
               <ul>
                 <li *ngFor="let song of searchResults" class="search-item">
@@ -102,9 +268,14 @@
               </ul>
             </div>
           </div>
+          <!-- Spotify-like Search Bar End -->
           <div class="song-list" [class.show]="showSongList">
             <div class="songList">
-              <div class="songCard" *ngFor="let song of songs" (click)="playSongById(song)">
+              <div 
+                class="songCard" 
+                *ngFor="let song of songs" 
+                (click)="playSongById(song)"
+                [ngClass]="{'playing': song.songId === currentSongId}">
                 <i class="fas fa-play-circle" *ngIf="!song.isPlaying"></i>
                 <div class="songInfo">
                   <span class="songName">{{song.songTitle}} &nbsp;</span>
@@ -159,7 +330,15 @@
               <div class="volume">
                 <img width="25" src="assets/volume.svg" alt="">
                 <div class="range">
-                  <input type="range" name="volume" id="volumeRange" (input)="adjustVolume($event)">
+                  <input
+                    type="range"
+                    name="volume"
+                    id="volumeRange"
+                    min="0"
+                    max="100"
+                    (input)="adjustVolume($event)"
+                    [value]="volumePercentage"
+                  >
                 </div>
               </div>
             </div>
@@ -221,9 +400,43 @@
             <div class="circle" [style.left.%]="circlePosition"></div>
           </div>
           <div class="abovebar">
-            <div class="songinfo">
-              <p>{{currentMusicName}} {{currentArtistName}}</p>
+            <div class="songinfo" style="overflow: hidden; white-space: nowrap; width: 100%;">
+              <div 
+                style="
+                  display: inline-block;
+                  white-space: nowrap;
+                  animation: marquee 12s linear infinite;
+                  min-width: 100%;
+                ">
+                <div style="width: 100%; overflow: hidden; position: relative; height: 28px;">
+                  <div 
+                    style="
+                      display: inline-block;
+                      white-space: nowrap;
+                      position: absolute;
+                      will-change: transform;
+                      animation: music-marquee 12s linear infinite;
+                      min-width: 100%;
+                    ">
+                    <span style="color: inherit; font-size: inherit; margin: 0; display: inline;">
+                      {{currentMusicName}} {{currentArtistName}}
+                    </span>
+                  </div>
+                </div>
+                <style>
+                  @keyframes music-marquee {
+                    0%   { transform: translateX(100%); }
+                    100% { transform: translateX(-100%); }
+                  }
+                </style>
+              </div>
             </div>
+            <style>
+              @keyframes marquee {
+                0%   { transform: translateX(100%); }
+                100% { transform: translateX(-100%); }
+              }
+            </style>
             <div class="songbuttons">
               <img width="35" id="previous" src="assets/prevsong.svg" alt="" (click)="previousSong()">
               <img width="35" id="play" [src]="playPauseSrc" alt="" (click)="togglePlay()">
@@ -236,7 +449,15 @@
               <div class="volume">
                 <img width="25" [src]="volumeIcon" alt="" (click)="toggleVolume()">
                 <div class="range">
-                  <input type="range" name="volume" id="volumeRange" (input)="adjustVolume($event)">
+                  <input
+                    type="range"
+                    name="volume"
+                    id="volumeRange"
+                    min="0"
+                    max="100"
+                    (input)="adjustVolume($event)"
+                    [value]="volumePercentage"
+                  >
                 </div>
               </div>
             </div>

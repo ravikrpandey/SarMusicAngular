@@ -11,18 +11,20 @@ import { FormControl } from '@angular/forms';
 export const SERVER_API_URL = environment.serverUrl;
 import { debounceTime } from 'rxjs/operators';
 
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-
 export class DashboardComponent implements AfterViewInit {
   likedSongs: any;
   searchKey: string = '';
   searchResults: any[] = [];
-  searchControl = new FormControl(); // Use FormControl with debounce
+  searchControl = new FormControl();
+
+  // Volume and loader
+  volumePercentage: number = 100;
+  isPlayPauseLoading: boolean = false;
 
   constructor(
     private router: Router,
@@ -33,16 +35,24 @@ export class DashboardComponent implements AfterViewInit {
     private snackBar: MatSnackBar,
     private authService: AuthService,
     private renderer: Renderer2
-  ) {    
-    // Set up debounce on searchControl
+  ) {
     this.searchControl.valueChanges
-      .pipe(debounceTime(500))  // Wait for 500 ms of inactivity
+      .pipe(debounceTime(500))
       .subscribe(value => {
         this.masterSearch(value);
       });
- }
+
+    // Restore last volume from localStorage if available
+    const lastVolume = localStorage.getItem('lastVolume');
+    if (lastVolume !== null) {
+      const parsed = parseInt(lastVolume, 10);
+      if (!isNaN(parsed) && parsed >= 0 && parsed <= 100) {
+        this.volumePercentage = parsed;
+      }
+    }
+  }
+
   @ViewChild('audioPlayer') audioPlayerRef!: ElementRef<HTMLAudioElement>;
-  // Other variables
   circlePosition: number = 0;
   currentTime: string = '0:00';
   totalTime: string = '0:00';
@@ -53,23 +63,20 @@ export class DashboardComponent implements AfterViewInit {
   songDuration: any;
   songId: any;
   showLikedSongs: boolean = false;
-  type: any = ''
+  type: any = '';
   abbumIdPlay: any;
   showSearch: boolean = false;
   mobileNumber: any;
   mostPlayedSongs: any;
   populatArtist: any;
 
-  // Define variables for the audio player and buttons
   audioPlayer!: HTMLAudioElement;
   playButton!: HTMLImageElement;
   nextButton!: HTMLImageElement;
   previousButton!: HTMLImageElement;
 
-  // Define variables
   lastScrollTop = 0;
   spotifyPlaylists: HTMLElement | null = null;
-
 
   playPauseSrc = 'assets/play.svg';
   playbuttonSrc = 'assets/play.svg';
@@ -78,18 +85,16 @@ export class DashboardComponent implements AfterViewInit {
   closeVolume: any = 'assets/closevolume.svg';
   volumeIcon: string = 'assets/volume.svg';
   isMuted: boolean = false;
-  // Define variables for the circle position and total duration of the song
+  youtubeId: string = '';
 
-  // card variables
   albums: any[] = [];
   songs: any[] = [];
 
-
-  // Assuming you have a property to track the currently playing song
+  // Track the currently playing song object
   currentSong: any;
   showSongList = false;
   haveMostPlayed = false;
-  
+  currentSongId = false;
 
   ngOnInit() {
     this.mobileNumber = localStorage.getItem('mobileNumber') as string | null;
@@ -97,38 +102,33 @@ export class DashboardComponent implements AfterViewInit {
     this.getAll();
     this.getMostPlayedSongsByUser();
     this.getAllPopularArtist();
-  
-    // Retrieve and play the last played song from localStorage
+
     const lastPlayedSong = JSON.parse(localStorage.getItem('lastPlayedSong') || 'null');
     if (lastPlayedSong) {
       this.playSongById(lastPlayedSong);
     }
   }
-  
 
-  
   masterSearch(searchKey: string) {
-    if (searchKey.trim()) {
+    if (searchKey && searchKey.trim()) {
       this.loginService.masterSearch(searchKey).subscribe(
         (response) => {
           if (response.code === 200) {
-            this.searchResults = response.data; 
-            console.log("searchResults",this.searchResults)
+            this.searchResults = response.data;
+            console.log("searchResults", this.searchResults)
           } else {
-            this.searchResults = []; // Clear results on unsuccessful response
+            this.searchResults = [];
           }
         },
         (error) => {
           console.error('Error fetching search results', error);
-          this.searchResults = []; // Clear results on error
+          this.searchResults = [];
         }
       );
     } else {
-      this.searchResults = []; // Clear results if search term is empty
+      this.searchResults = [];
     }
   }
-  
-  
 
   toggleSongList() {
     this.showSongList = !this.showSongList;
@@ -140,7 +140,6 @@ export class DashboardComponent implements AfterViewInit {
       panelClass: type == 'error' ? ['snackbar-error'] : ['snackbar-success'],
       verticalPosition: 'top',
       horizontalPosition: 'right',
-
     });
   }
 
@@ -150,9 +149,6 @@ export class DashboardComponent implements AfterViewInit {
       this.cdr.detectChanges();
     })
   };
-
-  
-
 
   songsByAlbumId(albumId: any) {
     this.abbumIdPlay = albumId
@@ -165,39 +161,39 @@ export class DashboardComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // Initialize audio player
     this.audioPlayer = this.audioPlayerRef?.nativeElement;
 
-    // Add event listener for updating seek bar
-    this?.audioPlayer?.addEventListener('timeupdate', () => {
+    // Set initial volume from localStorage if available
+    if (this.audioPlayer) {
+      this.audioPlayer.volume = this.volumePercentage / 100;
+    }
+
+    this.audioPlayer?.addEventListener('timeupdate', () => {
       this.updateSeekBar();
     });
 
-    // Add event listeners for play, pause, and error events
-    this?.audioPlayer?.addEventListener('play', () => {
+    this.audioPlayer?.addEventListener('play', () => {
       this.playPauseSrc = this.pauseButtonSrc;
+      this.isPlayPauseLoading = false;
       this.cdr.detectChanges();
     });
 
-    this?.audioPlayer?.addEventListener('pause', () => {
+    this.audioPlayer?.addEventListener('pause', () => {
       this.playPauseSrc = this.playbuttonSrc;
+      this.isPlayPauseLoading = false;
       this.cdr.detectChanges();
     });
 
-    if (this?.audioPlayer){
-    this?.audioPlayer?.addEventListener('error', (event) => {
-      // console.error('Error occurred while playing the audio:', event);
-      // Handle error gracefully
+    this.audioPlayer?.addEventListener('error', (event) => {
+      this.isPlayPauseLoading = false;
+      this.cdr.detectChanges();
+      this.openSnackBar('Error occurred while playing the audio.', 'close', 'error');
     });
-  }
 
-    // Add event listener for when current song ends
-    this?.audioPlayer?.addEventListener('ended', () => {
-      // Play the next song
+    this.audioPlayer?.addEventListener('ended', () => {
       this.nextSong();
     });
 
-    // Get the element reference
     this.spotifyPlaylists = document.querySelector('.spotifyPlaylists');
   }
 
@@ -205,14 +201,10 @@ export class DashboardComponent implements AfterViewInit {
     this.showSearch = !this.showSearch;
   }
 
-
-  // Inside your component class
-
-  // Update seek bar and current time
   updateSeekBar() {
-    if (this?.audioPlayer) {
-      const currentTime = this?.audioPlayer.currentTime;
-      let duration = this?.audioPlayer.duration;
+    if (this.audioPlayer) {
+      const currentTime = this.audioPlayer.currentTime;
+      let duration = this.audioPlayer.duration;
       if (isNaN(duration)) {
         duration = 0;
       }
@@ -224,8 +216,6 @@ export class DashboardComponent implements AfterViewInit {
     }
   }
 
-
-  // Format time as mm:ss
   formatTime(time: number): string {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
@@ -233,126 +223,186 @@ export class DashboardComponent implements AfterViewInit {
   }
 
   adjustSong(event: MouseEvent) {
-    if (this?.audioPlayer && event.target instanceof HTMLElement) {
+    if (this.audioPlayer && event.target instanceof HTMLElement) {
       const seekBarWidth = event.target.clientWidth;
       const clickX = event.clientX - event.target.getBoundingClientRect().left;
       const percentage = (clickX / seekBarWidth) * 100;
-      const newTime = (percentage / 100) * this?.audioPlayer.duration;
+      const newTime = (percentage / 100) * this.audioPlayer.duration;
       this.audioPlayer.currentTime = newTime;
       this.circlePosition = percentage;
       this.currentTime = this.formatTime(newTime);
     }
   }
 
-
   adjustVolume(event: Event) {
     const volumeLevel = (event.target as HTMLInputElement).value;
-    if (this?.audioPlayer) {
+    if (this.audioPlayer) {
       const normalizedVolume = parseFloat(volumeLevel) / 100;
       this.audioPlayer.volume = normalizedVolume;
+      localStorage.setItem('lastVolume', volumeLevel);
+      this.volumePercentage = parseInt(volumeLevel, 10);
+      if (this.audioPlayer.volume === 0) {
+        this.isMuted = true;
+        this.volumeIcon = 'assets/mute.svg';
+      } else {
+        this.isMuted = false;
+        this.volumeIcon = 'assets/volume.svg';
+      }
+      this.cdr.detectChanges();
     }
   }
 
-
   togglePlay() {
-    if (this?.audioPlayer && this?.audioPlayer.src) {
-      // Check if the audio source is set
-      if (this?.audioPlayer.readyState >= 1) {
-        // Check if the audio is loaded
-        if (this?.audioPlayer.paused) {
-          this?.audioPlayer.play();
-
+    if (this.audioPlayer && this.audioPlayer.src) {
+      if (this.audioPlayer.readyState >= 2) {
+        if (this.audioPlayer.paused) {
+          this.isPlayPauseLoading = true;
+          this.cdr.detectChanges();
+          const playPromise = this.audioPlayer.play();
+          if (playPromise && typeof playPromise.then === 'function') {
+            playPromise.finally(() => {
+              this.isPlayPauseLoading = false;
+              this.cdr.detectChanges();
+            });
+          }
         } else {
-          this?.audioPlayer.pause();
+          this.isPlayPauseLoading = true;
+          this.cdr.detectChanges();
+          this.audioPlayer.pause();
         }
       } else {
-        console.warn('Audio is still loading.');
+        this.isPlayPauseLoading = true;
+        this.cdr.detectChanges();
         this.openSnackBar('Please hold tight its going to rock.', 'close', 'error');
       }
     } else {
-      console.warn('Audio source is not set.');
+      this.isPlayPauseLoading = false;
+      this.cdr.detectChanges();
       this.openSnackBar('Audio source is not set.', 'close', 'error');
     }
   }
 
-
   playSongById(song: any) {
-    this.currentMusic = song.songUrl;
+    this.currentSong = song; // Set the currentSong object for template use
     this.currentMusicName = song.songTitle;
     this.currentArtistName = song.artistName;
     this.songDuration = song.duration;
     this.songId = song.songId;
+    this.currentSongId = song.songId;
 
-      // Save last played song in localStorage
-  localStorage.setItem('lastPlayedSong', JSON.stringify({
-    songId: song.songId,
-    songUrl: song.songUrl,
-    songTitle: song.songTitle,
-    artistName: song.artistName,
-    duration: song.duration
-  }));
-    
+    if (song.youtubeId) {
+      this.youtubeId = song.youtubeId;
+      this.currentMusic = `${SERVER_API_URL}/api/youtube-stream/${song.youtubeId}`;
+    } else {
+      this.currentMusic = song.songUrl;
+    }
+
+    localStorage.setItem('lastPlayedSong', JSON.stringify({
+      songId: song.songId,
+      songUrl: song.songUrl,
+      youtubeId: song.youtubeId || null,
+      songTitle: song.songTitle,
+      artistName: song.artistName,
+      duration: song.duration
+    }));
+
     if (localStorage.getItem('mobileNumber')) {
       this.mobileNumber = localStorage.getItem('mobileNumber');
       this.getMostPlayedSongsByUser();
-      this.loginService.increaseSongCount(this.songId, this.mobileNumber).subscribe((res: any) => {
-
-      })
+      this.loginService.increaseSongCount(this.songId, this.mobileNumber).subscribe();
     }
 
-    // Set the new source and wait for it to be ready to play
+    // Remove previous canplaythrough event listeners to avoid stacking
+    if (this.audioPlayer) {
+      const clone = this.audioPlayer.cloneNode(true) as HTMLAudioElement;
+      this.audioPlayer.parentNode?.replaceChild(clone, this.audioPlayer);
+      this.audioPlayer = clone;
+      // Restore volume after replacing node
+      this.audioPlayer.volume = this.volumePercentage / 100;
+      // Re-attach event listeners
+      this.audioPlayer.addEventListener('timeupdate', () => this.updateSeekBar());
+      this.audioPlayer.addEventListener('play', () => {
+        this.playPauseSrc = this.pauseButtonSrc;
+        this.isPlayPauseLoading = false;
+        this.cdr.detectChanges();
+      });
+      this.audioPlayer.addEventListener('pause', () => {
+        this.playPauseSrc = this.playbuttonSrc;
+        this.isPlayPauseLoading = false;
+        this.cdr.detectChanges();
+      });
+      this.audioPlayer.addEventListener('error', (event) => {
+        this.isPlayPauseLoading = false;
+        this.cdr.detectChanges();
+        this.openSnackBar('Error occurred while playing the audio.', 'close', 'error');
+      });
+      this.audioPlayer.addEventListener('ended', () => this.nextSong());
+    }
+
     this.audioPlayer.src = this.currentMusic;
-    this?.audioPlayer.load(); // Load the new source
+    this.audioPlayer.load();
 
-    // Add event listener for when the new source is ready to play
-    this?.audioPlayer?.addEventListener('canplaythrough', () => {
-      // Play the song when it's ready
-      this?.audioPlayer.play();
-      // Update the play/pause button icon
+    // Restore volume after loading new song
+    if (this.audioPlayer) {
+      this.audioPlayer.volume = this.volumePercentage / 100;
+    }
+
+    this.isPlayPauseLoading = true;
+    this.cdr.detectChanges();
+
+    const canplaythroughHandler = () => {
+      this.audioPlayer.play();
       this.playPauseSrc = this.pauseButtonSrc;
+      this.isPlayPauseLoading = false;
       this.cdr.detectChanges();
-    });
-
-    // Handle errors
-    this?.audioPlayer?.addEventListener('error', (event) => {
-      console.error('Error occurred while loading the audio:', event);
-      // Handle error gracefully
-    });
+      this.audioPlayer.removeEventListener('canplaythrough', canplaythroughHandler);
+    };
+    this.audioPlayer.addEventListener('canplaythrough', canplaythroughHandler);
   }
-
 
   toggleVolume() {
-    if (this?.audioPlayer) {
+    if (this.audioPlayer) {
       if (this.isMuted) {
-        this.audioPlayer.volume = 1;
+        const lastVolume = localStorage.getItem('lastVolume');
+        let volumeToSet = 1;
+        if (lastVolume !== null) {
+          const parsed = parseInt(lastVolume, 10);
+          if (!isNaN(parsed) && parsed >= 0 && parsed <= 100) {
+            volumeToSet = parsed / 100;
+            this.volumePercentage = parsed;
+          }
+        }
+        this.audioPlayer.volume = volumeToSet;
         this.volumeIcon = 'assets/volume.svg';
+        this.isMuted = false;
       } else {
+        localStorage.setItem('lastVolume', Math.round(this.audioPlayer.volume * 100).toString());
         this.audioPlayer.volume = 0;
         this.volumeIcon = 'assets/mute.svg';
+        this.volumePercentage = 0;
+        this.isMuted = true;
       }
-      this.isMuted = !this.isMuted;
+      this.cdr.detectChanges();
     }
   }
 
-  // Function to play the next song
   nextSong() {
-    if (this.songs.length === 0) return; // No songs available
-    const currentIndex = this.songs.findIndex(song => song.songUrl === this.currentMusic);
+    if (this.songs.length === 0) return;
+    const currentIndex = this.songs.findIndex(song => (song.songUrl === this.currentMusic || song.youtubeId === this.youtubeId));
     let nextIndex = currentIndex + 1;
     if (nextIndex >= this.songs.length) {
-      nextIndex = 0; // Loop back to the first song if reaching the end
+      nextIndex = 0;
     }
     const nextSong = this.songs[nextIndex];
     this.playSongById(nextSong);
   }
 
-  // Function to play the previous song
   previousSong() {
-    if (this.songs.length === 0) return; // No songs available
-    const currentIndex = this.songs.findIndex(song => song.songUrl === this.currentMusic);
+    if (this.songs.length === 0) return;
+    const currentIndex = this.songs.findIndex(song => (song.songUrl === this.currentMusic || song.youtubeId === this.youtubeId));
     let prevIndex = currentIndex - 1;
     if (prevIndex < 0) {
-      prevIndex = this.songs.length - 1; // Loop back to the last song if reaching the beginning
+      prevIndex = this.songs.length - 1;
     }
     const prevSong = this.songs[prevIndex];
     this.playSongById(prevSong);
@@ -360,11 +410,9 @@ export class DashboardComponent implements AfterViewInit {
 
   loginForm() {
     this.router.navigate(['/login']);
-
   }
 
   signOutForm() {
-    // Remove the mobile number from localStorage
     this.authService.logout();
     localStorage.removeItem('mobileNumber');
     window.location.href = '/auth';
@@ -378,11 +426,7 @@ export class DashboardComponent implements AfterViewInit {
 
   adminMenueToggle() {
     this.router.navigate(['/admin']);
-    //   localStorage.removeItem('mobileNumber');
-    //  window.location.href = '/auth';
   }
-
-  // =============Likng song=============
 
   addToLikedSongs(songid: Number, liked: string) {
     let mobileNumber = localStorage.getItem('mobileNumber');
@@ -397,9 +441,7 @@ export class DashboardComponent implements AfterViewInit {
       if (res) {
         this.openSnackBar(res.message, 'close', 'Success');
       }
-
     })
-
   }
 
   removeFromLikedSongs(songid: Number, liked: string) {
@@ -415,33 +457,26 @@ export class DashboardComponent implements AfterViewInit {
       if (res) {
         this.openSnackBar(res.message, 'close', 'Success');
       }
-
     })
-
   }
 
   toggleLove(song: any) {
-    song.liked = !song.liked; // Toggle the liked state
+    song.liked = !song.liked;
     if (song.liked) {
-      // Add the song to the "liked" section or perform any other action
       this.addToLikedSongs(song.songId, song.liked);
     } else {
-      // Remove the song from the "liked" section or perform any other action
       this.removeFromLikedSongs(song.songId, song.liked);
     }
   }
-
 
   toggleLibrary() {
     this.showLikedSongs = !this.showLikedSongs;
   }
 
-
   getMostPlayedSongsByUser(): void {
     this.loginService.getMostPlayed(this.mobileNumber).subscribe(
       (res: any) => {
         if (res?.mostPlayed) {
-          // Collect all songs arrays from `mostPlayed` and assign to `this.songs`
           this.haveMostPlayed = true;
           this.mostPlayedSongs = res.mostPlayed.reduce((acc: any[], pl: any) => acc.concat(pl.songs), []);
         } else {
@@ -455,7 +490,8 @@ export class DashboardComponent implements AfterViewInit {
     );
   }
 
-  getAllPopularArtist(): void {    this.loginService.getAllPopularArtist().subscribe(
+  getAllPopularArtist(): void {
+    this.loginService.getAllPopularArtist().subscribe(
       (res: any) => {
         if (res?.data) {
           this.populatArtist = res.data;
@@ -470,18 +506,16 @@ export class DashboardComponent implements AfterViewInit {
     );
   }
 
-  songsByArtistId(artistId: any): void {  
-    debugger 
-     this.loginService.songsByArtistId(artistId).subscribe((res:any) => {
+  songsByArtistId(artistId: any): void {
+    debugger
+    this.loginService.songsByArtistId(artistId).subscribe((res: any) => {
       if (res.data.length > 0) {
         this.songs = res.data;
         if (this.songs.length > 0) {
           this.playSongById(this.songs[0]);
         }
       }
-
     })
-
   }
 
   getLikedSongByUser() {
@@ -492,14 +526,11 @@ export class DashboardComponent implements AfterViewInit {
           this.searchResults = [];
         }
       })
-
     }
   }
 
   navigateToEaseOnTech() {
     this.router.navigate(['/easeontech']);
   }
-
 };
-
 
