@@ -187,7 +187,7 @@ export class DashboardComponent implements AfterViewInit {
     this.audioPlayer?.addEventListener('error', (event) => {
       this.isPlayPauseLoading = false;
       this.cdr.detectChanges();
-      this.openSnackBar('Error occurred while playing the audio.', 'close', 'error');
+      // this.openSnackBar('Error occurred while playing the audio.', 'close', 'error');
     });
 
     this.audioPlayer?.addEventListener('ended', () => {
