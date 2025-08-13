@@ -308,7 +308,6 @@ export class DashboardComponent implements AfterViewInit {
 
     if (localStorage.getItem('mobileNumber')) {
       this.mobileNumber = localStorage.getItem('mobileNumber');
-      this.getMostPlayedSongsByUser();
       this.loginService.increaseSongCount(this.songId, this.mobileNumber).subscribe();
     }
 
@@ -329,6 +328,7 @@ export class DashboardComponent implements AfterViewInit {
       this.audioPlayer.addEventListener('pause', () => {
         this.playPauseSrc = this.playbuttonSrc;
         this.isPlayPauseLoading = false;
+        this.currentSongId = this.currentSongId 
         this.cdr.detectChanges();
       });
       this.audioPlayer.addEventListener('error', (event) => {
