@@ -154,7 +154,7 @@ export class DashboardComponent implements AfterViewInit {
     this.abbumIdPlay = albumId
     this.loginService.songsByAlbumId(albumId).subscribe((res: any) => {
       this.songs = res.data;
-      if (this.songs.length > 0 && this.songId == null) {
+      if (this.songs.length > 0 && this.songId != null) {
         this.playSongById(this.songs[0]);
       }
     })
