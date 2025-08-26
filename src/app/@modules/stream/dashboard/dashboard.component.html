@@ -308,7 +308,7 @@
           </div>
         </div>
         <div class="playbar">
-          <audio #audioPlayer id="audioPlayer" [src]="currentMusic"></audio>
+          <!-- <audio #audioPlayer id="audioPlayer" [src]="currentMusic"></audio> -->
           <div class="seekbar" (click)="adjustSong($event)">
             <div class="progress-bar" [style.width.%]="circlePosition"></div>
             <div class="circle" [style.left.%]="circlePosition"></div>
@@ -342,7 +342,11 @@
           </div>
         </div>
       </div>
-      <audio #audioPlayer [src]="currentMusic" (timeupdate)="updateSeekBar()"></audio>
+      <!-- <audio #audioPlayer [src]="currentMusic" (timeupdate)="updateSeekBar()"></audio> -->
+      <!-- Hidden YouTube iframe for streaming -->
+<iframe id="yt-player" width="0" height="0" frameborder="0"
+allow="autoplay; encrypted-media">
+</iframe>
       <div class="spotifyPlaylists">
         <h1 *ngIf="haveMostPlayed == true">Most Played</h1>
         <div class="popular-songs">
@@ -389,142 +393,70 @@
             </div>
           </div>
         </div>
-        <!-- Dynamic Company Story Card END -->
-        <div class="playbar">
-          <audio #audioPlayer id="audioPlayer" [src]="currentMusic"></audio>
-          <div class="seekbar" (click)="adjustSong($event)">
-            <div class="progress-bar" [style.width.%]="circlePosition"></div>
-            <div class="circle" [style.left.%]="circlePosition"></div>
-          </div>
-          <div class="abovebar">
-            <div class="songinfo" style="overflow: hidden; white-space: nowrap; width: 100%;">
-              <div 
-                style="
-                  display: inline-block;
-                  white-space: nowrap;
-                  animation: marquee 12s linear infinite;
-                  min-width: 100%;
-                ">
-                <div style="width: 100%; overflow: hidden; position: relative; height: 28px;">
-                  <div 
-                    style="
-                      display: inline-block;
-                      white-space: nowrap;
-                      position: absolute;
-                      will-change: transform;
-                      animation: music-marquee 12s linear infinite;
-                      min-width: 100%;
-                    ">
-                    <span style="color: inherit; font-size: inherit; margin: 0; display: inline;">
-                      {{currentMusicName}} {{currentArtistName}}
-                    </span>
-                  </div>
-                </div>
-                <style>
-                  @keyframes music-marquee {
-                    0%   { transform: translateX(100%); }
-                    100% { transform: translateX(-100%); }
-                  }
-                </style>
-              </div>
-            </div>
-            <style>
-              @keyframes marquee {
-                0%   { transform: translateX(100%); }
-                100% { transform: translateX(-100%); }
-              }
-            </style>
-            <div class="songbuttons">
-              <img width="35" id="previous" src="assets/prevsong.svg" alt="" (click)="previousSong()">
-              <img width="35" id="play" [src]="playPauseSrc" alt="" (click)="togglePlay()">
-              <img width="35" id="next" src="assets/nextsong.svg" alt="" (click)="nextSong()">
-            </div>
-            <div class="timevol">
-              <div class="songtime">
-                <p>{{ currentTime }} / {{ totalTime }}</p>
-              </div>
-              <div class="volume">
-                <img width="25" [src]="volumeIcon" alt="" (click)="toggleVolume()">
-                <div class="range">
-                  <input
-                    type="range"
-                    name="volume"
-                    id="volumeRange"
-                    min="0"
-                    max="100"
-                    (input)="adjustVolume($event)"
-                    [value]="volumePercentage"
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
+<!-- Dynamic Company Story Card END -->
+<div class="playbar">
+  <!-- Single audio element -->
+  <audio #audioPlayer id="audioPlayer" [src]="currentMusic" (timeupdate)="updateSeekBar()" (change)="seekTo($event)"></audio>
+
+  <!-- Seekbar -->
+  <div class="seekbar" (click)="adjustSong($event)">
+    <div class="progress-bar" [style.width.%]="circlePosition"></div>
+    <div class="circle" [style.left.%]="circlePosition"></div>
+  </div>
+
+  <!-- Above seekbar: song info + buttons -->
+  <div class="abovebar">
+    <!-- Song title and artist -->
+    <div class="songinfo" style="overflow: hidden; white-space: nowrap; width: 100%;">
+      <div style="display: inline-block; white-space: nowrap; animation: music-marquee 12s linear infinite;">
+        {{currentMusicName}} - {{currentArtistName}}
+      </div>
+      <style>
+        @keyframes music-marquee {
+          0% { transform: translateX(100%); }
+          100% { transform: translateX(-100%); }
+        }
+      </style>
+    </div>
+
+    <!-- Song buttons -->
+    <div class="songbuttons">
+      <img width="35" src="assets/prevsong.svg" alt="" (click)="previousSong()">
+      <img width="35" [src]="playPauseSrc" alt="" (click)="togglePlay()">
+      <img width="35" src="assets/nextsong.svg" alt="" (click)="nextSong()">
+    </div>
+
+    <!-- Time and volume -->
+    <div class="timevol">
+      <div class="songtime">
+        <p>{{ currentTime }} / {{ totalTime }}</p>
+      </div>
+      <div class="volume">
+        <img width="25" [src]="volumeIcon" alt="" (click)="toggleVolume()">
+        <div class="range">
+          <input
+            type="range"
+            min="0"
+            max="100"
+            (input)="adjustVolume($event)"
+            [value]="volumePercentage"
+          >
         </div>
-        <audio #audioPlayer [src]="currentMusic" (timeupdate)="updateSeekBar()"></audio>
       </div>
     </div>
   </div>
-  <!-- Attractive Footer Card -->
-  <!-- <div class="footer-card">
-    <div class="footer-container">
-      <div class="footer-section">
-        <div class="footer-logo">
-          <h3>🎵 SaR Music</h3>
-          <p>Your ultimate music streaming experience</p>
-        </div>
-        <div class="footer-social">
-          <a href="#" class="social-link">
-            <i class="fab fa-facebook"></i>
-          </a>
-          <a href="#" class="social-link">
-            <i class="fab fa-twitter"></i>
-          </a>
-          <a href="#" class="social-link">
-            <i class="fab fa-instagram"></i>
-          </a>
-          <a href="#" class="social-link">
-            <i class="fab fa-youtube"></i>
-          </a>
-        </div>
-      </div>
-      <div class="footer-section">
-        <h4>Quick Links</h4>
-        <ul class="footer-links">
-          <li><a href="#home">Home</a></li>
-          <li><a href="#library">Library</a></li>
-          <li><a href="#playlists">Playlists</a></li>
-          <li><a href="#artists">Artists</a></li>
-        </ul>
-      </div>
-      <div class="footer-section">
-        <h4>Discover</h4>
-        <ul class="footer-links">
-          <li><a href="#trending">Trending</a></li>
-          <li><a href="#new-releases">New Releases</a></li>
-          <li><a href="#genres">Genres</a></li>
-          <li><a href="#mood">Mood</a></li>
-        </ul>
-      </div>
-      <div class="footer-section">
-        <h4>Company</h4>
-        <ul class="footer-links">
-          <li><a href="/easeontech">About Us</a></li>
-          <li><a href="#careers">Careers</a></li>
-          <li><a href="#contact">Contact</a></li>
-          <li><a href="#support">Support</a></li>
-        </ul>
+</div>
+
+<!-- Hidden YouTube iframe (keep for YouTube streaming) -->
+<iframe id="yt-player" width="0" height="0" frameborder="0"
+  allow="autoplay; encrypted-media">
+</iframe>
+
+
       </div>
     </div>
-    <div class="footer-bottom">
-      <div class="footer-bottom-content">
-        <p>&copy; 2025 SaR Music. All rights reserved.</p>
-        <div class="footer-bottom-links">
-          <span>Made with ❤️ by</span>
-          <a href="/easeontech" class="easeontech-link">🚀 EaseOnTech</a>
-        </div>
-      </div>
-    </div>
-  </div> -->
+  </div>
+  
   <script src="js/script.js"></script>
 </body>
 </html>

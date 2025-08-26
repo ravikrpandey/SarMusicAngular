@@ -11,6 +11,8 @@ import { FormControl } from '@angular/forms';
 export const SERVER_API_URL = environment.serverUrl;
 import { debounceTime } from 'rxjs/operators';
 
+declare var YT: any;
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -52,10 +54,11 @@ export class DashboardComponent implements AfterViewInit {
     }
   }
 
-  @ViewChild('audioPlayer') audioPlayerRef!: ElementRef<HTMLAudioElement>;
+  @ViewChild('audioPlayer', { static: false }) audioPlayerRef!: ElementRef<HTMLAudioElement>;
+  audioPlayer!: HTMLAudioElement;
   circlePosition: number = 0;
   currentTime: string = '0:00';
-  totalTime: string = '0:00';
+  totalTime: string = '5:00';
   isPlaying: boolean = false;
   currentMusic: any;
   currentMusicName: any;
@@ -69,8 +72,9 @@ export class DashboardComponent implements AfterViewInit {
   mobileNumber: any;
   mostPlayedSongs: any;
   populatArtist: any;
+  interval: any;
+  duration: number = 0;
 
-  audioPlayer!: HTMLAudioElement;
   playButton!: HTMLImageElement;
   nextButton!: HTMLImageElement;
   previousButton!: HTMLImageElement;
@@ -89,12 +93,15 @@ export class DashboardComponent implements AfterViewInit {
 
   albums: any[] = [];
   songs: any[] = [];
+  player: any;
 
   // Track the currently playing song object
   currentSong: any;
   showSongList = false;
   haveMostPlayed = false;
   currentSongId = false;
+  ytPlayer: any; 
+  ytPlayerReady: boolean = false;
 
   ngOnInit() {
     this.mobileNumber = localStorage.getItem('mobileNumber') as string | null;
@@ -160,99 +167,311 @@ export class DashboardComponent implements AfterViewInit {
     })
   }
 
+  loadVideo() {
+    if (this.player) {
+      this.player.loadVideoById(this.youtubeId);
+      this.duration = this.player.getDuration();
+    } else {
+      this.loadPlayer(this.youtubeId);
+    }
+  }
+
   ngAfterViewInit() {
-    this.audioPlayer = this.audioPlayerRef?.nativeElement;
-
-    // Set initial volume from localStorage if available
-    if (this.audioPlayer) {
-      this.audioPlayer.volume = this.volumePercentage / 100;
+    if (!(window as any)['YT']) {
+      const tag = document.createElement('script');
+      tag.src = "https://www.youtube.com/iframe_api";
+      document.body.appendChild(tag);
     }
-
-    this.audioPlayer?.addEventListener('timeupdate', () => {
-      this.updateSeekBar();
-    });
-
-    this.audioPlayer?.addEventListener('play', () => {
-      this.playPauseSrc = this.pauseButtonSrc;
-      this.isPlayPauseLoading = false;
-      this.cdr.detectChanges();
-    });
-
-    this.audioPlayer?.addEventListener('pause', () => {
-      this.playPauseSrc = this.playbuttonSrc;
-      this.isPlayPauseLoading = false;
-      this.cdr.detectChanges();
-    });
-
-    this.audioPlayer?.addEventListener('error', (event) => {
-      this.isPlayPauseLoading = false;
-      this.cdr.detectChanges();
-      // this.openSnackBar('Error occurred while playing the audio.', 'close', 'error');
-    });
-
-    this.audioPlayer?.addEventListener('ended', () => {
-      this.nextSong();
-    });
-
-    this.spotifyPlaylists = document.querySelector('.spotifyPlaylists');
-  }
-
-  toggleSearchBar() {
-    this.showSearch = !this.showSearch;
-  }
-
-  updateSeekBar() {
-    if (this.audioPlayer) {
-      const currentTime = this.audioPlayer.currentTime;
-      let duration = this.audioPlayer.duration;
-      if (isNaN(duration)) {
-        duration = 0;
+  
+    (window as any)['onYouTubeIframeAPIReady'] = () => {
+      this.loadPlayer(this.youtubeId);
+    };
+  
+    this.audioPlayer = this.audioPlayerRef.nativeElement;
+  
+    // Load last saved volume from localStorage if available
+    const savedVolume = localStorage.getItem('lastVolume');
+    if (savedVolume) {
+      this.volumePercentage = parseInt(savedVolume, 10);
+  
+      // Apply to audio
+      if (this.audioPlayer) {
+        this.audioPlayer.volume = this.volumePercentage / 100;
       }
-      const progress = (currentTime / duration) * 100;
-
-      this.currentTime = this.formatTime(currentTime);
-      this.totalTime = this.formatTime(duration);
-      this.circlePosition = progress;
-    }
-  }
-
-  formatTime(time: number): string {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-  }
-
-  adjustSong(event: MouseEvent) {
-    if (this.audioPlayer && event.target instanceof HTMLElement) {
-      const seekBarWidth = event.target.clientWidth;
-      const clickX = event.clientX - event.target.getBoundingClientRect().left;
-      const percentage = (clickX / seekBarWidth) * 100;
-      const newTime = (percentage / 100) * this.audioPlayer.duration;
-      this.audioPlayer.currentTime = newTime;
-      this.circlePosition = percentage;
-      this.currentTime = this.formatTime(newTime);
-    }
-  }
-
-  adjustVolume(event: Event) {
-    const volumeLevel = (event.target as HTMLInputElement).value;
-    if (this.audioPlayer) {
-      const normalizedVolume = parseFloat(volumeLevel) / 100;
-      this.audioPlayer.volume = normalizedVolume;
-      localStorage.setItem('lastVolume', volumeLevel);
-      this.volumePercentage = parseInt(volumeLevel, 10);
-      if (this.audioPlayer.volume === 0) {
+  
+      // Apply to YouTube player if ready
+      if (this.player && typeof this.player.setVolume === 'function') {
+        this.player.setVolume(this.volumePercentage);
+      }
+  
+      // Update UI icon
+      if (this.volumePercentage === 0) {
         this.isMuted = true;
         this.volumeIcon = 'assets/mute.svg';
       } else {
         this.isMuted = false;
         this.volumeIcon = 'assets/volume.svg';
       }
-      this.cdr.detectChanges();
+    } else {
+      // fallback: set default volume
+      if (this.audioPlayer) {
+        this.audioPlayer.volume = this.volumePercentage / 100;
+      }
     }
+  
+    this.audioPlayer?.addEventListener('timeupdate', () => {
+      this.updateSeekBar();
+    });
+  
+    this.audioPlayer?.addEventListener('play', () => {
+      this.playPauseSrc = this.pauseButtonSrc;
+      this.isPlayPauseLoading = false;
+      this.cdr.detectChanges();
+    });
+  
+    this.audioPlayer?.addEventListener('pause', () => {
+      this.playPauseSrc = this.playbuttonSrc;
+      this.isPlayPauseLoading = false;
+      this.cdr.detectChanges();
+    });
+  
+    this.audioPlayer?.addEventListener('error', (event) => {
+      this.isPlayPauseLoading = false;
+      this.cdr.detectChanges();
+      // this.openSnackBar('Error occurred while playing the audio.', 'close', 'error');
+    });
+  
+    this.audioPlayer?.addEventListener('ended', () => {
+      this.nextSong();
+    });
+  
+    this.spotifyPlaylists = document.querySelector('.spotifyPlaylists');
+  }
+  
+
+  toggleSearchBar() {
+    this.showSearch = !this.showSearch;
   }
 
+  loadPlayer(videoId: any) {
+    // If player already exists, just load new video
+    if (this.player && typeof this.player.loadVideoById === 'function') {
+      this.player.loadVideoById(videoId);
+      this.duration = this.player.getDuration();
+      this.updateYouTubeDuration();
+      this.startTracking();
+      return;
+    }
+    this.player = new YT.Player('player', {
+      height: '0',
+      width: '0',
+      videoId: videoId,
+      playerVars: { autoplay: 0, controls: 0 },
+      events: {
+        'onReady': () => {
+          this.duration = this.player.getDuration();
+          this.updateYouTubeDuration();
+          this.startTracking();
+        }
+      }
+    });
+  }
+
+  // Update totalTime for YouTube video
+updateYouTubeDuration() {
+  if (this.player && typeof this.player.getDuration === 'function') {
+    const duration = this.player.getDuration();
+    if (isFinite(duration) && duration > 0) {
+      this.duration = duration;
+      this.totalTime = this.formatTime(duration);
+    }
+  }
+}
+
+  updateSeekBar() {
+    // YouTube
+    if (this.youtubeId && this.player?.getCurrentTime) {
+      const ytCurrent = this.player.getCurrentTime();
+      const ytDuration = this.player.getDuration();
+      if (ytDuration > 0) {
+        this.circlePosition = (ytCurrent / ytDuration) * 100;
+        this.currentTime = this.formatTime(ytCurrent);
+        this.totalTime = this.formatTime(ytDuration);
+      }
+      return;
+    }
+  
+    // Audio
+    if (this.audioPlayer?.duration) {
+      const percentage = (this.audioPlayer.currentTime / this.audioPlayer.duration) * 100;
+      this.circlePosition = percentage;
+      this.currentTime = this.formatTime(this.audioPlayer.currentTime);
+      this.totalTime = this.formatTime(this.audioPlayer.duration);
+    }
+  }
+  
+
+  // formatTime(time: number): string {
+  //   if (typeof time !== 'number' || isNaN(time) || time < 0) return '0:00';
+  //   const minutes = Math.floor(time / 60);
+  //   const seconds = Math.floor(time % 60);
+  //   return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  // }
+
+  // Format seconds -> mm:ss
+  formatTime(time: number): string {
+    if (typeof time !== 'number' || isNaN(time) || time < 0) return '0:00';
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60); // floor to integer
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  }
+  
+
+
+  // Seekbar click for audio
+  adjustSong(event: MouseEvent) {
+    if (this.youtubeId && this.player && typeof this.player.getDuration === 'function' && typeof this.player.seekTo === 'function') {
+      // If YouTube is active, use YouTube seekbar logic
+      this.adjustYouTubeSeekbar(event);
+      return;
+    }
+
+    if (!this.audioPlayer) return;
+
+    const duration = this.audioPlayer.duration;
+    if (!isFinite(duration) || duration === 0) {
+      console.warn('Audio not ready for seeking.');
+      return;
+    }
+
+  const target = event.currentTarget as HTMLElement;
+  const clickX = event.clientX - target.getBoundingClientRect().left;
+  const percentage = clickX / target.clientWidth;
+  const newTime = duration * percentage;
+
+  this.audioPlayer.currentTime = newTime;
+  this.circlePosition = percentage * 100;
+  this.currentTime = this.formatTime(newTime);
+}
+
+
+seekTo(event: any) {
+  if (this.player) {
+    this.player.seekTo(this.currentTime, true);
+  }
+}
+  
+  
+  
+  
+  
+
+// adjustVolume(event: Event) {
+//   const volumeLevel = (event.target as HTMLInputElement).value;
+//   this.volumePercentage = parseInt(volumeLevel, 10);
+
+//   // For audio element
+//   if (this.audioPlayer) {
+//     this.audioPlayer.volume = this.volumePercentage / 100;
+//   }
+
+//   // For YouTube player
+//   if (this.player && typeof this.player.setVolume === 'function') {
+//     this.player.setVolume(this.volumePercentage);
+//   }
+
+//   // Save for persistence
+//   localStorage.setItem('lastVolume', volumeLevel);
+
+//   // Update UI icons
+//   if (this.volumePercentage === 0) {
+//     this.isMuted = true;
+//     this.volumeIcon = 'assets/mute.svg';
+//   } else {
+//     this.isMuted = false;
+//     this.volumeIcon = 'assets/volume.svg';
+//   }
+
+//   this.cdr.detectChanges();
+// }
+
+
+  // togglePlay() {
+  //   if (this.audioPlayer && this.audioPlayer.src) {
+  //     if (this.audioPlayer.readyState >= 2) {
+  //       if (this.audioPlayer.paused) {
+  //         this.isPlayPauseLoading = true;
+  //         this.cdr.detectChanges();
+  //         const playPromise = this.audioPlayer.play();
+  //         if (playPromise && typeof playPromise.then === 'function') {
+  //           playPromise.finally(() => {
+  //             this.isPlayPauseLoading = false;
+  //             this.cdr.detectChanges();
+  //           });
+  //         }
+  //       } else {
+  //         this.isPlayPauseLoading = true;
+  //         this.cdr.detectChanges();
+  //         this.audioPlayer.pause();
+  //       }
+  //     } else {
+  //       this.isPlayPauseLoading = true;
+  //       this.cdr.detectChanges();
+  //       this.openSnackBar('Please hold tight its going to rock.', 'close', 'error');
+  //     }
+  //   } else {
+  //     this.isPlayPauseLoading = false;
+  //     this.cdr.detectChanges();
+  //     this.openSnackBar('Audio source is not set.', 'close', 'error');
+  //   }
+  // }
+
+  adjustVolume(event: Event) {
+    const volumeLevel = (event.target as HTMLInputElement).value;
+    this.volumePercentage = parseInt(volumeLevel, 10);
+  
+    // For audio element
+    if (this.audioPlayer) {
+      this.audioPlayer.volume = this.volumePercentage / 100;
+    }
+  
+    // For YouTube player
+    if (this.player && typeof this.player.setVolume === 'function') {
+      this.player.setVolume(this.volumePercentage);
+    }
+  
+    // Save last volume for persistence
+    localStorage.setItem('lastVolume', this.volumePercentage.toString());
+  
+    // Update UI icons
+    if (this.volumePercentage === 0) {
+      this.isMuted = true;
+      this.volumeIcon = 'assets/mute.svg';
+    } else {
+      this.isMuted = false;
+      this.volumeIcon = 'assets/volume.svg';
+    }
+  
+    this.cdr.detectChanges();
+  }
+  
+
   togglePlay() {
+    // If YouTube is active
+    if (this.youtubeId && this.player) {
+      const state = this.player.getPlayerState();
+      // PLAYING
+      if (state === YT.PlayerState.PLAYING) {
+        this.player.pauseVideo();
+        this.playPauseSrc = this.playbuttonSrc;
+      } else {
+        this.player.playVideo();
+        this.playPauseSrc = this.pauseButtonSrc;
+      }
+      return;
+    }
+  
+    // Otherwise, handle regular audio
     if (this.audioPlayer && this.audioPlayer.src) {
       if (this.audioPlayer.readyState >= 2) {
         if (this.audioPlayer.paused) {
@@ -263,17 +482,19 @@ export class DashboardComponent implements AfterViewInit {
             playPromise.finally(() => {
               this.isPlayPauseLoading = false;
               this.cdr.detectChanges();
+              this.playPauseSrc = this.pauseButtonSrc;
             });
           }
         } else {
           this.isPlayPauseLoading = true;
           this.cdr.detectChanges();
           this.audioPlayer.pause();
+          this.playPauseSrc = this.playbuttonSrc;
         }
       } else {
         this.isPlayPauseLoading = true;
         this.cdr.detectChanges();
-        this.openSnackBar('Please hold tight its going to rock.', 'close', 'error');
+        this.openSnackBar('Please hold tight, it\'s going to rock.', 'close', 'error');
       }
     } else {
       this.isPlayPauseLoading = false;
@@ -281,6 +502,26 @@ export class DashboardComponent implements AfterViewInit {
       this.openSnackBar('Audio source is not set.', 'close', 'error');
     }
   }
+  
+  
+
+  stopOtherPlayer(type: 'audio' | 'youtube') {
+    if (type === 'audio') {
+      // Stop YouTube if playing
+      if (this.player && typeof this.player.stopVideo === 'function') {
+        this.player.stopVideo();
+      }
+      this.youtubeId = ''; // reset id so seekbar logic doesn’t think YT is active
+    } else {
+      // Stop audio if playing
+      if (this.audioPlayer) {
+        this.audioPlayer.pause();
+        this.audioPlayer.currentTime = 0;
+      }
+      this.currentMusic = null;
+    }
+  }
+  
 
   playSongById(song: any) {
     this.currentSong = song; // Set the currentSong object for template use
@@ -292,7 +533,13 @@ export class DashboardComponent implements AfterViewInit {
 
     if (song.youtubeId) {
       this.youtubeId = song.youtubeId;
-      this.currentMusic = `${SERVER_API_URL}/api/youtube-stream/${song.youtubeId}`;
+      // this.currentMusic = `${SERVER_API_URL}/api/youtube-stream/${song.youtubeId}`;
+      this.loadPlayer(this.youtubeId)
+          const iframe = document.getElementById('yt-player') as HTMLIFrameElement;
+    // if (iframe) {
+    //   iframe.src = `https://www.youtube.com/embed/${song.youtubeId}?autoplay=1`;
+    // }
+    
     } else {
       this.currentMusic = song.songUrl;
     }
@@ -334,7 +581,7 @@ export class DashboardComponent implements AfterViewInit {
       this.audioPlayer.addEventListener('error', (event) => {
         this.isPlayPauseLoading = false;
         this.cdr.detectChanges();
-        this.openSnackBar('Error occurred while playing the audio.', 'close', 'error');
+        // this.openSnackBar('Error occurred while playing the audio.', 'close', 'error');
       });
       this.audioPlayer.addEventListener('ended', () => this.nextSong());
     }
@@ -360,31 +607,89 @@ export class DashboardComponent implements AfterViewInit {
     this.audioPlayer.addEventListener('canplaythrough', canplaythroughHandler);
   }
 
-  toggleVolume() {
-    if (this.audioPlayer) {
-      if (this.isMuted) {
-        const lastVolume = localStorage.getItem('lastVolume');
-        let volumeToSet = 1;
-        if (lastVolume !== null) {
-          const parsed = parseInt(lastVolume, 10);
-          if (!isNaN(parsed) && parsed >= 0 && parsed <= 100) {
-            volumeToSet = parsed / 100;
-            this.volumePercentage = parsed;
-          }
-        }
-        this.audioPlayer.volume = volumeToSet;
-        this.volumeIcon = 'assets/volume.svg';
-        this.isMuted = false;
-      } else {
-        localStorage.setItem('lastVolume', Math.round(this.audioPlayer.volume * 100).toString());
-        this.audioPlayer.volume = 0;
-        this.volumeIcon = 'assets/mute.svg';
-        this.volumePercentage = 0;
-        this.isMuted = true;
-      }
-      this.cdr.detectChanges();
-    }
+// Start interval tracking for YouTube seekbar
+// Start interval tracking for YouTube or audio seekbar
+startTracking() {
+  if (this.interval) clearInterval(this.interval);
+
+  // Immediately sync play/pause icon
+  if (this.youtubeId && this.player) {
+    const state = this.player.getPlayerState();
+    this.playPauseSrc = state === YT.PlayerState.PLAYING ? this.pauseButtonSrc : this.playbuttonSrc;
+  } else if (this.audioPlayer) {
+    this.playPauseSrc = this.audioPlayer.paused ? this.playbuttonSrc : this.pauseButtonSrc;
   }
+
+  this.interval = setInterval(() => {
+    if (this.youtubeId && this.player && typeof this.player.getCurrentTime === 'function' && typeof this.player.getDuration === 'function') {
+      const current = this.player.getCurrentTime();
+      const duration = this.player.getDuration();
+      if (isFinite(current) && isFinite(duration) && duration > 0) {
+        this.circlePosition = (current / duration) * 100;
+        this.currentTime = this.formatTime(current);
+        this.totalTime = this.formatTime(duration);
+      }
+
+      // Sync YouTube play/pause icon continuously
+      const state = this.player.getPlayerState();
+      this.playPauseSrc = state === YT.PlayerState.PLAYING ? this.pauseButtonSrc : this.playbuttonSrc;
+
+    } else if (this.audioPlayer) {
+      const current = this.audioPlayer.currentTime;
+      const duration = this.audioPlayer.duration;
+      if (isFinite(current) && isFinite(duration)) {
+        this.circlePosition = (current / duration) * 100;
+        this.currentTime = this.formatTime(current);
+        this.totalTime = this.formatTime(duration);
+      }
+
+      // Sync audio play/pause icon continuously
+      this.playPauseSrc = this.audioPlayer.paused ? this.playbuttonSrc : this.pauseButtonSrc;
+    }
+
+    // Trigger Angular change detection
+    this.cdr.detectChanges();
+  }, 500);
+}
+
+
+  toggleVolume() {
+    if (this.isMuted) {
+      // Restore last volume
+      const lastVolume = localStorage.getItem('lastVolume');
+      let volumeToSet = 100;
+      if (lastVolume !== null) {
+        const parsed = parseInt(lastVolume, 10);
+        if (!isNaN(parsed)) {
+          volumeToSet = parsed;
+        }
+      }
+      this.volumePercentage = volumeToSet;
+  
+      if (this.audioPlayer) this.audioPlayer.volume = volumeToSet / 100;
+      if (this.player && typeof this.player.setVolume === 'function') {
+        this.player.setVolume(volumeToSet);
+      }
+  
+      this.volumeIcon = 'assets/volume.svg';
+      this.isMuted = false;
+    } else {
+      // Save current before muting
+      localStorage.setItem('lastVolume', this.volumePercentage.toString());
+  
+      this.volumePercentage = 0;
+      if (this.audioPlayer) this.audioPlayer.volume = 0;
+      if (this.player && typeof this.player.setVolume === 'function') {
+        this.player.setVolume(0);
+      }
+  
+      this.volumeIcon = 'assets/mute.svg';
+      this.isMuted = true;
+    }
+  
+    this.cdr.detectChanges();
+  }
+  
 
   nextSong() {
     if (this.songs.length === 0) return;
@@ -532,5 +837,38 @@ export class DashboardComponent implements AfterViewInit {
   navigateToEaseOnTech() {
     this.router.navigate(['/easeontech']);
   }
+
+isYouTubePlaying(): boolean {
+  // Check if the YouTube player exists and is currently playing
+  if (this.player && typeof this.player.getPlayerState === 'function') {
+    // 1 = playing, 2 = paused, 3 = buffering, 5 = video cued
+    return this.player.getPlayerState() === 1;
+  }
+  return false;
+}
+
+adjustYouTubeSeekbar(event: MouseEvent) {
+  if (!this.player || typeof this.player.seekTo !== 'function') return;
+
+  const seekbar = event.currentTarget as HTMLElement;
+  const rect = seekbar.getBoundingClientRect();
+  const clickX = event.clientX - rect.left;
+  const percent = clickX / rect.width;
+
+  const duration = this.player.getDuration();
+  const seekToTime = percent * duration;
+
+  this.player.seekTo(seekToTime, true);
+  this.circlePosition = percent * 100;
+  this.currentTime = this.formatTime(seekToTime);
+
+  // ensure YouTube keeps playing after seek
+  if (this.player.getPlayerState() !== 1) {
+    this.player.playVideo();
+  }
+}
+
+
+
 };
 

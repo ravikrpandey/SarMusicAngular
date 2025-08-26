@@ -10,12 +10,58 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    integrity="sha384-uxq/xBbFAO8SXvXVeD6cu7wnb7TdSZ+r3vZdtL3zB9a72g5Qr0x3z2StxOAqJT0Q" crossorigin="anonymous"> -->
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body class="mat-typography">
   <app-root></app-root>
+
+  <!-- Hidden YouTube iframe player -->
+  <div style="display:none">
+    <div id="player"></div>
+  </div>
 </body>
+
+<!-- Load YouTube Iframe API -->
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<script>
+  let player;
+
+  // Called automatically by YouTube API
+  function onYouTubeIframeAPIReady() {
+    player = new YT.Player('player', {
+      height: '0',
+      width: '0',
+      videoId: '', // Initially blank
+      playerVars: {
+        'playsinline': 1
+      },
+      events: {
+        'onReady': onPlayerReady,
+        'onStateChange': onPlayerStateChange
+      }
+    });
+  }
+
+  function onPlayerReady(event) {
+    console.log("YouTube Iframe API is ready ✅");
+  }
+
+  function onPlayerStateChange(event) {
+    console.log("Player state:", event.data);
+  }
+
+  // Expose function to Angular for playing a song
+  window.playYouTubeSong = function(videoId) {
+    if (player && videoId) {
+      player.loadVideoById(videoId);
+      player.playVideo();
+    }
+  }
+
+  // Expose function to pause
+  window.pauseYouTubeSong = function() {
+    if (player) player.pauseVideo();
+  }
+</script>
 </html>
