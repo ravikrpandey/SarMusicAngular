@@ -257,6 +257,10 @@ export class DashboardComponent implements AfterViewInit {
     // If player already exists, just load new video
     if (this.player && typeof this.player.loadVideoById === 'function') {
       this.player.loadVideoById(videoId);
+    // Enhance sound quality for YouTube
+    if (typeof this.player.setPlaybackQuality === 'function') {
+      this.player.setPlaybackQuality('highres'); // Try highest quality
+    }
       this.duration = this.player.getDuration();
       this.updateYouTubeDuration();
       this.startTracking();
@@ -269,6 +273,10 @@ export class DashboardComponent implements AfterViewInit {
       playerVars: { autoplay: 0, controls: 0 },
       events: {
         'onReady': () => {
+        // Enhance sound quality for YouTube
+        if (typeof this.player.setPlaybackQuality === 'function') {
+          this.player.setPlaybackQuality('highres'); // Try highest quality
+        }
           this.duration = this.player.getDuration();
           this.updateYouTubeDuration();
           this.startTracking();
