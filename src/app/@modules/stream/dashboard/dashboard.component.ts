@@ -10,7 +10,6 @@ import { environment } from 'src/app/environment/environment';
 import { FormControl } from '@angular/forms';
 export const SERVER_API_URL = environment.serverUrl;
 import { debounceTime } from 'rxjs/operators';
-
 declare var YT: any;
 
 @Component({
@@ -27,7 +26,7 @@ export class DashboardComponent implements AfterViewInit {
   // Volume and loader
   volumePercentage: number = 100;
   isPlayPauseLoading: boolean = false;
-
+ 
   constructor(
     private router: Router,
     private http: HttpClient,
@@ -36,7 +35,7 @@ export class DashboardComponent implements AfterViewInit {
     private cdr: ChangeDetectorRef,
     private snackBar: MatSnackBar,
     private authService: AuthService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
   ) {
     this.searchControl.valueChanges
       .pipe(debounceTime(500))
@@ -253,37 +252,52 @@ export class DashboardComponent implements AfterViewInit {
     this.showSearch = !this.showSearch;
   }
 
-  loadPlayer(videoId: any) {
-    // If player already exists, just load new video
-    if (this.player && typeof this.player.loadVideoById === 'function') {
-      this.player.loadVideoById(videoId);
-    // Enhance sound quality for YouTube
-    if (typeof this.player.setPlaybackQuality === 'function') {
-      this.player.setPlaybackQuality('highres'); // Try highest quality
-    }
-      this.duration = this.player.getDuration();
-      this.updateYouTubeDuration();
-      this.startTracking();
-      return;
-    }
-    this.player = new YT.Player('player', {
-      height: '0',
-      width: '0',
-      videoId: videoId,
-      playerVars: { autoplay: 0, controls: 0 },
-      events: {
-        'onReady': () => {
-        // Enhance sound quality for YouTube
-        if (typeof this.player.setPlaybackQuality === 'function') {
-          this.player.setPlaybackQuality('highres'); // Try highest quality
-        }
-          this.duration = this.player.getDuration();
-          this.updateYouTubeDuration();
-          this.startTracking();
+loadPlayer(videoId: any) {
+  if (this.player && typeof this.player.loadVideoById === 'function') {
+    this.player.loadVideoById(videoId);
+    this.setHighQuality();
+    this.duration = this.player.getDuration();
+    this.updateYouTubeDuration();
+    this.startTracking();
+    return;
+  }
+
+  this.player = new YT.Player('player', {
+    height: '0',   // Hide video
+    width: '0',    // Hide video
+    videoId: videoId,
+    playerVars: {
+      autoplay: 0,
+      controls: 0,
+      playsinline: 1,
+      modestbranding: 1,
+      iv_load_policy: 3,
+      rel: 0,
+    },
+    events: {
+      'onReady': () => {
+        this.setHighQuality();
+        this.duration = this.player.getDuration();
+        this.updateYouTubeDuration();
+        this.startTracking();
+      },
+      'onStateChange': (event: any) => {
+        if (event.data === YT.PlayerState.PLAYING) {
+          this.setHighQuality();
         }
       }
-    });
+    }
+  });
+}
+
+private setHighQuality() {
+  if (this.player && typeof this.player.setPlaybackQuality === 'function') {
+    this.player.setPlaybackQuality('highres');
+    this.player.setPlaybackQuality('hd1080'); // fallback
   }
+}
+
+
 
   // Update totalTime for YouTube video
 updateYouTubeDuration() {
